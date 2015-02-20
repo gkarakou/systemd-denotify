@@ -22,4 +22,4 @@ pygobject2
 
 INSTALL
 
-Just run as root INSTALL.sh after installing the dependencies.
+Just run as root INSTALL.sh(from within the cloned repo's directory) after installing the dependencies.
