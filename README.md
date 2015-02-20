@@ -28,7 +28,7 @@ python2-systemd
 NOTE: if you cant find the packages you can always install them from Pypi.
 
 Fedora:
-yum install pip
+yum install python-pip
 
 Arch:
 pacman-S python2-pip
