@@ -11,8 +11,8 @@ NOTE: For the app to work your desktop user must be a member of systemd-journal 
 
 
 DEPENDENCIES
-
 --------------------
+
 Fedora 21:
 python-systemd
 python-dbus
@@ -34,8 +34,7 @@ Arch:
 pacman -S python2-pip
 
 
--------------------------------
 
 INSTALL
-
+------------------------
 Just run as root INSTALL.sh(from within the cloned repo's directory) after installing the dependencies.
