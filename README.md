@@ -25,7 +25,7 @@ python2-notify
 python2-gobject
 python2-systemd
 
-NOTE: if you cant find the packages you can always install them from Pypi
+NOTE: if you cant find the packages you can always install them from Pypi.\r\n
 Fedora:
 yum install pip
 Arch:
