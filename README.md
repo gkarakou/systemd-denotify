@@ -7,9 +7,11 @@ There is also one class that every specified interval (by default 30 minutes) no
 By default this class is not started. However one can start it by editing the systemd-notify.py and uncommenting the last two lines.
 If you have already run INSTALL.sh the file is located at /usr/local/bin/systemd-notify.py
 
-On a fedora 21 installation it depends on these libraries(Note that on other linux distributions these names could be different)
 
 DEPENDENCIES
+
+On a fedora 21 installation it depends on these libraries(On other linux distributions these names could be different):
+
 --------------------
 python-systemd
 python-dbus
