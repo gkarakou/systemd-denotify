@@ -31,7 +31,7 @@ Fedora:
 yum install python-pip
 
 Arch:
-pacman-S python2-pip
+pacman -S python2-pip
 
 
 -------------------------------
