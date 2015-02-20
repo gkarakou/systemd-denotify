@@ -24,6 +24,7 @@ python2
 python2-notify
 python2-gobject
 python2-systemd
+
 NOTE: if you cant find the packages you can always install them from Pypi
 Fedora:
 yum install pip
