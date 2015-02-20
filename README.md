@@ -7,7 +7,7 @@ There is also one class that every specified interval (by default 30 minutes) no
 By default this class is not started. However one can start it by editing the systemd-notify.py and uncommenting the last two lines.
 If you have already run INSTALL.sh the file is located at /usr/local/bin/systemd-notify.py
 
-NOTE: For the app to work your desktop user must be a member of systemd-journal group
+NOTE: For the app to work your desktop user must be a member of systemd-journal group. Though INSTALL.sh adds your current X logged in user to the group if you want another user to start X and the app you have to manually add him to the group.
 
 
 DEPENDENCIES
