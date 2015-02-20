@@ -12,14 +12,23 @@ NOTE: For the app to work your desktop user must be a member of systemd-journal 
 
 DEPENDENCIES
 
-On a fedora 21 installation it depends on these libraries(On other linux distributions these names could be different):
-
 --------------------
+Fedora 21:
 python-systemd
 python-dbus
 python-notify
 pygobject2
 
+Arch Linux:
+python2
+python2-notify
+python2-gobject
+python2-systemd
+NOTE: if you cant find the packages you can always install them from Pypi
+Fedora:
+yum install pip
+Arch:
+pacman-S python2-pip
 -------------------------------
 
 INSTALL
