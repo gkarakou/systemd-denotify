@@ -12,7 +12,7 @@ from threading import Thread
 import Queue
 from gi.repository import Notify
 import os
-q=Queue.Queue()
+
 class DbusNotify():
 
     def __init__(self):
@@ -56,7 +56,7 @@ class DbusNotify():
 
 class logindMonitor(threading.Thread):
 
-    def __init__(self,q):
+    def __init__(self):
         Thread.__init__(self)
 
     def run(self):
@@ -83,7 +83,7 @@ class logindMonitor(threading.Thread):
 
 class LogReader(threading.Thread):
 
-    def __init__(self,q):
+    def __init__(self):
         Thread.__init__(self)
 
     def run(self):
@@ -101,8 +101,8 @@ class LogReader(threading.Thread):
         # while True:
         #	time.sleep(1)
         while p.poll():
-            reliable = j.reliable_fd()
-            print reliable
+            #reliable = j.reliable_fd()
+            #print reliable
             # if it prints True it is pollable
             waiting = j.process()
             # if JOURNAL append or JOURNAL logrotate
@@ -136,12 +136,12 @@ if __name__ == "__main__":
     print "main pid: "+ str(main_pid)
     time.sleep(3)
     print "attempting to start logReader..."
-    lr=LogReader(q)
+    lr=LogReader()
     lr.daemon=True
     lr.start()
     time.sleep(3)
     print "attempting to start logindMonitor..."
-    lm=logindMonitor(q)
+    lm=logindMonitor()
     lm.start()
     #db = DbusNotify()
     #db.run()
