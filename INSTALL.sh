@@ -14,5 +14,5 @@ chmod 0755 /usr/local/bin/systemd-notify.py
 chmod 0644 /etc/xdg/autostart/systemd-notify.desktop
 if [ -f /etc/xdg/autostart/systemd-notify.desktop ] && [ -f /usr/local/bin/systemd-notify.py];then echo "installation was successful";fi
 else 
-echo "something is wrong with your $PATH, or you cant run chmod as root.\n Fix that and rerun the script.";
+echo "something is wrong with your $PATH, or your current working directory is not systemd-notify.py.\n cd first or fix $PATH issues and rerun the script.";
 exit
