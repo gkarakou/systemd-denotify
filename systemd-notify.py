@@ -9,7 +9,6 @@ import datetime
 from systemd import journal
 #import logging
 from threading import Thread
-import Queue
 from gi.repository import Notify
 import os
 
