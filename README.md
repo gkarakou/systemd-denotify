@@ -44,3 +44,9 @@ cd systemd-notify.py
 su -
 
 sh INSTALL.sh
+
+exit
+
+or do it with sudo if you believe its safer:
+
+sudo sh INSTALL.sh
