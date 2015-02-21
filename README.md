@@ -37,7 +37,7 @@ pacman -S python2-pip
 
 INSTALL
 ------------------------
-git clone https://github.com/gkarakou/systemd-notify.py
+git clone https://github.com/gkarakou/systemd-notify.py.git
 
 cd systemd-notify.py
 
