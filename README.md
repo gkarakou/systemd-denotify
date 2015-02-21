@@ -37,4 +37,7 @@ pacman -S python2-pip
 
 INSTALL
 ------------------------
-Just run as root INSTALL.sh(from within the cloned repo's directory) after installing the dependencies.
+git clone https://github.com/gkarakou/systemd-notify.py
+cd systemd-notify.py
+su -
+sh INSTALL.sh
