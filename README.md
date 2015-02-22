@@ -18,6 +18,7 @@ python-systemd
 python-dbus
 python-notify
 pygobject2
+python-slip-dbus
 
 Arch Linux:
 python2
