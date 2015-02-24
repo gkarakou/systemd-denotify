@@ -10,6 +10,15 @@ If you have already run INSTALL.sh the file is located at /usr/local/bin/systemd
 NOTE: For the app to work your desktop user must be a member of systemd-journal group. Though INSTALL.sh adds your current X logged in user to the group if you want another user to start X and the app you have to manually add him to the group.
 
 
+REQUIREMENTS
+-------------------
+
+As the name implies you need to be running a modern linux distribution with systemd.
+
+ You also need a running Xorg, this script(though i like to call it a classy python app) wont work without a desktop session.
+
+
+
 DEPENDENCIES
 --------------------
 
