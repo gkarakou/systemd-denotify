@@ -57,6 +57,8 @@ sh INSTALL.sh
 exit
 </code>
 or do it with sudo if you believe its safer:
-[code]
+<code>
+
 sudo sh INSTALL.sh
-[/code]
+
+</code>
