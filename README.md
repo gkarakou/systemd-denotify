@@ -51,6 +51,12 @@ Arch:
 pacman -S python2-pip
 </pre>
 
+Search a package:
+
+<pre>
+pip search dbus
+</pre>
+
 
 INSTALL
 ------------------------
