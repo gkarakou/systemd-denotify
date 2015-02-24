@@ -40,7 +40,7 @@ python2-gobject
 python2-systemd
 
 </pre>
-NOTE: if you cant find the packages you can always search them through Pypi.
+NOTE: if you cant find the packages in your distro's package manager you can always search them through Pypi.
 
 Fedora:
 <pre>
