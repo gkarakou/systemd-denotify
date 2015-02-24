@@ -23,25 +23,33 @@ DEPENDENCIES
 --------------------
 
 Fedora 21:
+
+<pre>
 systemd-python
 notify-python
 pygobject2
 python-slip-dbus
 
+</pre>
 Arch Linux:
+
+<pre>
 python2
 python2-notify
 python2-gobject
 python2-systemd
 
-NOTE: if you cant find the packages you can always install them from Pypi.
+</pre>
+NOTE: if you cant find the packages you can always search them through Pypi.
 
 Fedora:
+<pre>
 yum install python-pip
-
+</pre>
 Arch:
+<pre>
 pacman -S python2-pip
-
+</pre>
 
 
 INSTALL
