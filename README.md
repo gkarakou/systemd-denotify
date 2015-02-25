@@ -89,7 +89,7 @@ sudo sh INSTALL.sh -python2
 </pre>
 
 
-NOTE: if you only find python3 libs in your distro's repos there is a python3 library named systemd-notify3.py, but it has not been thoroughly tested and is not guaranteed to work. To install it:
+NOTE: if you only found the python3 libs in your distro's repos there is a python3 library named systemd-notify3.py, but it has not been thoroughly tested and is not guaranteed to work. To install it:
 
 <pre>
 sudo sh INSTALL.sh -python3
