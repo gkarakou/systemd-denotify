@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+from __future__ import print_function
 from dbus import SystemBus, Interface
 import threading
 import select
@@ -6,7 +7,6 @@ from systemd import login
 import time
 import datetime
 from systemd import journal
-#import logging
 from threading import Thread
 from gi.repository import Notify
 import os
@@ -38,13 +38,13 @@ class DbusNotify():
             except  Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print message
+                print(message)
             try:
                 proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
             except  Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print message
+                print(message)
             try:
                 service_properties = Interface(
                 proxy,
@@ -52,7 +52,7 @@ class DbusNotify():
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print message
+                print(message)
             try:
                 state = service_properties.Get(
                 'org.freedesktop.systemd1.Unit',
@@ -60,7 +60,7 @@ class DbusNotify():
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print message
+                print(message)
             status = a + " status: %s" % state
             try:
                 Notify.init("systemd-notify")
@@ -69,7 +69,7 @@ class DbusNotify():
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print message
+                print(message)
         return
 
 
@@ -113,18 +113,14 @@ class LogReader(threading.Thread):
         # near the end of the journal fd
 
         j.seek_realtime(datetime.datetime.now())
-        #  classic linux-only polling  
         p = select.poll()
-        # pylint errors this
         p.register(j, j.get_events())
         while p.poll():
-        #    Debugging call:if it prints True it is pollable
-        #    reliable = j.reliable_fd()
-        #    print reliable
-        
-        #   next process the journal(note pylint errors this too)
+            reliable = j.reliable_fd()
+            # if it prints True it is pollable
+            print(reliable)
             waiting = j.process()
-        #   if JOURNAL append or JOURNAL logrotate
+            # if JOURNAL append or JOURNAL logrotate
             if waiting == 1 or waiting == 2:
                 j.get_next()
                 for entry in j:
@@ -143,25 +139,23 @@ class LogReader(threading.Thread):
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}" 
                             message = template.format(type(ex).__name__, ex.args)
-                            print message
+                            print(message)
                     else:
                         continue
             else:
-                #debugging
-                print "journal has no new entries"
+                print("journal has no new entries")
             continue
 
 if __name__ == "__main__":
     main_pid=os.getpid()
-    print "systemd-notify.py pid: "+ str(main_pid)
+    print("main pid: "+ str(main_pid))
     time.sleep(3)
+    print("attempting to start logReader...")
     lr=LogReader()
     lr.daemon=True
     lr.start()
-    #note we dont need to acquire/release locks(synchronize) all over the classes 
-    #cause we dont operate on the same data in either of the threads
-    #also note we do not join(), since we run on infinite loops
     time.sleep(3)
+    print("attempting to start logindMonitor...")
     lm=logindMonitor()
     lm.start()
     db = DbusNotify()
