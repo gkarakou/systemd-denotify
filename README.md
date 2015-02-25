@@ -1,8 +1,6 @@
 # systemd-notify.py
 GENERAL
 -------------------
-Systemd-notify is a set of classes that leverage the power of python-systemd library.
-=======
 Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see Dependencies section).
 These classes provide desktop notification upon a user login and when a systemd service fails(by constantly reading the systemd journal).
 There is also one class that every specified interval (by default 30 minutes) notifies the user for the status of some services.
@@ -22,15 +20,6 @@ As the name implies you need to be running a modern linux distribution with syst
 DEPENDENCIES
 -------------------
 
-On a fedora 21 installation it depends on these libraries(On other linux distributions these names could be different):
-
---------------------
-python-systemd
-python-dbus
-python-notify
-pygobject2
-
---------------------
 
 Fedora 21:
 
@@ -53,7 +42,6 @@ python-systemd python-dbus python-notify
 </pre>
 
 
-NOTE: if you only find python3 libs in your distro's repos there is a python3 library named systemd-notify3.py, but it has not been thoroughly tested and is not guaranteed to work.
 
 NOTE: if you cant find the packages in your distro's package manager you can always search them through Pypi.
 
@@ -78,6 +66,7 @@ pip search dbus
 
 -------------------------------
 
+NOTE: There is a chance you installed the equivalent python3 packages. See below in the install section how to
 
 
 INSTALL
@@ -88,13 +77,21 @@ cd systemd-notify.py
 
 su -
 
-sh INSTALL.sh
+sh INSTALL.sh -python2
 
 exit
 </pre>
 or do it with sudo if you believe its safer:
 <pre>
 
-sudo sh INSTALL.sh
+sudo sh INSTALL.sh -python2
 
 </pre>
+
+
+NOTE: if you only find python3 libs in your distro's repos there is a python3 library named systemd-notify3.py, but it has not been thoroughly tested and is not guaranteed to work. To install it:
+
+<pre>
+sudo sh INSTALL.sh -python3
+</pre>
+
