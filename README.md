@@ -40,6 +40,17 @@ python2-gobject
 python2-systemd
 
 </pre>
+
+Debian:
+
+<pre>
+sudo apt-get install -f python-systemd python-dbus python-notify
+
+</pre>
+
+
+NOTE: if you only find python3 libs in your distro's repos there is a 2to3 library named systemd-notify3.py, but it has not been thoroughly tested and is not guaranteed to work.
+
 NOTE: if you cant find the packages in your distro's package manager you can always search them through Pypi.
 
 Fedora:
