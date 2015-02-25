@@ -43,7 +43,7 @@ fi
 ;;
 *)
 error $1
-echo "are you playing around? args are -python2 or -python3"
+echo "You should invoke the scipt with valid arguments:  -python2 or -python3"
 exit -1
 ;;
  esac
