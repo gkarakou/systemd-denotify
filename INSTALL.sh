@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 while [ "$1" != "" ] ; do
 case "$1" in
 -python3)
@@ -49,4 +49,3 @@ exit -1
  esac
  shift
 done
-
