@@ -1,11 +1,9 @@
 # systemd-notify.py
 GENERAL
 -------------------
-<<<<<<< HEAD
 Systemd-notify is a set of classes that leverage the power of python-systemd library.
 =======
 Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see Dependencies section).
->>>>>>> d8afeee1f46e6eb0f32d311b78752c443a565303
 These classes provide desktop notification upon a user login and when a systemd service fails(by constantly reading the systemd journal).
 There is also one class that every specified interval (by default 30 minutes) notifies the user for the status of some services.
 By default this class is not started. However one can start it by editing the systemd-notify.py and uncommenting the last two lines.
@@ -22,7 +20,7 @@ As the name implies you need to be running a modern linux distribution with syst
 
 
 DEPENDENCIES
-<<<<<<< HEAD
+-------------------
 
 On a fedora 21 installation it depends on these libraries(On other linux distributions these names could be different):
 
@@ -31,7 +29,7 @@ python-systemd
 python-dbus
 python-notify
 pygobject2
-=======
+
 --------------------
 
 Fedora 21:
@@ -77,15 +75,12 @@ Search a package:
 <pre>
 pip search dbus
 </pre>
->>>>>>> d8afeee1f46e6eb0f32d311b78752c443a565303
 
 -------------------------------
 
-INSTALL
-<<<<<<< HEAD
 
-Just run as root INSTALL.sh after installing the dependencies.
-=======
+
+INSTALL
 ------------------------
 <pre>git clone https://github.com/gkarakou/systemd-notify.py.git
 
@@ -103,4 +98,3 @@ or do it with sudo if you believe its safer:
 sudo sh INSTALL.sh
 
 </pre>
->>>>>>> d8afeee1f46e6eb0f32d311b78752c443a565303
