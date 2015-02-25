@@ -31,7 +31,7 @@ systemd-python notify-python pygobject2 python-slip-dbus
 Arch Linux:
 
 <pre>
-python2 python2-notify python2-gobject python2-systemd
+python2 python2-notify python2-gobject python2-systemd python2-dbus
 
 </pre>
 
