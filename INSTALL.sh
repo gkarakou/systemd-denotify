@@ -15,7 +15,7 @@ sed -i 's/notify/notify3/g' systemd-notify.desktop
 cp systemd-notify.desktop /etc/xdg/autostart
 chmod 0755 /usr/local/bin/systemd-notify3.py
 chmod 0644 /etc/xdg/autostart/systemd-notify.desktop
-if [ -f /etc/xdg/autostart/systemd-notify3.desktop ] && [ -f /usr/local/bin/systemd-notify.py ];then echo "installation was successful";
+if [ -f /etc/xdg/autostart/systemd-notify.desktop ] && [ -f /usr/local/bin/systemd-notify3.py ];then echo "installation was successful";
 else 
 echo "something is wrong with your PATH env, or your current working directory is not systemd-notify.py.\n cd first or fix PATH issues and rerun the script.";
 exit
