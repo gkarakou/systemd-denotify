@@ -150,14 +150,14 @@ class LogReader(threading.Thread):
 
 if __name__ == "__main__":
     main_pid=os.getpid()
-    print("main pid: "+ str(main_pid))
+    print("systemd_notify.py pid: "+ str(main_pid))
     time.sleep(3)
-    print("attempting to start logReader...")
+    #print("attempting to start logReader...")
     lr=LogReader()
     lr.daemon=True
     lr.start()
     time.sleep(3)
-    print("attempting to start logindMonitor...")
+    #print("attempting to start logindMonitor...")
     lm=logindMonitor()
     lm.start()
     db = DbusNotify()
