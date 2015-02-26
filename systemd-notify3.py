@@ -108,17 +108,18 @@ class LogReader(threading.Thread):
         j = journal.Reader()
         j.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
+        
         # it is questionable whether there is actually a record with the real
         # datetime we provide but we assume it moves the cursor to somewhere
         # near the end of the journal fd
-
         j.seek_realtime(datetime.datetime.now())
         p = select.poll()
         p.register(j, j.get_events())
         while p.poll():
-            reliable = j.reliable_fd()
+            #next is a debugging call
             # if it prints True it is pollable
-            print(reliable)
+            #reliable = j.reliable_fd()
+            #print(reliable)
             waiting = j.process()
             # if JOURNAL append or JOURNAL logrotate
             if waiting == 1 or waiting == 2:
@@ -142,6 +143,7 @@ class LogReader(threading.Thread):
                             print(message)
                     else:
                         continue
+            #debug
             else:
                 print("journal has no new entries")
             continue
