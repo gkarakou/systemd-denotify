@@ -128,7 +128,7 @@ class LogReader(threading.Thread):
                     if 'MESSAGE' in entry:
                         pattern = "entered failed state"
                         try:
-                            string = entry['MESSAGE'].decode('utf-8')
+                            string = entry['MESSAGE']
                             if string and pattern in string:
                                 Notify.init("systemd-notify")
                                 n=Notify.Notification.new(
@@ -151,13 +151,11 @@ class LogReader(threading.Thread):
 if __name__ == "__main__":
     main_pid=os.getpid()
     print("systemd_notify.py pid: "+ str(main_pid))
-    time.sleep(3)
     #print("attempting to start logReader...")
     lr=LogReader()
     lr.daemon=True
-    lr.start()
-    time.sleep(3)
-    #print("attempting to start logindMonitor...")
+    started=lr.start()
+    #print("atempting to start logindMonitor...")
     lm=logindMonitor()
     lm.start()
     db = DbusNotify()
