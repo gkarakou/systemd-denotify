@@ -166,5 +166,5 @@ if __name__ == "__main__":
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
 
-    db = DbusNotify()
-    db_started=db.run()
+    #db = DbusNotify()
+    #db_started=db.run()
