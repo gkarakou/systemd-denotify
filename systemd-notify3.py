@@ -38,13 +38,13 @@ class DbusNotify():
             except  Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print(message)
+                journal.send("systemd-notify: "+message)
             try:
                 proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
             except  Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print(message)
+                journal.send("systemd-notify: "+message)
             try:
                 service_properties = Interface(
                 proxy,
@@ -52,7 +52,7 @@ class DbusNotify():
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print(message)
+                journal.send("systemd-notify: "+message)
             try:
                 state = service_properties.Get(
                 'org.freedesktop.systemd1.Unit',
@@ -60,7 +60,7 @@ class DbusNotify():
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print(message)
+                journal.send("systemd-notify: "+message)
             status = a + " status: %s" % state
             try:
                 Notify.init("systemd-notify")
@@ -69,7 +69,7 @@ class DbusNotify():
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                print(message)
+                journal.send("systemd-notify: "+message)
         return
 
 
@@ -105,6 +105,7 @@ class LogReader(threading.Thread):
         Thread.__init__(self)
 
     def run(self):
+
         j = journal.Reader()
         j.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -140,23 +141,30 @@ class LogReader(threading.Thread):
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}" 
                             message = template.format(type(ex).__name__, ex.args)
-                            print(message)
+                            journal.send("systemd-notify: "+message)
                     else:
                         continue
-            #debug
             else:
-                print("journal has no new entries")
+                pass
             continue
 
 if __name__ == "__main__":
-    main_pid=os.getpid()
-    print("systemd_notify.py pid: "+ str(main_pid))
-    #print("attempting to start logReader...")
     lr=LogReader()
     lr.daemon=True
-    started=lr.start()
-    #print("atempting to start logindMonitor...")
+    lr.start()
     lm=logindMonitor()
     lm.start()
+    if isinstance(lr,object) & isinstance(lm,object) :
+        pid=os.getpid()
+        js=journal.send("systemd-notify: successfully started logReader and logindMonitor instances with pid "+ str(pid))
+        try:
+            fp=os.open("/tmp/systemd-notify.pid",os.O_RDWR|os.O_CREAT)
+            os.write(fp,str(pid))
+            os.close(fp)
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}" 
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-notify: "+message)
+
     db = DbusNotify()
-    db.run()
+    db_started=db.run()
