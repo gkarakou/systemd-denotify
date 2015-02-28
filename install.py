@@ -52,9 +52,6 @@ class Installer():
         out="/usr/sbin/usermod -a -G systemd-journal" +str(output)
         usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
         #usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
-        #usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
-        #usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
-        #usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
 
 
     def install2(self):
