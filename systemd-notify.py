@@ -82,50 +82,45 @@ class logindMonitor(threading.Thread):
         Thread.__init__(self)
 
     def run(self):
-            '''API->http://www.freedesktop.org/software/systemd/python-systemd/'''
+        '''API->http://www.freedesktop.org/software/systemd/python-systemd/'''
 
-            while True:
-                    time.sleep(1)
-                    try:
-                        mu = login.Monitor("uid")
-                    except Exception as ex:
-                        template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        journal.send("systemd-notify: "+message)
-                    p = select.poll()
-                    try:
-                        p.register(mu, mu.get_events())
-                    except Exception as ex:
-                        template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        journal.send("systemd-notify: "+message)
-                    p.poll()
-                    u = login.uids()
-                    for user in u:
-                        now = datetime.datetime.now()
-                        try:
-                            Notify.init("systemd-notify")
-                            n = Notify.Notification.new(
-                            "systemd-notify",
-                            "login from user id: " +
-                            str(user) +
-                            " at " +
-                            str(now)[
-                            :19])
-                            n.show()
-                        except Exception as ex:
-                            template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                            message = template.format(type(ex).__name__, ex.args)
-                            journal.send("systemd-notify: "+message)
+        while True:
+            time.sleep(1)
+            try:
+                monitor_uids = login.Monitor("uid")
+            except Exception as ex:
+                template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                message = template.format(type(ex).__name__, ex.args)
+                journal.send("systemd-notify: "+message)
+                poller = select.poll()
+            try:
+                poller.register(monitor_uids, monitor_uids.get_events())
+            except Exception as ex:
+                template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                message = template.format(type(ex).__name__, ex.args)
+                journal.send("systemd-notify: "+message)
+            poller.poll()
+            users = login.uids()
+            for user in users:
+                now = datetime.datetime.now()
+                try:
+                    Notify.init("systemd-notify")
+                    notificatio = Notify.Notification.new("systemd-notify", "login from user id: "+str(user) +" at "+str(now)[:19])
+                    notificatio.show()
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-notify: "+message)
 
     def __del__(self):
 
         '''this wont run but we provide it for completeness'''
-        if callable(getattr(threading.Thread,"__del__")):
-            return super.__del__()
+        if callable(getattr(threading.Thread, "__del__")):
+            super.__del__()
+            return
         else:
-             del self.run
-             return None
+            del self.run
+            return 
 
 class LogReader(threading.Thread):
 
@@ -182,23 +177,24 @@ class LogReader(threading.Thread):
 
         '''this wont run but we provide it for completeness'''
         if callable(getattr(threading.Thread,"__del__")):
-            return super.__del__()
+            super.__del__()
+            return 
         else:
-             del self.run
-             return None
+            del self.run
+            return 
 
 if __name__ == "__main__":
     lr = LogReader()
-    lr.daemon=True
+    lr.daemon = True
     lr.start()
     lm = logindMonitor()
     lm.start()
-    if isinstance(lr,object) & isinstance(lm,object) :
+    if isinstance(lr, object) & isinstance(lm, object) :
         pid = os.getpid()
         js = journal.send("systemd-notify: successfully started logReader and logindMonitor instances with pid "+ str(pid))
         try:
             with open('/tmp/systemd-notify.pid', 'w') as of:
-                    of.write(str(pid))
+                of.write(str(pid))
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
