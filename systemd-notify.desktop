@@ -1,5 +1,5 @@
 [Desktop Entry]
 Version=1.0
-Name=Pynotify33 System
+Name=Pynotify System
 Type=Application
 Exec=/usr/local/bin/systemd-notify.py

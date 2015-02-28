@@ -32,27 +32,26 @@ class Installer():
         output = "/usr/bin/w | /usr/bin/grep ':0' | /usr/bin/cut -d' ' -f1 | /usr/bin/sort|/usr/bin/uniq"
         try:
             who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
-            grep = sub.Popen(['/usr/bin/grep', ':0'], stdout=sub.PIPE, stderr=sub.PIPE)
-            cut = sub.Popen(['/usr/bin/cut', '-d " "', '-f1'], stdout=sub.PIPE, stderr=sub.PIPE)
-            sort = sub.Popen(['/usr/bin/sort'], stdout=sub.PIPE, stderr=sub.PIPE)
-            uniq = sub.Popen(['/usr/bin/uniq'], stdout=sub.PIPE, stderr=sub.PIPE)
+            grep = sub.Popen(['/usr/bin/grep', ':0'], stdin=who.stdout, stdout=sub.PIPE)
+            cut = sub.Popen(['/usr/bin/cut', '-d ', '-f1'], stdin=grep.stdout, stdout=sub.PIPE)
+            sort = sub.Popen(['/usr/bin/sort'], stdin=cut.stdout, stdout=sub.PIPE)
+            uniq = sub.Popen(['/usr/bin/uniq'], stdin=sort.stdout, stdout=sub.PIPE)
             who.stdout.close()
             grep.stdout.close()
             cut.stdout.close()
             sort.stdout.close()
-            #output, errors = uniq.communicate()[0]
-            output, errors = uniq.communicate()
-            if output:
-                print("output from w command: "+output)
-            elif errors:
-                print(errors)
+            end_of_pipe = uniq.stdout
+            for line in end_of_pipe:
+                data = line.strip()   
+                stringify = str(data.decode("utf-8"))
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
-        out="/usr/sbin/usermod -a -G systemd-journal" +str(output)
-        usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
-        #usermod = sub.Popen(["/usr/sbin/usermod"], stdout=sub.PIPE, stderr=sub.PIPE)
+        #this will raise auto if exit status non zero 
+        command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
+        usermod = sub.check_call(command.split(), shell=False)
+
 
 
     def install2(self):
@@ -122,6 +121,7 @@ if sys.argv[1] == "python2":
     installer.install2()
 elif sys.argv[1] == "python3":
     installer.install3()
+    installer.add_Xuser_to_group()
 else:
     print("There can be only one argument: either python2 or python3")
     sys.exit(-1)
