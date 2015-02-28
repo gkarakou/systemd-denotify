@@ -88,7 +88,7 @@ class logindMonitor(threading.Thread):
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
                 journal.send("systemd-notify: "+message)
-                poller = select.poll()
+            poller = select.poll()
             try:
                 poller.register(monitor_uids, monitor_uids.get_events())
             except Exception as ex:
