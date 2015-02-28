@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from dbus import SystemBus, Interface
 import threading
-import select
+import selec
 from systemd import login
 import time
 import datetime
@@ -83,20 +83,20 @@ class logindMonitor(threading.Thread):
 
     def run(self):
             '''API->http://www.freedesktop.org/software/systemd/python-systemd/'''
-            
+
             while True:
                     time.sleep(1)
                     try:
                         mu = login.Monitor("uid")
                     except Exception as ex:
-                        template = "An exception of type {0} occured. Arguments:\n{1!r}" 
+                        template = "An exception of type {0} occured. Arguments:\n{1!r}"
                         message = template.format(type(ex).__name__, ex.args)
                         journal.send("systemd-notify: "+message)
                     p = select.poll()
                     try:
                         p.register(mu, mu.get_events())
                     except Exception as ex:
-                        template = "An exception of type {0} occured. Arguments:\n{1!r}" 
+                        template = "An exception of type {0} occured. Arguments:\n{1!r}"
                         message = template.format(type(ex).__name__, ex.args)
                         journal.send("systemd-notify: "+message)
                     p.poll()
@@ -119,7 +119,7 @@ class logindMonitor(threading.Thread):
                             journal.send("systemd-notify: "+message)
 
     def __del__(self):
-        
+
         '''this wont run but we provide it for completeness'''
         if callable(getattr(threading.Thread,"__del__")):
             return super.__del__()
@@ -136,11 +136,11 @@ class LogReader(threading.Thread):
     def run(self):
 
         '''API->http://www.freedesktop.org/software/systemd/python-systemd/'''
-        
+
         j = journal.Reader()
         j.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
-        
+
         # it is questionable whether there is actually a record with the real
         # datetime we provide but we assume it moves the cursor to somewhere
         # near the end of the journal fd
@@ -170,7 +170,7 @@ class LogReader(threading.Thread):
                             else:
                                 continue
                         except Exception as ex:
-                            template = "An exception of type {0} occured. Arguments:\n{1!r}" 
+                            template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
                             journal.send("systemd-notify: "+message)
                     else:
@@ -180,7 +180,7 @@ class LogReader(threading.Thread):
             continue
 
     def __del__(self):
-        
+
         '''this wont run but we provide it for completeness'''
         if callable(getattr(threading.Thread,"__del__")):
             return super.__del__()
@@ -202,7 +202,7 @@ if __name__ == "__main__":
             with open('/tmp/systemd-notify.pid', 'w') as of:
                     of.write(str(pid))
         except Exception as ex:
-            template = "An exception of type {0} occured. Arguments:\n{1!r}" 
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
 
