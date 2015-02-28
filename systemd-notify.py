@@ -110,7 +110,7 @@ class logindMonitor(threading.Thread):
 
     def __del__(self):
 
-        '''this wont run but we provide it for completeness'''
+        #this wont run but we provide it for completeness
         if callable(getattr(threading.Thread, "__del__")):
             super.__del__()
             return

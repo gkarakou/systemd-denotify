@@ -26,8 +26,10 @@ class Installer():
         else:
             print("os wasnt arch")
 
-    def add_Xuser_to_group(self):
+    def addXuser_to_group(self):
         output = "/usr/bin/w | /usr/bin/grep ':0' | /usr/bin/cut -d' ' -f1 | /usr/bin/sort|/usr/bin/uniq"
+        #CREDITS->http://pymotw.com/2/subprocess/
+        
         try:
             who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
             grep = sub.Popen(['/usr/bin/grep', ':0'], stdin=who.stdout, stdout=sub.PIPE)
@@ -53,7 +55,7 @@ class Installer():
             print("Your user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
 
 
-    def install2(self):
+    def install_v2(self):
         path = os.path.dirname(os.path.abspath(__file__))
         src_c = path+"/systemd-notify.py"
         src_d = path+"/systemd-notify.desktop"
@@ -76,7 +78,7 @@ class Installer():
 
         print("successfully installed systemd-notify v2")
 
-    def install3(self):
+    def install_v3(self):
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
         with open(path+"/systemd-notify.desktop", "r+") as fin:
@@ -108,21 +110,21 @@ class Installer():
 
     #def __del__(self):
 
-     #   del self.install2
-     #   del self.install3
+     #   del self.install_v2
+     #   del self.install_v3
 
 
 installer = Installer()
 if len(list(sys.argv)) == 1:
-    print("Error\nYou must enter at least one argument: either python2 or python3.\nExiting...") 
+    print("Error\nYou must enter one argument: either python2 or python3.\nExiting...") 
     sys.exit(1)
 if sys.argv[1] == "python2":
     installer.is_archlinux()
-    installer.add_Xuser_to_group()
-    installer.install2()
+    installer.addXuser_to_group()
+    installer.install_v2()
 elif sys.argv[1] == "python3":
     installer.add_Xuser_to_group()
-    installer.install3()
+    installer.install_v3()
 else:
     print("There can be only one argument: either python2 or python3")
     sys.exit(1)
