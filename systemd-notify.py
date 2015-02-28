@@ -124,7 +124,6 @@ class logindMonitor(threading.Thread):
         if callable(getattr(threading.Thread,"__del__")):
             return super.__del__()
         else:
-             del self.logindMonitor
              del self.run
              return None
 
@@ -185,7 +184,6 @@ class LogReader(threading.Thread):
         if callable(getattr(threading.Thread,"__del__")):
             return super.__del__()
         else:
-             del self.logindMonitor
              del self.run
              return None
 
