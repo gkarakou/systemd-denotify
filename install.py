@@ -9,8 +9,6 @@ import subprocess as sub
 class Installer():
 
     def __init__(self):
-        #print("instatiating class Installer")
-        #sys.argv = argv
         pass
 
     def is_archlinux(self):
@@ -48,10 +46,11 @@ class Installer():
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
-        #this will raise auto if exit status non zero 
+        #this will autoraise  if exit status non zero 
         command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
         usermod = sub.check_call(command.split(), shell=False)
-
+        if usermod:
+            print("Your user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
 
 
     def install2(self):
@@ -111,17 +110,19 @@ class Installer():
 
      #   del self.install2
      #   del self.install3
-     #   return None
 
 
 installer = Installer()
+if len(list(sys.argv)) == 1:
+    print("Error\nYou must enter at least one argument: either python2 or python3.\nExiting...") 
+    sys.exit(1)
 if sys.argv[1] == "python2":
     installer.is_archlinux()
     installer.add_Xuser_to_group()
     installer.install2()
 elif sys.argv[1] == "python3":
-    installer.install3()
     installer.add_Xuser_to_group()
+    installer.install3()
 else:
     print("There can be only one argument: either python2 or python3")
-    sys.exit(-1)
+    sys.exit(1)
