@@ -31,19 +31,20 @@ class Installer():
     def add_Xuser_to_group(self):
         output = "/usr/bin/w | /usr/bin/grep ':0' | /usr/bin/cut -d' ' -f1 | /usr/bin/sort|/usr/bin/uniq"
         try:
-            who = sub.Popen(["/usr/bin/w"], stdout=sub.PIPE, stderr=sub.PIPE)
-            grep = sub.Popen(["/usr/bin/grep", ":0"], stdout=sub.PIPE, stderr=sub.PIPE)
-            cut = sub.Popen(["/usr/bin/cut", "-d' ' ", "-f1"], stdout=sub.PIPE, stderr=sub.PIPE)
-            sort = sub.Popen(["/usr/bin/sort"], stdout=sub.PIPE, stderr=sub.PIPE)
-            uniq = sub.Popen(["/usr/bin/uniq"], stdout=sub.PIPE, stderr=sub.PIPE)
+            who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
+            grep = sub.Popen(['/usr/bin/grep', ':0'], stdout=sub.PIPE, stderr=sub.PIPE)
+            cut = sub.Popen(['/usr/bin/cut', '-d " "', '-f1'], stdout=sub.PIPE, stderr=sub.PIPE)
+            sort = sub.Popen(['/usr/bin/sort'], stdout=sub.PIPE, stderr=sub.PIPE)
+            uniq = sub.Popen(['/usr/bin/uniq'], stdout=sub.PIPE, stderr=sub.PIPE)
             who.stdout.close()
             grep.stdout.close()
             cut.stdout.close()
             sort.stdout.close()
-            output, errors = uniq.communicate()[0]
+            #output, errors = uniq.communicate()[0]
+            output, errors = uniq.communicate()
             if output:
                 print("output from w command: "+output)
-            else:
+            elif errors:
                 print(errors)
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"

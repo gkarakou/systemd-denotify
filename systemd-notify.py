@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from dbus import SystemBus, Interface
 import threading
-import selec
+import select
 from systemd import login
 import time
 import datetime

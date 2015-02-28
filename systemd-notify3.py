@@ -2,7 +2,7 @@
 from __future__ import print_function
 from dbus import SystemBus, Interface
 import threading
-import selec
+import select
 from systemd import login
 import time
 import datetime
