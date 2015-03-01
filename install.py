@@ -11,6 +11,26 @@ class Installer():
     def __init__(self):
         pass
 
+    def get_uid(self):
+        uid = os.getuid()
+  #      print("uid= "+ str(uid))
+        return uid
+   
+  #  def setuid_root(self,uid_root):
+  #      self.uid_root = uid_root
+  #      try:
+  #          setuid_toor = os.setuid(uid_root)
+  #          if setuid_toor:
+  #              print("getting uid in True setuid_root func: "+ str(self.get_uid())) 
+  #              return True
+  #          else:
+  #              print("getting uid in False setuid_root func: "+ str(self.get_uid())) 
+  #              return False
+  #      except Exception  as ex:
+  #          template = "An exception of type {0} occured. Arguments:\n{1!r}"
+  #          message = template.format(type(ex).__name__, ex.args)
+  #          journal.send("systemd-notify: "+message)
+
     def is_archlinux(self):
         if  os.path.isfile("/etc/pacman.conf"):
             path = os.path.dirname(os.path.abspath(__file__))
@@ -27,9 +47,12 @@ class Installer():
             print("os wasnt arch")
 
     def addXuser_to_group(self):
-        output = "/usr/bin/w | /usr/bin/grep ':0' | /usr/bin/cut -d' ' -f1 | /usr/bin/sort|/usr/bin/uniq"
         #CREDITS->http://pymotw.com/2/subprocess/
-        
+   #     print("getting uid in addXuser func before setresuid: "+ str(self.get_uid())) 
+   #     os.setresuid(0,0,0)
+   #     print("getting uid in addXuser func after setresuid: "+ str(self.get_uid())) 
+
+        login = os.getlogin()       
         try:
             who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
             grep = sub.Popen(['/usr/bin/grep', ':0'], stdin=who.stdout, stdout=sub.PIPE)
@@ -49,11 +72,16 @@ class Installer():
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
         #this will autoraise  if exit status non zero 
-        command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
-        usermod = sub.check_call(command.split(), shell=False)
-        if usermod:
-            print("Your user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
-
+        if login == stringify:
+            #print("login user matches X user")
+            command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
+            usermod = sub.check_call(command.split(), shell=False)
+            if usermod:
+                print("Your user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
+                return True
+            else:
+                print("Your user was not added to the systemd-journal group " )
+                return False
 
     def install_v2(self):
         path = os.path.dirname(os.path.abspath(__file__))
@@ -123,7 +151,9 @@ if sys.argv[1] == "python2":
     installer.addXuser_to_group()
     installer.install_v2()
 elif sys.argv[1] == "python3":
-    installer.add_Xuser_to_group()
+    installer.get_uid()
+   # installer.setuid_root(0)
+    installer.addXuser_to_group()
     installer.install_v3()
 else:
     print("There can be only one argument: either python2 or python3")
