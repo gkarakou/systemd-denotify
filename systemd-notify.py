@@ -16,26 +16,22 @@ class DbusNotify():
     def __init__(self):
         pass
 
-    def run(self, start, minutes, list):
+    def run(self, *args):
         '''API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html'''
         '''API->http://www.freedesktop.org/wiki/Software/systemd/dbus/'''
         '''Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/'''
         
-        print type(start)
-        print type(minutes)
-        print type(list)
-        print "\n"
-        print list[0]
-        print list[1]
-        if start == "False":
+        
+        if sys.argv[1] == "False":
             return False
         else:
-            secs = int(minutes) * 60
+            secs = int(sys.argv[2]) * 60
             threat = threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-            for a in list:
+            len_args=len(args)
+            for a in args[3:len_args]:
                 try:
                     getUnit = manager.LoadUnit(a)
                 except  Exception as ex:
@@ -193,19 +189,6 @@ if __name__ == "__main__":
             templated = "An exception of type {0} occured. Arguments:\n{1!r}"
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
-    
-
-    #print type(sys.argv[1])
-    #print type(sys.argv[2])
-    print type(sys.argv[3])
-    print "argv 4: " + sys.argv[4]
-    print "argv 5: " + sys.argv[5]
-    
-   # if type(sys.argv[1]) == str and sys.argv[1] == "True":
-   #     if sys.argv[2] and type(sys.argv[2]) == str:
-   #         if sys.argv[3] and type(sys.argv[3]) == str:
   
-    size_argv=len(sys.argv)
-    print size_argv
-       #  db = DbusNotify()
-       #  db_started=db.run(sys.argv[1], sys.argv[2], sys.argv[3])
+    db = DbusNotify()
+    db_started=db.run(*sys.argv)

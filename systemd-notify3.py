@@ -17,22 +17,22 @@ class DbusNotify():
     def __init__(self):
         pass
 
-    def run(self, start, minutes, *services):
+    def run(self, *args):
         '''API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html'''
         '''API->http://www.freedesktop.org/wiki/Software/systemd/dbus/'''
         '''Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/'''
-
-        if start == False:
+        
+        
+        if sys.argv[1] == "False":
             return False
         else:
-            secs = minutes * 60
+            secs = int(sys.argv[2]) * 60
             threat = threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-
-            array = services 
-            for a in array:
+            len_args=len(args)
+            for a in args[3:len_args]:
                 try:
                     getUnit = manager.LoadUnit(a)
                 except  Exception as ex:
@@ -190,9 +190,6 @@ if __name__ == "__main__":
             templated = "An exception of type {0} occured. Arguments:\n{1!r}"
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
-    
-    if type(sys.argv[1]) == str & sys.argv[1] == "True":
-        if sys.argv[2] & type(sys.argv[2]) == int:
-            if sys.argv[3] & type(sys.argv[3]) == list:
-                db = DbusNotify()
-                db_started=db.run(sys.argv[1], sys.argv[2], sys.argv[3])
+  
+    db = DbusNotify()
+    db_started=db.run(*sys.argv)

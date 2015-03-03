@@ -87,14 +87,15 @@ class Installer():
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
         for service in services:
-           # for s in service:
-            #    print("s in service: "+ s)
-           with open(path+"/systemd-notify.desktop", "r+") as fin:
-            data += fin.read()
-            fin.seek(0)
-            data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + start +" " + str(minutes) + " "+ str(service))
-            fin.write(data_replace)
-            fin.truncate()
+            ser = ""
+            for s in service:
+                ser += s + " "
+            with open(path+"/systemd-notify.desktop", "r+") as fin:
+                data += fin.read()
+                fin.seek(0)
+                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + start +" " + str(minutes) + " "+ str(ser))
+                fin.write(data_replace)
+                fin.truncate()
 
         src_c = path+"/systemd-notify.py"
         src_d = path+"/systemd-notify.desktop"
@@ -117,15 +118,19 @@ class Installer():
 
         print("successfully installed systemd-notify v2")
 
-    def install_v3(self):
+    def install_v3(self, start, minutes, *services):
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
-        with open(path+"/systemd-notify.desktop", "r+") as fin:
-            data += fin.read()
-            fin.seek(0)
-            data_replace = data.replace("notify", "notify3")
-            fin.write(data_replace)
-            fin.truncate()
+        for service in services:
+            ser = ""
+            for s in service:
+                ser += s + " "
+            with open(path+"/systemd-notify.desktop", "r+") as fin:
+                data += fin.read()
+                fin.seek(0)
+                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify3.py", "Exec=/usr/local/bin/systemd-notify3.py" + " " + start +" " + str(minutes) + " "+ str(ser))
+                fin.write(data_replace)
+                fin.truncate()
         src_c = path+"/systemd-notify3.py"
         src_d = path+"/systemd-notify.desktop"
         dst_c = "/usr/local/bin/systemd-notify3.py"
@@ -168,11 +173,10 @@ if input_from_user_bool:
 input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a comma: ")
 if input_from_user_list:
     if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
-        services_list=["iptables.service", "rc-local.service", "polkit.service", "autovt@tty2.service"]
+        services_list="iptables.service", "rc-local.service", "polkit.service", "autovt@tty2.service"
     elif type(input_from_user_list) == str & "," in input_from_user_list:
-        services_list=[]
-        services_list=input_from_user_list.split(",")
-        #services_list.append(services)
+        services_list = ""
+        services_list +=input_from_user_list.split(",")
     else:
         print("Either type Y or type the services you want separated by a space")
  #       continue
@@ -198,7 +202,7 @@ elif sys.argv[1] == "v3":
     installer.get_uid()
    # installer.setuid_root(0)
     installer.addXuser_to_group()
-    installer.install_v3()
+    installer.install_v3(str(start_dbus), moments, services_list)
 else:
     print("There can be only one argument: either v2 or v3")
     sys.exit(1)
