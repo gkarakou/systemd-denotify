@@ -83,8 +83,19 @@ class Installer():
                 print("Your user was not added to the systemd-journal group " )
                 return False
 
-    def install_v2(self):
+    def install_v2(self, start, services, minutes):
+        self.start = start
+        self.services = services
+        self.minutes = minutes
         path = os.path.dirname(os.path.abspath(__file__))
+        data = ""
+        with open(path+"/systemd-notify.desktop", "r+") as fin:
+            data += fin.read()
+            fin.seek(0)
+            data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + self.start +" " + self.services +" " + self.minutes)
+            fin.write(data_replace)
+            fin.truncate()
+
         src_c = path+"/systemd-notify.py"
         src_d = path+"/systemd-notify.desktop"
         dst_c = "/usr/local/bin/systemd-notify.py"
@@ -143,18 +154,50 @@ class Installer():
 
 
 installer = Installer()
+input_from_user_bool= raw_input("Would you like to receive notifications for the status of some services? Y/n")
+if input_from_user_bool:
+    if type(input_from_user_bool) == str & input_from_user_bool == "Y" | input_from_user_bool == "y":
+        start_dbus = True
+    elif type(input_from_user_bool) == str & input_from_user_bool == "N" | input_from_user_bool == "n":
+        start_dbus = False
+    else:
+        print("You must type either Y or N for Yes or No")
+else:
+    continue
+input_from_user_list = raw_input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a comma")
+if input_from_user_list:
+    if type(input_from_user_list) == str & input_from_user_list == "Y" | input_from_user_list == "y" :
+        services_list=["iptables.service", "rc-local.service", "polkit.service", "autovt@tty2.service"]
+    elif type(input_from_user_list) == str & "," in input_from_user_list:
+        services_list=[]
+        services_list=input_from_user_list.split(",")
+        #services_list.append(services)
+    else:
+        print("Either type Y or type the services you want separated by a space")
+else:
+    continue
+input_from_user_int =raw_input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want") 
+if input_from_user_int:
+    if type(input_from_user_int) == str & input_from_user_int == "Y" | input_from_user_int == "y":
+        moments=30
+    elif type(input_from_user_int) == int:
+        moments = input_from_user_int
+    else:
+        print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want")
+else:
+    continue
 if len(list(sys.argv)) == 1:
-    print("Error\nYou must enter one argument: either python2 or python3.\nExiting...") 
+    print("Error\nYou must enter one argument: either v2 or v3.\nExiting...") 
     sys.exit(1)
-if sys.argv[1] == "python2":
+if sys.argv[1] == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
-    installer.install_v2()
-elif sys.argv[1] == "python3":
+    installer.install_v2(start_dbus, services_list, moments)
+elif sys.argv[1] == "v3":
     installer.get_uid()
    # installer.setuid_root(0)
     installer.addXuser_to_group()
     installer.install_v3()
 else:
-    print("There can be only one argument: either python2 or python3")
+    print("There can be only one argument: either v2 or v3")
     sys.exit(1)
