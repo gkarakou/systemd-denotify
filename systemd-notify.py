@@ -190,8 +190,8 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     
-    if type(sys.argv[1]) == str & sys.argv[1] == "True":
-        if sys.argv[2] & type(sys.argv[2]) == int:
-            if sys.argv[3] & type(sys.argv[3]) == list:
+    if type(sys.argv[1]) == bool and sys.argv[1] == True:
+        if sys.argv[2] and type(sys.argv[2]) == int:
+            if sys.argv[3] and type(sys.argv[3]) == list:
                 db = DbusNotify()
                 db_started=db.run(sys.argv[1], sys.argv[2], sys.argv[3])
