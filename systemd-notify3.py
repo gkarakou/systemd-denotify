@@ -17,24 +17,21 @@ class DbusNotify():
     def __init__(self):
         pass
 
-    def run(self, start=False, services=["iptables.service", "rc-local.service", "polkit.service", "autovt@tty2.service"], minutes=30):
+    def run(self, start, minutes, *services):
         '''API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html'''
         '''API->http://www.freedesktop.org/wiki/Software/systemd/dbus/'''
         '''Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/'''
 
-        self.start = start
-        self.services = services
-        self.minutes = minutes
-        if self.start == False:
+        if start == False:
             return False
         else:
-            secs = self.minutes * 60
+            secs = minutes * 60
             threat = threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
 
-            array = self.services 
+            array = services 
             for a in array:
                 try:
                     getUnit = manager.LoadUnit(a)
@@ -194,8 +191,8 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     
-    if type(sys.argv[1]) == bool & sys.argv[1] == "True":
-        if sys.argv[2] & type(sys.argv[2]) == list:
-            if sys.argv[3] & type(sys.argv[3]) == int:
+    if type(sys.argv[1]) == str & sys.argv[1] == "True":
+        if sys.argv[2] & type(sys.argv[2]) == int:
+            if sys.argv[3] & type(sys.argv[3]) == list:
                 db = DbusNotify()
                 db_started=db.run(sys.argv[1], sys.argv[2], sys.argv[3])

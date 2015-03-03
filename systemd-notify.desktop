@@ -1,5 +1,5 @@
 [Desktop Entry]
 Version=1.0
-Name=Pynotify33333 System
+Name=Pynotify System
 Type=Application
-Exec=/usr/local/bin/systemd-notify33333.py
+Exec=/usr/local/bin/systemd-notify.py True 30 ['iptables.service', 'rc-local.service', 'polkit.service', 'autovt@tty2.service'] True 30 ['iptables.service', 'rc-local.service', 'polkit.service', 'autovt@tty2.service']
