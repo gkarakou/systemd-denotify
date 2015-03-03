@@ -190,6 +190,5 @@ if __name__ == "__main__":
             templated = "An exception of type {0} occured. Arguments:\n{1!r}"
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
-  
     db = DbusNotify()
     db_started=db.run(*sys.argv)
