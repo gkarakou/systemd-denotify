@@ -16,22 +16,26 @@ class DbusNotify():
     def __init__(self):
         pass
 
-    def run(self, start, minutes, *services):
+    def run(self, start, minutes, list):
         '''API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html'''
         '''API->http://www.freedesktop.org/wiki/Software/systemd/dbus/'''
         '''Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/'''
-
-        if start == False:
+        
+        print type(start)
+        print type(minutes)
+        print type(list)
+        print "\n"
+        print list[0]
+        print list[1]
+        if start == "False":
             return False
         else:
-            secs = minutes * 60
+            secs = int(minutes) * 60
             threat = threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-
-            array = services 
-            for a in array:
+            for a in list:
                 try:
                     getUnit = manager.LoadUnit(a)
                 except  Exception as ex:
@@ -190,8 +194,18 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     
-    if type(sys.argv[1]) == bool and sys.argv[1] == True:
-        if sys.argv[2] and type(sys.argv[2]) == int:
-            if sys.argv[3] and type(sys.argv[3]) == list:
-                db = DbusNotify()
-                db_started=db.run(sys.argv[1], sys.argv[2], sys.argv[3])
+
+    #print type(sys.argv[1])
+    #print type(sys.argv[2])
+    print type(sys.argv[3])
+    print "argv 4: " + sys.argv[4]
+    print "argv 5: " + sys.argv[5]
+    
+   # if type(sys.argv[1]) == str and sys.argv[1] == "True":
+   #     if sys.argv[2] and type(sys.argv[2]) == str:
+   #         if sys.argv[3] and type(sys.argv[3]) == str:
+  
+    size_argv=len(sys.argv)
+    print size_argv
+       #  db = DbusNotify()
+       #  db_started=db.run(sys.argv[1], sys.argv[2], sys.argv[3])
