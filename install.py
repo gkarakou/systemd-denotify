@@ -198,8 +198,6 @@ if sys.argv[1] == "v2":
     installer.addXuser_to_group()
     installer.install_v2(str(start_dbus), moments, services_list)
 elif sys.argv[1] == "v3":
-    installer.get_uid()
-   # installer.setuid_root(0)
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
 else:
