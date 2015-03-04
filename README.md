@@ -2,7 +2,7 @@
 GENERAL
 -------------------
 Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
-These classes provide desktop notification upon a user login and when a systemd service fails (by constantly reading the systemd journal).
+These classes provide desktop notification upon a user login and when a systemd service fails (something unlikely to happen unless you are playing around with systemd directives in unit files like me).
 There is also one class that every specified interval (by default 30 minutes) notifies the user for the status of some services.
 One can start it on demand by answering the questions when installing. See the INSTALL section 
 
@@ -12,9 +12,9 @@ REQUIREMENTS
 
 As the name implies you need to be running a modern linux distribution with systemd.
 
- You also need a running Xorg, this script(though i like to call it a classy python app) wont work without a desktop session.
+You also need a running Xorg, this script(though i like to call it a classy python app) wont work without a desktop session.
 
-
+As a linux user you have to be comfortable with the terminal. 
 
 DEPENDENCIES
 -------------------
@@ -70,6 +70,8 @@ NOTE: There is a chance you installed the equivalent python3 packages. See below
 
 INSTALL
 ------------------------
+On a terminal:
+
 <pre>git clone https://github.com/gkarakou/systemd-notify.py.git
 
 cd systemd-notify.py
