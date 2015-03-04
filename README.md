@@ -83,7 +83,7 @@ exit
 or do it with sudo if you believe its safer:
 <pre>
 
-sudo python3 install.pt -v2
+sudo python3 install.py -v2
 
 </pre>
 
