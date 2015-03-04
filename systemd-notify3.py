@@ -13,25 +13,38 @@ import os
 import sys
 
 class DbusNotify():
+    """
+    DbusNotify 
+    :desc: Class that notifies the user for the status of some systemd services
+    Has an empty constructor and a run method
+    """
 
     def __init__(self):
+        """
+        __init__ 
+        :desc: Constructor function that by default does nothing
+        """
         pass
 
     def run(self, *args):
-        '''API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html'''
-        '''API->http://www.freedesktop.org/wiki/Software/systemd/dbus/'''
-        '''Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/'''
-        
-        
+        """
+        run 
+        return False or void   
+        :param *args: user supplied args 
+        :desc: function that starts a timer thread based on user input
+        Helpful API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html
+        Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
+        Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
+        """
         if sys.argv[1] == "False":
             return False
         else:
             secs = int(sys.argv[2]) * 60
-            threat = threading.Timer(secs, self.run, args).start()
+            threading.Timer(secs, self.run, args).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-            len_args=len(args)
+            len_args = len(args)
             for a in args[3:len_args]:
                 try:
                     getUnit = manager.LoadUnit(a)
@@ -66,16 +79,29 @@ class DbusNotify():
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-notify: "+message)
-            #return
-
 
 class logindMonitor(threading.Thread):
+    """
+    logindMonitor
+    :desc: Class that notifies the user for user logins
+    Extends threading.Thread
+    Has a constructor that calls the parent one, a run method and a destructor
+    """
 
     def __init__(self):
+        """
+        __init__
+        return parent constructor
+        """
         Thread.__init__(self)
 
     def run(self):
-        '''API->http://www.freedesktop.org/software/systemd/python-systemd/'''
+        """
+        run
+        return void
+        :desc: function that goes on an infinite loop polling the logind daemon for user logins 
+        Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
+        """
 
         while True:
             time.sleep(1)
@@ -106,8 +132,11 @@ class logindMonitor(threading.Thread):
                     journal.send("systemd-notify: "+message)
 
     def __del__(self):
-
-        '''this wont run but we provide it for completeness'''
+        """
+        __del__
+        return parent destructor or del objects
+        :desc: destructor function that wont run because the gc will run first, but we provide it for completeness
+        """
         if callable(getattr(threading.Thread, "__del__")):
             super.__del__()
             return
@@ -116,14 +145,27 @@ class logindMonitor(threading.Thread):
             return 
 
 class LogReader(threading.Thread):
+    """
+    LogReader
+    :desc: Class that notifies the user for failed systemd services 
+    Extends threading.Thread
+    Has an constructor that calls the parent one, a run method and a destructor
+    """
 
     def __init__(self):
+        """
+        __init__
+        return parent constructor
+        """
         Thread.__init__(self)
 
     def run(self):
-
-        '''API->http://www.freedesktop.org/software/systemd/python-systemd/'''
-
+        """
+        run
+        return void
+        :desc: function that goes on an infinite loop polling the systemd-journal for failed services
+        Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
+        """
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -165,8 +207,10 @@ class LogReader(threading.Thread):
             continue
 
     def __del__(self):
-
-        '''this wont run but we provide it for completeness'''
+        """__del__
+        return parent destructor or del objects
+        :desc: destructor function that wont run because the gc will run first, but we provide it for completeness
+        """
         if callable(getattr(threading.Thread, "__del__")):
             super.__del__()
             return 
@@ -175,6 +219,14 @@ class LogReader(threading.Thread):
             return 
 
 if __name__ == "__main__":
+    """
+    __main__
+    :desc: Somewhat main function though we are linux only
+    Starts logReader and logindMonitor instances (threads)
+    Writes pid file on /tmp cause we dont have and dont want root rights
+    based on user input
+    Instantiates DbusNotify class and starts run function with string args (True/False, time, services)
+    """
     log_reader = LogReader()
     log_reader.daemon = True
     log_reader.start()
@@ -182,7 +234,7 @@ if __name__ == "__main__":
     lm.start()
     if isinstance(log_reader, object) & isinstance(lm, object):
         pid = os.getpid()
-        js = journal.send("systemd-notify: successfully started logReader and logindMonitor instances with pid "+ str(pid))
+        js = journal.send("systemd-notify: successfully started with pid "+ str(pid))
         try:
             with open('/tmp/systemd-notify.pid', 'w') as of:
                 of.write(str(pid))
@@ -191,4 +243,4 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     db = DbusNotify()
-    db_started=db.run(*sys.argv)
+    db_started = db.run(*sys.argv)
