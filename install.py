@@ -86,14 +86,19 @@ class Installer():
     def install_v2(self, start, minutes, *services):
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
+        #print(type(services))
+        #print(services)
+        ser = ""
+        serv = ""
         for service in services:
-            ser = ""
-            for s in service:
-                ser += s 
+            ser = service.replace(" ", ".service ")
+            serv += ser
+        #    for s in service:
+        #        ser += s + " " 
             with open(path+"/systemd-notify.desktop", "r+") as fin:
                 data += fin.read()
                 fin.seek(0)
-                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + start +" " + str(minutes) + " "+ str(ser))
+                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + start +" " + str(minutes) + " "+ str(serv)+ ".service")
                 fin.write(data_replace)
                 fin.truncate()
 
@@ -170,29 +175,35 @@ if input_from_user_bool:
         #break 
 #else:
 #    continue
-input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a space: ")
-services_list = ""
-if input_from_user_list:
-    if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
-        services_list="iptables.service" "rc-local.service" "polkit.service" "autovt@tty2.service"
-    elif type(input_from_user_list) == str and  "," in input_from_user_list:
-           services_list=str(input_from_user_list) 
-            #services += service.split(","))
-    else:
-        print("Either type Y or type the services you want separated by a space")
+if start_dbus == False:
+    services_list = "None"
+    moments = 1000
+else:
+    input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a space: ")
+    services_list = ""
+    if input_from_user_list:
+        if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
+            services_list="iptables rc-local polkit autovt@tty2"
+        elif type(input_from_user_list) == str and  " " in input_from_user_list:
+                print(type(input_from_user_list))
+                print(input_from_user_list)
+                services_list=str(input_from_user_list) 
+                #services += service.split(","))
+        else:
+            print("Either type Y or type the services you want separated by a space")
  #       continue
 #continue
-input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ") 
-moments = "" 
-if input_from_user_int:
-    if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
-        moments += str(30)
-    elif type(input_from_user_int) == str and input_from_user_int != "Y" or input_from_user_int != "y":
-        moments += str(input_from_user_int)
-    else:
-        print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
-#        continue
-#continue
+    input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ") 
+    moments = "" 
+    if input_from_user_int:
+        if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
+            moments += str(30)
+        elif type(input_from_user_int) == str and input_from_user_int != "Y" or input_from_user_int != "y":
+            moments += str(input_from_user_int)
+        else:
+            print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
+    #        continue
+    #continue
 if len(list(sys.argv)) == 1:
     print("Error\nYou must enter one argument: either v2 or v3.\nExiting...") 
     sys.exit(1)
