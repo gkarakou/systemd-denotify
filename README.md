@@ -76,14 +76,14 @@ cd systemd-notify.py
 
 su -
 
-python3 install.py -v2
+python3 install.py v2
 
 exit
 </pre>
 or do it with sudo if you believe its safer:
 <pre>
 
-sudo python3 install.py -v2
+sudo python3 install.py v2
 
 </pre>
 
@@ -91,6 +91,6 @@ sudo python3 install.py -v2
 NOTE: if you only found the python3 libs in your distro's repos there is a python3 library named systemd-notify3.py. To install it:
 
 <pre>
-sudo python3 install.py -v3
+sudo python3 install.py v3
 </pre>
 
