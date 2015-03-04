@@ -11,11 +11,12 @@ class Installer():
     def __init__(self):
         pass
 
-    def get_uid(self):
-        uid = os.getuid()
-  #      print("uid= "+ str(uid))
-        return uid
+  #  This should be implemented if we want the user to install from a gui instead from a terminal
+  #  def get_uid(self):
+  #      uid = os.getuid()
+  #      return uid
    
+  #  This should be implemented if we want the user to install from a gui instead from a terminal
   #  def setuid_root(self,uid_root):
   #      self.uid_root = uid_root
   #      try:
@@ -48,10 +49,7 @@ class Installer():
 
     def addXuser_to_group(self):
         #CREDITS->http://pymotw.com/2/subprocess/
-   #     print("getting uid in addXuser func before setresuid: "+ str(self.get_uid())) 
-   #     os.setresuid(0,0,0)
-   #     print("getting uid in addXuser func after setresuid: "+ str(self.get_uid())) 
-
+        
         login = os.getlogin()       
         try:
             who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
@@ -86,22 +84,17 @@ class Installer():
     def install_v2(self, start, minutes, *services):
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
-        #print(type(services))
-        #print(services)
         ser = ""
         serv = ""
         for service in services:
             ser = service.replace(" ", ".service ")
             serv += ser
-        #    for s in service:
-        #        ser += s + " " 
             with open(path+"/systemd-notify.desktop", "r+") as fin:
                 data += fin.read()
                 fin.seek(0)
                 data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + start +" " + str(minutes) + " "+ str(serv)+ ".service")
                 fin.write(data_replace)
                 fin.truncate()
-
         src_c = path+"/systemd-notify.py"
         src_d = path+"/systemd-notify.desktop"
         dst_c = "/usr/local/bin/systemd-notify.py"
@@ -126,21 +119,21 @@ class Installer():
     def install_v3(self, start, minutes, *services):
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
+        ser = ""
+        serv = ""
         for service in services:
-            ser = ""
-            for s in service:
-                ser += s + " "
+            ser = service.replace(" ", ".service ")
+            serv += ser
             with open(path+"/systemd-notify.desktop", "r+") as fin:
                 data += fin.read()
                 fin.seek(0)
-                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify3.py", "Exec=/usr/local/bin/systemd-notify3.py" + " " + start +" " + str(minutes) + " "+ str(ser))
+                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify3.py" + " " + start +" " + str(minutes) + " "+ str(serv)+ ".service")
                 fin.write(data_replace)
                 fin.truncate()
         src_c = path+"/systemd-notify3.py"
         src_d = path+"/systemd-notify.desktop"
         dst_c = "/usr/local/bin/systemd-notify3.py"
         dst_d = "/etc/xdg/autostart/systemd-notify.desktop"
-
         try:
             shutil.copy2(src_c, dst_c)
             shutil.copy2(src_d, dst_d)
@@ -172,9 +165,6 @@ if input_from_user_bool:
         start_dbus = False
     else:
         print("You must type either Y or N for Yes or No: ")
-        #break 
-#else:
-#    continue
 if start_dbus == False:
     services_list = "None"
     moments = 1000
@@ -191,8 +181,6 @@ else:
                 #services += service.split(","))
         else:
             print("Either type Y or type the services you want separated by a space")
- #       continue
-#continue
     input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ") 
     moments = "" 
     if input_from_user_int:
@@ -202,8 +190,6 @@ else:
             moments += str(input_from_user_int)
         else:
             print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
-    #        continue
-    #continue
 if len(list(sys.argv)) == 1:
     print("Error\nYou must enter one argument: either v2 or v3.\nExiting...") 
     sys.exit(1)
