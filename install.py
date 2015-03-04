@@ -89,7 +89,7 @@ class Installer():
         for service in services:
             ser = ""
             for s in service:
-                ser += s + " "
+                ser += s 
             with open(path+"/systemd-notify.desktop", "r+") as fin:
                 data += fin.read()
                 fin.seek(0)
@@ -163,30 +163,32 @@ input_from_user_bool= input("Would you like to receive notifications for the sta
 if input_from_user_bool:
     if type(input_from_user_bool) == str and input_from_user_bool == "Y" or input_from_user_bool == "y":
         start_dbus = True
-    elif type(input_from_user_bool) == str & input_from_user_bool == "N" | input_from_user_bool == "n":
+    elif type(input_from_user_bool) == str and input_from_user_bool == "N" or input_from_user_bool == "n":
         start_dbus = False
     else:
         print("You must type either Y or N for Yes or No: ")
         #break 
 #else:
 #    continue
-input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a comma: ")
+input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a space: ")
+services_list = ""
 if input_from_user_list:
     if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
-        services_list="iptables.service", "rc-local.service", "polkit.service", "autovt@tty2.service"
-    elif type(input_from_user_list) == str & "," in input_from_user_list:
-        services_list = ""
-        services_list +=input_from_user_list.split(",")
+        services_list="iptables.service" "rc-local.service" "polkit.service" "autovt@tty2.service"
+    elif type(input_from_user_list) == str and  "," in input_from_user_list:
+           services_list=str(input_from_user_list) 
+            #services += service.split(","))
     else:
         print("Either type Y or type the services you want separated by a space")
  #       continue
 #continue
 input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ") 
+moments = "" 
 if input_from_user_int:
     if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
-        moments=30
-    elif type(input_from_user_int) == int:
-        moments = input_from_user_int
+        moments += str(30)
+    elif type(input_from_user_int) == str and input_from_user_int != "Y" or input_from_user_int != "y":
+        moments += str(input_from_user_int)
     else:
         print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
 #        continue

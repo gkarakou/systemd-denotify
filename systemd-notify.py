@@ -26,7 +26,7 @@ class DbusNotify():
             return False
         else:
             secs = int(sys.argv[2]) * 60
-            threat = threading.Timer(secs, self.run).start()
+            threat = threading.Timer(secs, self.run, args).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
@@ -65,7 +65,7 @@ class DbusNotify():
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-notify: "+message)
-            return
+            #return
 
 
 class logindMonitor(threading.Thread):
