@@ -31,14 +31,14 @@ class DbusNotify():
         run 
         return False or void   
         :param *args: user supplied args 
-        :desc: function that starts a timer thread based on user input
+        :desc: function that starts (or not) a timer thread based on user input
         Helpful API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
         if sys.argv[1] == "False":
             return False
-        else:
+        elif sys.argv[1] == "True":
             secs = int(sys.argv[2]) * 60
             threading.Timer(secs, self.run, args).start()
             bus = SystemBus()
@@ -79,6 +79,9 @@ class DbusNotify():
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-notify: "+message)
+        else:
+            return False
+
 
 class logindMonitor(threading.Thread):
     """

@@ -71,7 +71,6 @@ class Installer():
             journal.send("systemd-notify: "+message)
         #this will autoraise  if exit status non zero 
         if login == stringify:
-            #print("login user matches X user")
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
@@ -157,7 +156,7 @@ class Installer():
 
 
 installer = Installer()
-input_from_user_bool= input("Would you like to receive notifications for the status of some services? Y/n: ")
+input_from_user_bool = input("Would you like to receive notifications for the status of some services? Y/n: ")
 if input_from_user_bool:
     if type(input_from_user_bool) == str and input_from_user_bool == "Y" or input_from_user_bool == "y":
         start_dbus = True
@@ -175,13 +174,10 @@ else:
         if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
             services_list="iptables rc-local polkit autovt@tty2"
         elif type(input_from_user_list) == str and  " " in input_from_user_list:
-                print(type(input_from_user_list))
-                print(input_from_user_list)
-                services_list=str(input_from_user_list) 
-                #services += service.split(","))
+            services_list=str(input_from_user_list) 
         else:
             print("Either type Y or type the services you want separated by a space")
-    input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ") 
+    input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ")
     moments = "" 
     if input_from_user_int:
         if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
