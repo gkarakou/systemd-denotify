@@ -77,7 +77,7 @@ class Installer():
                 print("Your user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
                 return True
             else:
-                print("Your user was not added to the systemd-journal group " )
+                print("Your user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group" )
                 return False
 
     def install_v2(self, start, minutes, *services):
@@ -193,7 +193,6 @@ while True:
                 print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
                 continue
     break
-
 if len(list(sys.argv)) == 1:
     print("Error\nYou must enter one argument: either v2 or v3.\nExiting...") 
     sys.exit(1)
