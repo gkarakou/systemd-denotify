@@ -4,8 +4,7 @@ GENERAL
 Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
 These classes provide desktop notification upon a user login and when a systemd service fails (by constantly reading the systemd journal).
 There is also one class that every specified interval (by default 30 minutes) notifies the user for the status of some services.
-By default this class is not started. However one can start it by editing the systemd-notify.py and uncommenting the last two lines.
-If you have already run INSTALL.sh the file is located at /usr/local/bin/systemd-notify.py
+One can start it on demand by answering the questions when installing. See the INSTALL section 
 
 
 REQUIREMENTS
@@ -77,21 +76,21 @@ cd systemd-notify.py
 
 su -
 
-sh INSTALL.sh -python2
+python3 install.py -v2
 
 exit
 </pre>
 or do it with sudo if you believe its safer:
 <pre>
 
-sudo sh INSTALL.sh -python2
+sudo python3 install.pt -v2
 
 </pre>
 
 
-NOTE: if you only found the python3 libs in your distro's repos there is a python3 library named systemd-notify3.py, but it has not been thoroughly tested and is not guaranteed to work flawlessly. To install it:
+NOTE: if you only found the python3 libs in your distro's repos there is a python3 library named systemd-notify3.py. To install it:
 
 <pre>
-sudo sh INSTALL.sh -python3
+sudo python3 install.py -v3
 </pre>
 
