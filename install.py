@@ -77,7 +77,7 @@ class Installer():
                 print("Your user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
                 return True
             else:
-                print("Your user was not added to the systemd-journal group " )
+                print("Your user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group" )
                 return False
 
     def install_v2(self, start, minutes, *services):
