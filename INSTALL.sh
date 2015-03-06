@@ -1,4 +1,7 @@
 #!/bin/sh
+#Simple script that was used in earlier versions to install the systemd-notify.py files
+#deprecated 
+#will be removed in later versions
 while [ "$1" != "" ] ; do
 case "$1" in
 -python3)

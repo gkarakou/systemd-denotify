@@ -7,8 +7,18 @@ import sys
 import subprocess as sub
 
 class Installer():
+    """
+    Installer
+    :desc : Class that installs either systemd-notify.py v2 or v3
+    """
 
     def __init__(self):
+        """
+        __init__
+        :desc : Function constructor
+        By default does nothing else than to instantiate the Installer object
+        
+        """
         pass
 
   #  This should be implemented if we want the user to install from a gui instead from a terminal
@@ -33,6 +43,13 @@ class Installer():
   #          journal.send("systemd-notify: "+message)
 
     def is_archlinux(self):
+        """
+        is_archlinux
+        return void
+        :desc: function that checks if the underlying os is archlinux
+        checks for the existense of /etc/pacman.conf
+        if it is there (os is definitely arch) , we open the file systemd-notify.py rw to have as interpreter python2
+        """
         if  os.path.isfile("/etc/pacman.conf"):
             path = os.path.dirname(os.path.abspath(__file__))
             data = ""
@@ -48,8 +65,11 @@ class Installer():
             print("os wasnt arch")
 
     def addXuser_to_group(self):
-        #CREDITS->http://pymotw.com/2/subprocess/
-        
+        """addXuser_to_group
+        return bool  
+        :desc : Function that adds the logedin user to systemd-journal group
+        CREDITS->http://pymotw.com/2/subprocess/
+        """
         login = os.getlogin()       
         try:
             who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
@@ -81,6 +101,14 @@ class Installer():
                 return False
 
     def install_v2(self, start, minutes, *services):
+        """install_v2
+        :return void
+        :param start:str(actually bool casted to str) whether the DbusNotify Class should be instantiated
+        :param minutes:str(actually int casted to str) for the time interval between notifications 
+        :param *services: str of services separated by a space
+        :desc: function that does the heavy job. Copies the v2 files to appropriate places and writes the command line args that 
+        will be used to start or not the DbusNotify Class. This func also chmod's the files so that the user that starts X is ab        le to execute the program.
+        """
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
         ser = ""
@@ -116,6 +144,14 @@ class Installer():
         print("successfully installed systemd-notify v2")
 
     def install_v3(self, start, minutes, *services):
+        """install_v3
+        :return void
+        :param start:str(actually bool casted to str) specifying whether the DbusNotify Class should be instantiated
+        :param minutes:str(actually int casted to str) for the time interval between notifications 
+        :param *services: str of services separated by a space
+        :desc: function that does the heavy job. Copies the v3 files to appropriate places and writes the command line args that 
+        will be used to start or not the DbusNotify Class. This func also chmod's the files so that the user that starts X is ab        le to execute the program.
+        """
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
         ser = ""
@@ -172,7 +208,7 @@ while True:
         services_list = "None"
         moments = 1000
     else:
-        input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want to be notified on separated by a space: ")
+        input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want separated by a space: ")
         services_list = ""
         if input_from_user_list:
             if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
