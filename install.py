@@ -17,7 +17,7 @@ class Installer():
         __init__
         :desc : Function constructor
         By default does nothing else than to instantiate the Installer object
-        
+
         """
         pass
 
@@ -25,17 +25,17 @@ class Installer():
   #  def get_uid(self):
   #      uid = os.getuid()
   #      return uid
-   
+
   #  This should be implemented if we want the user to install from a gui instead from a terminal
   #  def setuid_root(self,uid_root):
   #      self.uid_root = uid_root
   #      try:
   #          setuid_toor = os.setuid(uid_root)
   #          if setuid_toor:
-  #              print("getting uid in True setuid_root func: "+ str(self.get_uid())) 
+  #              print("getting uid in True setuid_root func: "+ str(self.get_uid()))
   #              return True
   #          else:
-  #              print("getting uid in False setuid_root func: "+ str(self.get_uid())) 
+  #              print("getting uid in False setuid_root func: "+ str(self.get_uid()))
   #              return False
   #      except Exception  as ex:
   #          template = "An exception of type {0} occured. Arguments:\n{1!r}"
@@ -66,11 +66,11 @@ class Installer():
 
     def addXuser_to_group(self):
         """addXuser_to_group
-        return bool  
+        return bool
         :desc : Function that adds the logedin user to systemd-journal group
         CREDITS->http://pymotw.com/2/subprocess/
         """
-        login = os.getlogin()       
+        login = os.getlogin()
         try:
             who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
             grep = sub.Popen(['/usr/bin/grep', ':0'], stdin=who.stdout, stdout=sub.PIPE)
@@ -83,13 +83,13 @@ class Installer():
             sort.stdout.close()
             end_of_pipe = uniq.stdout
             for line in end_of_pipe:
-                data = line.strip()   
+                data = line.strip()
                 stringify = str(data.decode("utf-8"))
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
-        #this will autoraise  if exit status non zero 
+        #this will autoraise  if exit status non zero
         if login == stringify:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
@@ -104,9 +104,9 @@ class Installer():
         """install_v2
         :return void
         :param start:str(actually bool casted to str) whether the DbusNotify Class should be instantiated
-        :param minutes:str(actually int casted to str) for the time interval between notifications 
+        :param minutes:str(actually int casted to str) for the time interval between notifications
         :param *services: str of services separated by a space
-        :desc: function that does the heavy job. Copies the v2 files to appropriate places and writes the command line args that 
+        :desc: function that does the heavy job. Copies the v2 files to appropriate places and writes the command line args that
         will be used to start or not the DbusNotify Class. This func also chmod's the files so that the user that starts X is ab        le to execute the program.
         """
         path = os.path.dirname(os.path.abspath(__file__))
@@ -147,9 +147,9 @@ class Installer():
         """install_v3
         :return void
         :param start:str(actually bool casted to str) specifying whether the DbusNotify Class should be instantiated
-        :param minutes:str(actually int casted to str) for the time interval between notifications 
+        :param minutes:str(actually int casted to str) for the time interval between notifications
         :param *services: str of services separated by a space
-        :desc: function that does the heavy job. Copies the v3 files to appropriate places and writes the command line args that 
+        :desc: function that does the heavy job. Copies the v3 files to appropriate places and writes the command line args that
         will be used to start or not the DbusNotify Class. This func also chmod's the files so that the user that starts X is ab        le to execute the program.
         """
         path = os.path.dirname(os.path.abspath(__file__))
@@ -214,12 +214,12 @@ while True:
             if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
                 services_list="iptables rc-local polkit autovt@tty2"
             elif type(input_from_user_list) == str and  " " in input_from_user_list:
-                services_list=str(input_from_user_list) 
+                services_list=str(input_from_user_list)
             else:
                 print("Either type Y or type the services you want separated by a space")
                 continue
         input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ")
-        moments = "" 
+        moments = ""
         if input_from_user_int:
             if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
                 moments += str(30)
@@ -230,7 +230,7 @@ while True:
                 continue
     break
 if len(list(sys.argv)) == 1:
-    print("Error\nYou must enter one argument: either v2 or v3.\nExiting...") 
+    print("Error\nYou must enter one argument: either v2 or v3.\nExiting...")
     sys.exit(1)
 if sys.argv[1] == "v2":
     installer.is_archlinux()

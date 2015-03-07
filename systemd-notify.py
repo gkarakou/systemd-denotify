@@ -13,23 +13,23 @@ import sys
 
 class DbusNotify():
     """
-    DbusNotify 
+    DbusNotify
     :desc: Class that notifies the user for the status of some systemd services
     Has an empty constructor and a run method
     """
 
     def __init__(self):
         """
-        __init__ 
+        __init__
         :desc: Constructor function that by default does nothing
         """
         pass
 
     def run(self, *args):
         """
-        run 
-        return False or void   
-        :param *args: user supplied args 
+        run
+        return False or void
+        :param *args: user supplied args
         :desc: function that starts (or not) a timer thread based on user input
         Helpful API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
@@ -101,7 +101,7 @@ class logindMonitor(threading.Thread):
         """
         run
         return void
-        :desc: function that goes on an infinite loop polling the logind daemon for user logins 
+        :desc: function that goes on an infinite loop polling the logind daemon for user logins
         Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
         """
 
@@ -144,12 +144,12 @@ class logindMonitor(threading.Thread):
             return
         else:
             del self.run
-            return 
+            return
 
 class LogReader(threading.Thread):
     """
     LogReader
-    :desc: Class that notifies the user for failed systemd services 
+    :desc: Class that notifies the user for failed systemd services
     Extends threading.Thread
     Has an constructor that calls the parent one, a run method and a destructor
     """
@@ -215,10 +215,10 @@ class LogReader(threading.Thread):
         """
         if callable(getattr(threading.Thread, "__del__")):
             super.__del__()
-            return 
+            return
         else:
             del self.run
-            return 
+            return
 
 if __name__ == "__main__":
     """
