@@ -76,15 +76,6 @@ On a terminal:
 
 cd systemd-notify.py
 
-su -
-
-python3 install.py v2
-
-exit
-</pre>
-or do it with sudo if you believe its safer:
-<pre>
-
 sudo python3 install.py v2
 
 </pre>
