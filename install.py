@@ -99,7 +99,7 @@ class Installer():
             else:
                 print("Your user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group" )
                 return False
-        else:
+        elif stringify != login:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
@@ -107,6 +107,15 @@ class Installer():
                 return True
             else:
                 print("Your Xorg loggedin user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group" )
+                return False
+        else:
+            command = '/usr/sbin/usermod -a -G systemd-journal '+ login
+            usermod = sub.check_call(command.split(), shell=False)
+            if usermod:
+                print("While we couldnt find the Xorg loggedin user,\nyour loggedin user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
+                return True
+            else:
+                print("Your loggedin user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group" )
                 return False
 
 
