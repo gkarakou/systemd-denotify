@@ -31,17 +31,17 @@ class Installer():
  #       print("getting uid: "+ str(uid))
         return uid
 
-    def set_euid(self, *args):
-        """set_euid
-        return int
-        :param *args:
-        """
-        euid = int(sys.argv[1])
-        setuid = os.seteuid(euid)
-        if setuid == None:
-            pass
+   # def set_euid(self, *args):
+   #     """set_euid
+   #     return int
+   #     :param *args:
+   #     """
+   #     euid = int(sys.argv[1])
+   #     setuid = os.seteuid(euid)
+   #     if setuid == None:
+   #         pass
            # print("setting uid: "+ str(self.get_euid()))
-        return setuid
+   #     return setuid
 
     def is_archlinux(self):
         """
