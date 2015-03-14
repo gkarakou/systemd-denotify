@@ -21,26 +21,6 @@ class Installer():
         """
         pass
 
-  #  This should be implemented if we want the user to install from a gui instead from a terminal
-  #  def get_uid(self):
-  #      uid = os.getuid()
-  #      return uid
-
-  #  This should be implemented if we want the user to install from a gui instead from a terminal
-  #  def setuid_root(self,uid_root):
-  #      self.uid_root = uid_root
-  #      try:
-  #          setuid_toor = os.setuid(uid_root)
-  #          if setuid_toor:
-  #              print("getting uid in True setuid_root func: "+ str(self.get_uid()))
-  #              return True
-  #          else:
-  #              print("getting uid in False setuid_root func: "+ str(self.get_uid()))
-  #              return False
-  #      except Exception  as ex:
-  #          template = "An exception of type {0} occured. Arguments:\n{1!r}"
-  #          message = template.format(type(ex).__name__, ex.args)
-  #          journal.send("systemd-notify: "+message)
 
     def is_archlinux(self):
         """
