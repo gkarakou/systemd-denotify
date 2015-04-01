@@ -5,6 +5,7 @@ import shutil
 from systemd import journal
 import sys
 import subprocess as sub
+import argparse
 
 class Installer():
     """
@@ -249,16 +250,14 @@ while True:
                 print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
                 continue
     break
-if len(list(sys.argv)) == 1:
-    print("Error\nYou must enter one argument: either v2 or v3.\nExiting...")
-    sys.exit(1)
-if sys.argv[1] == "v2":
+parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify.py")
+parser.add_argument("-v2", "--version2", dest="v2", default=True, help="install version 2 of systemd-notify")
+parser.add_argument("-v3", "--version3", dest="v3", help="install version 3 of systemd-notify")
+args = parser.parse_args()
+if args.v2:
     installer.is_archlinux()
     installer.addXuser_to_group()
     installer.install_v2(str(start_dbus), moments, services_list)
-elif sys.argv[1] == "v3":
+elif args.v3:
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
-else:
-    print("There can be only one argument: either v2 or v3")
-    sys.exit(1)
