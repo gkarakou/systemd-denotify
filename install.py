@@ -250,7 +250,7 @@ while True:
                 print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
                 continue
     break
-parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify.py")
+parser = argparse.ArgumentParser(description="install v2 or v3")
 parser.add_argument("-i", "--install", default="v2", dest="install", help="install version 2 or 3 of systemd-notify(default is 2)")
 #parser.add_argument("-v3", "--version3", dest="v3", help="install version 3 of systemd-notify")
 args = parser.parse_args()
