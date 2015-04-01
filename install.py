@@ -64,7 +64,8 @@ class Installer():
                 print("os was arch")
 
         else:
-            print("os wasnt arch")
+            #print("os wasnt arch")
+            pass
 
     def addXuser_to_group(self):
         """addXuser_to_group
@@ -117,7 +118,7 @@ class Installer():
                 print("While we couldnt find the Xorg loggedin user,\nyour loggedin user was added to the systemd-journal group.\nYou must relogin for the changes to take effect")
                 return True
             else:
-                print("Your loggedin user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group" )
+                print("Your loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group" )
                 return False
 
 
@@ -213,6 +214,10 @@ class Installer():
 
 
 installer = Installer()
+parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
+parser.add_argument("-i", "--install", default="v2", dest="install", help="v2 or v3")
+#parser.add_argument("-v3", "--version3", dest="v3", help="install version 3 of systemd-notify")
+args = parser.parse_args()
 while True:
     input_from_user_bool = input("Would you like to receive notifications for the status of some services? Y/n: ")
     if input_from_user_bool:
@@ -250,10 +255,6 @@ while True:
                 print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
                 continue
     break
-parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
-parser.add_argument("-i", "--install", default="v2", dest="install", help="v2 or v3")
-#parser.add_argument("-v3", "--version3", dest="v3", help="install version 3 of systemd-notify")
-args = parser.parse_args()
 if args.install == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
