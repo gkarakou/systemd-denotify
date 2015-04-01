@@ -130,7 +130,7 @@ class logindMonitor(threading.Thread):
                     Notify.init("systemd-notify")
                     notificatio = Notify.Notification.new("systemd-notify", "login from user id: "+str(user) +" at "+str(now)[:19])
                     notificatio.show()
-                    if  user == 1000: 
+                    if  user == 1000:
                         text = '"login from george"'
                         sub.check_call(["espeak", text])
                 except Exception as ex:

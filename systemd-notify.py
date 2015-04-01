@@ -10,6 +10,7 @@ from threading import Thread
 from gi.repository import Notify
 import os
 import sys
+import subprocess as sub
 
 class DbusNotify():
     """
@@ -128,6 +129,9 @@ class logindMonitor(threading.Thread):
                     Notify.init("systemd-notify")
                     notificatio = Notify.Notification.new("systemd-notify", "login from user id: "+str(user) +" at "+str(now)[:19])
                     notificatio.show()
+                    if  user == 1000:
+                        text = '"login from george"'
+                        sub.check_call(["espeak", text])
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
@@ -136,7 +140,7 @@ class logindMonitor(threading.Thread):
     def __del__(self):
         """
         __del__
-        return parent destructor or delete objects
+        return parent destructor or del objects
         :desc: destructor function that wont run because the gc will run first, but we provide it for completeness
         """
         if callable(getattr(threading.Thread, "__del__")):
@@ -190,12 +194,16 @@ class LogReader(threading.Thread):
                 for entry in j_reader:
                     if 'MESSAGE' in entry:
                         pattern = "entered failed state"
+                        pattern2 = "SSH_CONNECTION_ESTABLISHED"
                         try:
                             string = entry['MESSAGE']
                             if string and pattern in string:
                                 Notify.init("systemd-notify")
                                 notificatio=Notify.Notification.new("systemd-notify", string)
                                 notificatio.show()
+                            elif string and pattern2 in string:
+                                text = '"ssh connection established with router"'
+                                sub.check_call(["espeak", text])
                             else:
                                 continue
                         except Exception as ex:
