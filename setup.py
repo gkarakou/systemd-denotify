@@ -253,7 +253,7 @@ while True:
                 continue
     break
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
-parser.add_argument("-i", "--install", dest="install_version", help="v2 | v3")
+parser.add_argument("-i", "--install", action="store_const", dest="install_version", help="v2 | v3")
 args = parser.parse_args()
 #print('type(args.install_version)     =', type(args.install_version))
 #print('args.install_version     =', args.install_version)
