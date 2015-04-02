@@ -215,10 +215,10 @@ class Installer():
 
 
 installer = Installer()
+start_dbus = False
+services_list = "None"
+moments = 1000
 while True:
-    start_dbus = False
-    services_list = "None"
-    moments = 1000
     input_from_user_bool = input("Would you like to receive notifications for the status of some services?[Y/n]: ")
     if input_from_user_bool:
         if type(input_from_user_bool) == str and input_from_user_bool == "Y" or input_from_user_bool == "y":
@@ -228,8 +228,8 @@ while True:
         else:
             print("You must type either Y or N for Yes or No: ")
             continue
-    #else:
-    #    continue
+    else:
+        continue
     if start_dbus == False:
         #services_list = "None"
         #moments = 1000
