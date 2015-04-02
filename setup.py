@@ -253,10 +253,10 @@ while True:
             print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
             continue
     break
-if arguments.i == "v2":
+if arguments.install == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
     installer.install_v2(str(start_dbus), moments, services_list)
-elif arguments.i == "v3":
+elif arguments.install == "v3":
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
