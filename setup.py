@@ -216,7 +216,7 @@ class Installer():
 
 installer = Installer()
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
-parser.add_argument("-i", choices=['v2', 'v3'],  required=True)
+parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2", required=True)
 arguments = parser.parse_args()
 while True:
     input_from_user_bool = input("Would you like to receive notifications for the status of some services?[Y/n]: ")
