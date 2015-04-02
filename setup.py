@@ -215,6 +215,9 @@ class Installer():
 
 
 installer = Installer()
+parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
+parser.add_argument("-i", choices=['v2', 'v3'],  required=True)
+arguments = parser.parse_args()
 while True:
     input_from_user_bool = input("Would you like to receive notifications for the status of some services?[Y/n]: ")
     if input_from_user_bool:
@@ -250,13 +253,6 @@ while True:
             print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
             continue
     break
-parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
-parser.add_argument("-i", choices=['v2', 'v3'],  required=True)
-#parser.add_argument("v2",  help="iinstall v2" )
-#parser.add_argument("v3",  help="install v3" )
-arguments = parser.parse_args()
-#print('type(args.install_version)     =', type(args.install_version))
-#print('args.install_version     =', args.install_version)
 if arguments.i == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
