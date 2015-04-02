@@ -215,9 +215,6 @@ class Installer():
 
 
 installer = Installer()
-start_dbus = False
-services_list = "None"
-moments = 1000
 while True:
     input_from_user_bool = input("Would you like to receive notifications for the status of some services?[Y/n]: ")
     if input_from_user_bool:
@@ -231,8 +228,8 @@ while True:
     else:
         continue
     if start_dbus == False:
-        #services_list = "None"
-        #moments = 1000
+        services_list = "None"
+        moments = 1000
         break
     else:
         input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want separated by a space: ")
