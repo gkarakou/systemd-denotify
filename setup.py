@@ -5,8 +5,6 @@ import shutil
 from systemd import journal
 import subprocess as sub
 import argparse
-import colorama
-import sys
 
 class Installer():
     """
@@ -18,10 +16,9 @@ class Installer():
         """
         __init__
         :desc : Function constructor
-        Instantiates colored console output using colorama lib
+        Instantiates the installer
 
         """
-        colorama.init(autoreset=True)
 
     def get_euid(self):
         """
@@ -119,7 +116,7 @@ class Installer():
                 print("\nWhile we couldnt find the Xorg loggedin user,\nyour loggedin user was added to the systemd-journal group.\nYou must relogin for the changes to take effect.")
                 return True
             else:
-                print(colorama.Fore.RED + "\nYour loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group." )
+                print("\nYour loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group." )
                 return False
 
 
@@ -164,7 +161,7 @@ class Installer():
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
 
-        print(colorama.Fore.GREEN +"\nsuccessfully installed systemd-notify v2.")
+        print("\nsuccessfully installed systemd-notify v2.")
 
     def install_v3(self, start, minutes, *services):
         """install_v3
@@ -206,7 +203,7 @@ class Installer():
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
-        print(colorama.Fore.GREEN + "\nsuccessfully installed systemd-notify v3.")
+        print("\nsuccessfully installed systemd-notify v3.")
 
     #def __del__(self):
 
