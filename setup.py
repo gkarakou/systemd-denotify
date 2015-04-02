@@ -263,10 +263,10 @@ parser.add_argument("-i", "--install", choices=['v2', 'v3'], dest="install", req
 arguments = parser.parse_args()
 #print('type(args.install_version)     =', type(args.install_version))
 #print('args.install_version     =', args.install_version)
-if arguments["install"] == "v2":
+if arguments.install == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
     installer.install_v2(str(start_dbus), moments, services_list)
-elif arguments["install"] == "v3":
+elif arguments.install == "v3":
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
