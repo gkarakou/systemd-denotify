@@ -130,9 +130,6 @@ class logindMonitor(threading.Thread):
                     Notify.init("systemd-notify")
                     notificatio = Notify.Notification.new("systemd-notify", "login from user id: "+str(user) +" at "+str(now)[:19])
                     notificatio.show()
-                    if  user == 1000:
-                        text = '"login from george"'
-                        sub.check_call(["espeak", text])
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
@@ -187,7 +184,7 @@ class LogReader(threading.Thread):
             #next is a debugging call
             # if it prints True it is pollable
             #reliable = j.reliable_fd()
-            #print reliable
+            #print(reliable)
             waiting = j_reader.process()
             # if JOURNAL append or JOURNAL logrotate
             if waiting == 1 or waiting == 2:
@@ -195,16 +192,13 @@ class LogReader(threading.Thread):
                 for entry in j_reader:
                     if 'MESSAGE' in entry:
                         pattern = "entered failed state"
-                        pattern2 = "SSH_CONNECTION_ESTABLISHED"
                         try:
                             string = entry['MESSAGE']
                             if string and pattern in string:
                                 Notify.init("systemd-notify")
                                 notificatio=Notify.Notification.new("systemd-notify", string)
                                 notificatio.show()
-                            elif string and pattern2 in string:
-                                text = '"ssh connection established with router"'
-                                sub.check_call(["espeak", text])
+                                sub.check_call(["espeak", string])
                             else:
                                 continue
                         except Exception as ex:
