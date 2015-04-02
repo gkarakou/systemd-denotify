@@ -136,7 +136,7 @@ class logindMonitor(threading.Thread):
     def __del__(self):
         """
         __del__
-        return parent destructor or delete objects
+        return parent destructor or del objects
         :desc: destructor function that wont run because the gc will run first, but we provide it for completeness
         """
         if callable(getattr(threading.Thread, "__del__")):
