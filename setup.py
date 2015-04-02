@@ -6,6 +6,7 @@ from systemd import journal
 import subprocess as sub
 import argparse
 import colorama
+import sys
 
 class Installer():
     """
@@ -264,3 +265,4 @@ if args.install_version == "v2":
 elif args.install_version == "v3":
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
+sys.exit(0)
