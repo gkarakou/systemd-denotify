@@ -216,6 +216,9 @@ class Installer():
 
 installer = Installer()
 while True:
+    start_dbus = False
+    services_list = "None"
+    moments = 1000
     input_from_user_bool = input("Would you like to receive notifications for the status of some services?[Y/n]: ")
     if input_from_user_bool:
         if type(input_from_user_bool) == str and input_from_user_bool == "Y" or input_from_user_bool == "y":
@@ -228,8 +231,8 @@ while True:
     #else:
     #    continue
     if start_dbus == False:
-        services_list = "None"
-        moments = 1000
+        #services_list = "None"
+        #moments = 1000
         break
     else:
         input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want separated by a space: ")
@@ -254,15 +257,15 @@ while True:
                 continue
     break
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
-parser.add_argument("-i", dest="install_version", help="v2 | v3")
+parser.add_argument("-i", "--install", dest="install", help="v2 | v3", required=True)
 args = parser.parse_args()
 #print('type(args.install_version)     =', type(args.install_version))
 #print('args.install_version     =', args.install_version)
-if args.install_version == "v2":
+if args.install == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
     installer.install_v2(str(start_dbus), moments, services_list)
-elif args.install_version == "v3":
+elif args.install == "v3":
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
 sys.exit(0)
