@@ -214,7 +214,21 @@ class Installer():
      #   del self.install_v3
 
 
+    def reset_desktop_file(self):
+        path = os.path.dirname(os.path.abspath(__file__))
+        data_replace = "[Desktop Entry]\nVersion=1.0\nName=PynotifySystem\nType=Application\nExec=/usr/local/bin/systemd-notify.py"
+        data = ""
+        with open(path+"/systemd-notify.desktop", "r+") as fin:
+            data += fin.read()
+            fin.seek(0)
+            fin.write(data_replace)
+            fin.truncate()
+
+
+
+
 installer = Installer()
+installer.reset_desktop_file()
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
 arguments = parser.parse_args()
