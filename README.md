@@ -23,20 +23,20 @@ DEPENDENCIES
 Fedora 21:
 
 <pre>
-systemd-python notify-python pygobject2 python-slip-dbus
+systemd-python notify-python pygobject2 python-slip-dbus espeak espeak-data
 
 </pre>
 Arch Linux:
 
 <pre>
-python2 python2-notify python2-gobject python2-systemd python2-dbus
+python2 python2-notify python2-gobject python2-systemd python2-dbus espeak espeak-data
 
 </pre>
 
 Debian:
 
 <pre>
-python-systemd python-dbus python-notify python-gobject python-gi
+python-systemd python-dbus python-notify python-gobject python-gi espeak espeak-data
 
 </pre>
 
