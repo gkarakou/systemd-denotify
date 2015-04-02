@@ -258,16 +258,16 @@ while True:
     break
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
 parser.add_argument("-i", "--install", dest="install", help="v2 | v3")
-parser.add_argument("v2",  help="iinstall v2" )
-parser.add_argument("v3",  help="install v3" )
-arguments = parser.parse_args()
+#parser.add_argument("v2",  help="iinstall v2" )
+#parser.add_argument("v3",  help="install v3" )
+arguments = vars(parser.parse_args())
 #print('type(args.install_version)     =', type(args.install_version))
 #print('args.install_version     =', args.install_version)
-if arguments.install == "v2":
+if arguments["install"] == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
     installer.install_v2(str(start_dbus), moments, services_list)
-elif arguments.install == "v3":
+elif arguments["install"] == "v3":
     installer.addXuser_to_group()
     installer.install_v3(str(start_dbus), moments, services_list)
 sys.exit(0)
