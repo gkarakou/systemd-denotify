@@ -260,7 +260,7 @@ parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], dest="install", required=True)
 #parser.add_argument("v2",  help="iinstall v2" )
 #parser.add_argument("v3",  help="install v3" )
-arguments = vars(parser.parse_args())
+arguments = parser.parse_args()
 #print('type(args.install_version)     =', type(args.install_version))
 #print('args.install_version     =', args.install_version)
 if arguments["install"] == "v2":
