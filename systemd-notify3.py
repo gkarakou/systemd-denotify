@@ -12,6 +12,7 @@ from gi.repository import Notify
 import os
 import sys
 import subprocess as sub
+from espeak import espeak
 
 class DbusNotify():
     """
@@ -184,7 +185,7 @@ class LogReader(threading.Thread):
             #next is a debugging call
             # if it prints True it is pollable
             #reliable = j.reliable_fd()
-            #print(reliable)
+            #print reliable
             waiting = j_reader.process()
             # if JOURNAL append or JOURNAL logrotate
             if waiting == 1 or waiting == 2:
@@ -198,7 +199,8 @@ class LogReader(threading.Thread):
                                 Notify.init("systemd-notify")
                                 notificatio=Notify.Notification.new("systemd-notify", string)
                                 notificatio.show()
-                                sub.check_call(["espeak", string])
+                                stri = string.replace(".", " ")
+                                espeak.synth(stri)
                             else:
                                 continue
                         except Exception as ex:

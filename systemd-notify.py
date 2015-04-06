@@ -11,6 +11,7 @@ from gi.repository import Notify
 import os
 import sys
 import subprocess as sub
+from espeak import espeak
 
 class DbusNotify():
     """
@@ -197,7 +198,8 @@ class LogReader(threading.Thread):
                                 Notify.init("systemd-notify")
                                 notificatio=Notify.Notification.new("systemd-notify", string)
                                 notificatio.show()
-                                sub.check_call(["espeak", string])
+                                stri = string.replace(".", " ")
+                                espeak.synth(stri)
                             else:
                                 continue
                         except Exception as ex:
