@@ -253,7 +253,7 @@ while True:
         else:
             print("Either type Y or type the services you want separated by a space")
             continue
-    input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ")
+    input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the minutes that you want: ")
     moments = ""
     if input_from_user_int:
         if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
