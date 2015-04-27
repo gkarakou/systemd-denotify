@@ -224,6 +224,56 @@ class LogReader(threading.Thread):
             del self.run
             return
 
+class EventHandler(pyinotify.ProcessEvent):
+    def process_IN_CLOSE_WRITE(self, event):
+        string1 = "file " +event.pathname + " written"
+        try:
+            Notify.init("systemd-notify")
+            notificatio = Notify.Notification.new("systemd-notify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-notify: "+message)
+
+    def process_IN_MODIFY(self, event):
+        string1 = "file " +event.pathname + " modified"
+        try:
+            Notify.init("systemd-notify")
+            notificatio = Notify.Notification.new("systemd-notify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-notify: "+message)
+
+    def process_IN_MOVED_TO(self, event):
+        string1 = "file " +event.pathname + " overwritten"
+        try:
+            Notify.init("systemd-notify")
+            notificatio = Notify.Notification.new("systemd-notify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-notify: "+message)
+
+    def process_IN_ATTRIB(self, event):
+        string1 = "files " +event.pathname + " metadata changed"
+        try:
+            Notify.init("systemd-notify")
+            notificatio = Notify.Notification.new("systemd-notify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+
+class FileNotifier():
+    def __init__(self):
+        mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
+        mask1 = pyinotify.IN_ATTRIB
+        wm = pyinotify.WatchManager()
+        notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
 if __name__ == "__main__":
     """
     __main__
