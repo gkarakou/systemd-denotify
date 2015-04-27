@@ -274,6 +274,8 @@ class FileNotifier():
         mask1 = pyinotify.IN_ATTRIB
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
+
+
 if __name__ == "__main__":
     """
     __main__
