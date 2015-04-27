@@ -272,9 +272,12 @@ class EventHandler(pyinotify.ProcessEvent):
 class FileNotifier():
     def __init__(self):
         mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
-        mask1 = pyinotify.IN_ATTRIB
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
+        notifier.start()
+        # Start watching  paths
+        wdd = wm.add_watch('/etc/systemd/', mask, rec=True)
+        wdd = wm.add_watch('/usr/lib/systemd/', mask, rec=True)
 
 
 if __name__ == "__main__":
@@ -291,6 +294,7 @@ if __name__ == "__main__":
     log_reader.start()
     lm = logindMonitor()
     lm.start()
+    FileNotifier()
     if isinstance(log_reader, object) & isinstance(lm, object):
         pid = os.getpid()
         js = journal.send("systemd-notify: successfully started with pid "+ str(pid))
