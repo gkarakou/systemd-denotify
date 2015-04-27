@@ -12,6 +12,7 @@ import os
 import sys
 import subprocess as sub
 from espeak import espeak
+import pyinotify
 
 class DbusNotify():
     """
