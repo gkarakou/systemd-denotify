@@ -295,7 +295,8 @@ if __name__ == "__main__":
     log_reader.start()
     lm = logindMonitor()
     lm.start()
-    FileNotifier()
+    FileNotifier()# is that a trick to not assign a variable?
+
     if isinstance(log_reader, object) & isinstance(lm, object):
         pid = os.getpid()
         js = journal.send("systemd-notify: successfully started with pid "+ str(pid))
