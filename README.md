@@ -16,6 +16,8 @@ set nobackup
 set nowritebackup
 set noswapfile
 
+Do this only if you own a ups, you have been warned.
+
 REQUIREMENTS
 -------------------
 
