@@ -12,8 +12,11 @@ I wrote these classes to enhance systemd's role on my desktop, but you can modif
 
 NOTE: if you use vim to edit files that are being monitored by systemd-notify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
 To overcome this annoyance if and only if you have a ups installed (in the case of a power failure you will lose data if you dont own a ups) you can edit /root/.vimrc and add these lines:
+
 set nobackup
+
 set nowritebackup
+
 set noswapfile
 
 Do this only if you own a ups, you have been warned.
