@@ -10,6 +10,8 @@ from threading import Thread
 from gi.repository import Notify
 import os
 import sys
+import ConfigParser
+import io
 
 class DbusNotify():
     """
@@ -35,16 +37,23 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        if sys.argv[1] == "False":
+        config = ConfigParser.RawConfigParser(allow_no_value=True)
+        config.readfp(io.BytesIO("/etc/systemd-desktop-notifications.conf")
+
+        config_start = config.get("Services", "start")
+        config_interval = config.get("Services", "interval")
+        config_services = config.get("Services", "services")
+        if config_start == "False":
             return False
-        elif sys.argv[1] == "True":
-            secs = int(sys.argv[2]) * 60
+        elif config_start == "True":
+            secs = int(config_interval) * 60
             threading.Timer(secs, self.run, args).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-            len_args = len(args)
-            for a in args[3:len_args]:
+            #len_args = len(args)
+
+            for a in config_services:
                 try:
                     getUnit = manager.LoadUnit(a)
                 except  Exception as ex:
@@ -245,4 +254,4 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     db = DbusNotify()
-    db_started = db.run(*sys.argv)
+    db_started = db.run()

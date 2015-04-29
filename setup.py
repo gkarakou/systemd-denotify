@@ -119,35 +119,23 @@ class Installer():
                 return False
 
 
-    def install_v2(self, start, minutes, *services):
+    def install_v2(self):
         """install_v2
         :return void
-        :param start:str(actually bool casted to str) whether the DbusNotify Class should be instantiated
-        :param minutes:str(actually int casted to str) for the time interval between notifications
-        :param *services: str of services separated by a space
-        :desc: function that does the heavy job. Copies the v2 files to appropriate places and writes the command line args that
-        will be used to start or not the DbusNotify Class. This func also chmod's the files so that the user that starts X is ab        le to execute the program.
+        :desc: function that does the heavy job. Copies the v2 files to appropriate places.
+         This func also chmod's the files so that the user that starts X is ab        le to execute the program.
         """
         path = os.path.dirname(os.path.abspath(__file__))
-        data = ""
-        ser = ""
-        serv = ""
-        for service in services:
-            ser = service.replace(" ", ".service ")
-            serv += ser
-            with open(path+"/systemd-notify.desktop", "r+") as fin:
-                data += fin.read()
-                fin.seek(0)
-                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify.py" + " " + start +" " + str(minutes) + " "+ str(serv)+ ".service")
-                fin.write(data_replace)
-                fin.truncate()
         src_c = path+"/systemd-notify.py"
         src_d = path+"/systemd-notify.desktop"
+        src_e = path+"/systemd-desktop-notifications.conf"
         dst_c = "/usr/local/bin/systemd-notify.py"
         dst_d = "/etc/xdg/autostart/systemd-notify.desktop"
+        dst_e = "/etc/systemd-desktop-notifications.conf"
         try:
             shutil.copy2(src_c, dst_c)
             shutil.copy2(src_d, dst_d)
+            shutil.copy2(src_e, dst_e)
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
@@ -155,6 +143,7 @@ class Installer():
         try:
             os.chmod(dst_c, 0o755)
             os.chmod(dst_d, 0o644)
+            os.chmod(dst_e, 0o644)
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
@@ -162,7 +151,7 @@ class Installer():
 
         print "\nsuccessfully installed systemd-notify v2."
 
-    def install_v3(self, start, minutes, *services):
+    def install_v3(self):
         """install_v3
         :return void
         :param start:str(actually bool casted to str) specifying whether the DbusNotify Class should be instantiated
@@ -172,25 +161,16 @@ class Installer():
         will be used to start or not the DbusNotify Class. This func also chmod's the files so that the user that starts X is ab        le to execute the program.
         """
         path = os.path.dirname(os.path.abspath(__file__))
-        data = ""
-        ser = ""
-        serv = ""
-        for service in services:
-            ser = service.replace(" ", ".service ")
-            serv += ser
-            with open(path+"/systemd-notify.desktop", "r+") as fin:
-                data += fin.read()
-                fin.seek(0)
-                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify3.py" + " " + start +" " + str(minutes) + " "+ str(serv)+ ".service")
-                fin.write(data_replace)
-                fin.truncate()
         src_c = path+"/systemd-notify3.py"
         src_d = path+"/systemd-notify.desktop"
+        src_e = path+"/systemd-desktop-notifications.conf"
         dst_c = "/usr/local/bin/systemd-notify3.py"
         dst_d = "/etc/xdg/autostart/systemd-notify.desktop"
+        dst_e = "/etc/systemd-desktop-notifications.conf"
         try:
             shutil.copy2(src_c, dst_c)
             shutil.copy2(src_d, dst_d)
+            shutil.copy2(src_e, dst_e)
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
@@ -198,6 +178,7 @@ class Installer():
         try:
             os.chmod(dst_c, 0o755)
             os.chmod(dst_d, 0o644)
+            os.chmod(dst_e, 0o644)
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
@@ -228,46 +209,10 @@ installer.reset_desktop_file()
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
 arguments = parser.parse_args()
-print "---------systemd-notify.py installation wizard--------------------\n"
-while True:
-    input_from_user_bool = raw_input("Would you like to receive notifications for the status of some services?[Y/n]: ")
-    if input_from_user_bool:
-        if type(input_from_user_bool) == str and input_from_user_bool == "Y" or input_from_user_bool == "y":
-            start_dbus = True
-        elif type(input_from_user_bool) == str and input_from_user_bool == "N" or input_from_user_bool == "n":
-            start_dbus = False
-            services_list = "None"
-            moments = 1000
-            break
-        else:
-            print "You must type either Y or N for Yes or No: "
-            continue
-
-    input_from_user_list = raw_input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want separated by a space: ")
-    services_list = ""
-    if input_from_user_list:
-        if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
-            services_list="iptables rc-local polkit autovt@tty2"
-        elif type(input_from_user_list) == str and  input_from_user_list != "Y" or input_from_user_list != "y":
-            services_list=str(input_from_user_list)
-        else:
-            print "Either type Y or type the services you want separated by a space"
-            continue
-    input_from_user_int = raw_input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ")
-    moments = ""
-    if input_from_user_int:
-        if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
-            moments += str(30)
-        elif type(input_from_user_int) == str and input_from_user_int != "Y" or input_from_user_int != "y":
-            moments += str(input_from_user_int)
-        else:
-            print "Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: "
-            continue
-    break
 if arguments.install == "v2":
     installer.is_archlinux()
     installer.addXuser_to_group()
-    installer.install_v2(str(start_dbus), moments, services_list)
+    installer.install_v2()
 elif arguments.install == "v3":
     installer.addXuser_to_group()
-    installer.install_v3(str(start_dbus), moments, services_list)
+    installer.install_v3()
