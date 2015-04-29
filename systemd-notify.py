@@ -41,6 +41,7 @@ class DbusNotify():
         config_start = config.getboolean("Services", "start")
         config_interval = config.getint("Services", "interval")
         config_services = config.get("Services", "services")
+        journal.send("systemd-notify: "+ "type of services" + type(config_services) +" services: "+ str(config_services))
         if config_start == "False":
             return False
         elif config_start == "True":
