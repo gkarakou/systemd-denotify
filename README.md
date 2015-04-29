@@ -38,7 +38,7 @@ systemd-python notify-python pygobject2 python-slip-dbus espeak python-espeak py
 Arch Linux:
 
 <pre>
-python2 python2-notify python2-gobject python2-systemd python2-dbus espeak python-espeak python-inotify
+python2 python-pyinotify python2-gobject python2-systemd python2-dbus espeak python-espeak python-inotify
 
 </pre>
 
