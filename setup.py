@@ -162,16 +162,11 @@ class Installer():
         """
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
-        ser = ""
-        serv = ""
-        for service in services:
-            ser = service.replace(" ", ".service ")
-            serv += ser
-            with open(path+"/systemd-notify.desktop", "r+") as fin:
-                data += fin.read()
-                fin.seek(0)
-                data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify3.py")
-                fin.write(data_replace)
+        with open(path+"/systemd-notify.desktop", "r+") as fin:
+            data += fin.read()
+            fin.seek(0)
+            data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify3.py")
+            fin.write(data_replace)
         src_c = path+"/systemd-notify3.py"
         src_d = path+"/systemd-notify.desktop"
         src_e = path+"/systemd-desktop-notifications.conf"
