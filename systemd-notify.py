@@ -37,11 +37,12 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        config = ConfigParser.RawConfigParser(allow_no_value=True)
-        config.readfp(io.BytesIO("/etc/systemd-desktop-notifications.conf")
-
-        config_start = config.get("Services", "start")
-        config_interval = config.get("Services", "interval")
+        #config = ConfigParser.RawConfigParser(allow_no_value=True)
+        #config.readfp(io.BytesIO("/etc/systemd-desktop-notifications.conf")
+        config = ConfigParser.RawConfigParser()
+        config.read('/etc/systemd-desktop-notifications.conf')
+        config_start = config.getboolean("Services", "start")
+        config_interval = config.getint("Services", "interval")
         config_services = config.get("Services", "services")
         if config_start == "False":
             return False
