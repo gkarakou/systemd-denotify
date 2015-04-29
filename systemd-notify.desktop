@@ -2,4 +2,4 @@
 Version=1.0
 Name=PynotifySystem
 Type=Application
-Exec=/usr/local/bin/systemd-notify.py True 30 iptables.service rc-local.service polkit.service systemd-networkd.service systemd-logind.service getty@tty2.service autovt@tty2.service
+Exec=/usr/local/bin/systemd-notify.py
