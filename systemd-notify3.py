@@ -93,6 +93,13 @@ class DbusNotify():
         else:
             return False
 
+
+
+
+
+
+
+
 class logindMonitor(threading.Thread):
     """
     logindMonitor
@@ -314,4 +321,4 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     db = DbusNotify()
-    db_started = db.run()
+    db.run()

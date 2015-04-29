@@ -9,8 +9,6 @@ from systemd import journal
 from threading import Thread
 from gi.repository import Notify
 import os
-import sys
-import subprocess as sub
 import ConfigParser
 from espeak import espeak
 import pyinotify
@@ -322,4 +320,4 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     db = DbusNotify()
-    db_started = db.run()
+    db.run()
