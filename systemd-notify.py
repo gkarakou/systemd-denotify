@@ -11,6 +11,7 @@ from gi.repository import Notify
 import os
 import sys
 import subprocess as sub
+import ConfigParser
 from espeak import espeak
 import pyinotify
 
@@ -28,6 +29,56 @@ class DbusNotify():
         """
         pass
 
+    def run(self):
+        """
+        run
+        return False or void
+        :desc: function that starts (or not) a timer thread based on user input
+        Helpful API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html
+        Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
+        Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
+        """
+        config = ConfigParser.RawConfigParser()
+        config.read('/etc/systemd-desktop-notifications.conf')
+        config_start = config.getboolean("Services", "start")
+        config_interval = config.getint("Services", "interval")
+        config_serv = config.get("Services", "services")
+        config_services = config_serv.split(",")
+
+        if isinstance(config_start, bool) and config_start == False:
+            return False
+        elif config_start == True and isinstance(config_interval, int) and isinstance(config_services, list):
+            journal.send("systemd-notify.py: "+ config_services[0] +"")
+            secs = int(config_interval) * 60
+            threading.Timer(secs, self.run).start()
+            bus = SystemBus()
+            systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+            manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
+
+            append = ".service"
+            for a in config_services:
+                a+= append
+                try:
+                    getUnit = manager.LoadUnit(a)
+                except  Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-notify: "+message)
+                try:
+                    proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
+                except  Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-notify: "+message)
+                try:
+                    service_properties = Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-notify: "+message)
+                try:
+                    state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
+                except Exception as ex:
 
 class logindMonitor(threading.Thread):
     """
