@@ -20,8 +20,6 @@ class Installer():
 
         """
 
-<<<<<<< HEAD:install.py
-=======
     def get_euid(self):
         """
         get_euid_
@@ -43,7 +41,6 @@ class Installer():
    #         pass
            # print("setting uid: "+ str(self.get_euid()))
    #     return setuid
->>>>>>> testing:setup.py
 
     def is_archlinux(self):
         """
