@@ -42,11 +42,10 @@ class DbusNotify():
         config_interval = config.getint("Services", "interval")
         config_serv = config.get("Services", "services")
         config_services = config_serv.split(",")
-        lists = []
 
-        if config_start == "False":
+        if isinstance(config_start, bool) and config_start == False:
             return False
-        elif config_start == "True":
+        elif config_start == True:
             secs = int(config_interval) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
