@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-from __future__ import print_function
+#!/usr/bin/python
 from dbus import SystemBus, Interface
 import threading
 import select
@@ -12,6 +11,7 @@ from gi.repository import Notify
 import os
 import sys
 import subprocess as sub
+import ConfigParser
 from espeak import espeak
 import pyinotify
 
@@ -29,26 +29,35 @@ class DbusNotify():
         """
         pass
 
-    def run(self, *args):
+    def run(self):
         """
         run
         return False or void
-        :param *args: user supplied args
         :desc: function that starts (or not) a timer thread based on user input
         Helpful API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        if sys.argv[1] == "False":
+        config = ConfigParser.RawConfigParser()
+        config.read('/etc/systemd-desktop-notifications.conf')
+        config_start = config.getboolean("Services", "start")
+        config_interval = config.getint("Services", "interval")
+        config_serv = config.get("Services", "services")
+        config_services = config_serv.split(",")
+
+        if isinstance(config_start, bool) and config_start == False:
             return False
-        elif sys.argv[1] == "True":
-            secs = int(sys.argv[2]) * 60
-            threading.Timer(secs, self.run, args).start()
+        elif config_start == True and isinstance(config_interval, int) and isinstance(config_services, list):
+            journal.send("systemd-notify.py: "+ config_services[0] +"")
+            secs = int(config_interval) * 60
+            threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-            len_args = len(args)
-            for a in args[3:len_args]:
+
+            append = ".service"
+            for a in config_services:
+                a+= append
                 try:
                     getUnit = manager.LoadUnit(a)
                 except  Exception as ex:
@@ -84,6 +93,12 @@ class DbusNotify():
                     journal.send("systemd-notify: "+message)
         else:
             return False
+
+
+
+
+
+
 
 
 class logindMonitor(threading.Thread):
@@ -296,7 +311,6 @@ if __name__ == "__main__":
     lm = logindMonitor()
     lm.start()
     FileNotifier()# is that a trick to not assign a variable?
-
     if isinstance(log_reader, object) & isinstance(lm, object):
         pid = os.getpid()
         js = journal.send("systemd-notify: successfully started with pid "+ str(pid))
@@ -308,4 +322,4 @@ if __name__ == "__main__":
             messaged = templated.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+messaged)
     db = DbusNotify()
-    db_started = db.run(*sys.argv)
+    db_started = db.run()
