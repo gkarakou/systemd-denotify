@@ -84,7 +84,10 @@ sudo python2 setup.py
 
 NOTE: If you installed the python3 dependencies
 
-<pre>
+<pre>git clone https://github.com/gkarakou/systemd-notify.py.git
+
+cd systemd-notify.py
+
 sudo python2 setup.py -i v3
 </pre>
 
