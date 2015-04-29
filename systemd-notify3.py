@@ -10,7 +10,7 @@ from systemd import journal
 from threading import Thread
 from gi.repository import Notify
 import os
-import ConfigParser
+import configparser
 from espeak import espeak
 import pyinotify
 
@@ -37,7 +37,7 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.read('/etc/systemd-desktop-notifications.conf')
         config_start = config.getboolean("Services", "start")
         config_interval = config.getint("Services", "interval")
@@ -92,13 +92,6 @@ class DbusNotify():
                     journal.send("systemd-notify: "+message)
         else:
             return False
-
-
-
-
-
-
-
 
 class logindMonitor(threading.Thread):
     """
