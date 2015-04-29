@@ -58,7 +58,7 @@ class Installer():
                 data_replace = data.replace("python", "python2")
                 fin.write(data_replace)
                 fin.truncate()
-                print "Os was arch."
+                journal.send("systemd-notify.py: "+ "Os was arch.")
 
         else:
             #print("os wasnt arch")
@@ -94,28 +94,28 @@ class Installer():
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                print "\nYour user was added to the systemd-journal group.\nYou must relogin for the changes to take effect."
+                journal.send("systemd-notify.py:" +  "Your user was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                print"\nYour user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group."
+                journal.send("systemd-notify.py: "+"Your user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
                 return False
         elif stringify != login:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                print "\nWhile your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.\nYou must relogin for the changes to take effect."
+                journal.send("systemd-notify.py: "+ "While your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                print "\nYour Xorg loggedin user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group."
+                journal.send("systemd-notify.py: "+"Your Xorg loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
                 return False
         else:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ login
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                print "\nWhile we couldnt find the Xorg loggedin user,\nyour loggedin user was added to the systemd-journal group.\nYou must relogin for the changes to take effect."
+                journal.send("systemd-notify.py: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                print "\nYour loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group."
+                journal.send("systemd-notify.py: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
                 return False
 
 
@@ -149,7 +149,7 @@ class Installer():
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
 
-        print "\nsuccessfully installed systemd-notify v2."
+        journal.send("systemd-notify.py: "+ "successfully installed systemd-notify v2.")
 
     def install_v3(self):
         """install_v3
@@ -183,7 +183,7 @@ class Installer():
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
-        print "\nsuccessfully installed systemd-notify v3."
+        journal.send("systemd-notify.py: "+ "successfully installed systemd-notify v3.")
 
     #def __del__(self):
 
