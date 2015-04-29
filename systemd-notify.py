@@ -45,13 +45,13 @@ class DbusNotify():
 
         if isinstance(config_start, bool) and config_start == False:
             return False
-        elif config_start == True:
+        elif config_start == True and isinstance(config_interval, int) and isinstance(config_services, list):
+            journal.send("systemd-notify.py: "+ "everything ok")
             secs = int(config_interval) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-            #len_args = len(args)
 
             for a in config_services:
                 try:
