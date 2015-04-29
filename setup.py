@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-from __future__ import print_function
+#!/usr/bin/python2
 import os
 import shutil
 from systemd import journal
@@ -27,7 +26,7 @@ class Installer():
         return int
         """
         uid=os.geteuid()
- #       print("getting uid: "+ str(uid))
+ #       print "getting uid: "+ str(uid)
         return uid
 
    # def set_euid(self, *args):
@@ -41,6 +40,7 @@ class Installer():
    #         pass
            # print("setting uid: "+ str(self.get_euid()))
    #     return setuid
+
     def is_archlinux(self):
         """
         is_archlinux
@@ -58,7 +58,7 @@ class Installer():
                 data_replace = data.replace("python", "python2")
                 fin.write(data_replace)
                 fin.truncate()
-                print("Os was arch.")
+                print "Os was arch."
 
         else:
             #print("os wasnt arch")
@@ -94,28 +94,28 @@ class Installer():
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                print("\nYour user was added to the systemd-journal group.\nYou must relogin for the changes to take effect.")
+                print "\nYour user was added to the systemd-journal group.\nYou must relogin for the changes to take effect."
                 return True
             else:
-                print("\nYour user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group." )
+                print"\nYour user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group."
                 return False
         elif stringify != login:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                print("\nWhile your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.\nYou must relogin for the changes to take effect.")
+                print "\nWhile your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.\nYou must relogin for the changes to take effect."
                 return True
             else:
-                print("\nYour Xorg loggedin user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group." )
+                print "\nYour Xorg loggedin user was not added to the systemd-journal group,\nbut there is a possibility he is already a member of the group."
                 return False
         else:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ login
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                print("\nWhile we couldnt find the Xorg loggedin user,\nyour loggedin user was added to the systemd-journal group.\nYou must relogin for the changes to take effect.")
+                print "\nWhile we couldnt find the Xorg loggedin user,\nyour loggedin user was added to the systemd-journal group.\nYou must relogin for the changes to take effect."
                 return True
             else:
-                print("\nYour loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group." )
+                print "\nYour loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group."
                 return False
 
 
@@ -160,7 +160,7 @@ class Installer():
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
 
-        print("\nsuccessfully installed systemd-notify v2.")
+        print "\nsuccessfully installed systemd-notify v2."
 
     def install_v3(self, start, minutes, *services):
         """install_v3
@@ -202,7 +202,7 @@ class Installer():
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-notify: "+message)
-        print("\nsuccessfully installed systemd-notify v3.")
+        print "\nsuccessfully installed systemd-notify v3."
 
     #def __del__(self):
 
@@ -229,7 +229,7 @@ parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
 arguments = parser.parse_args()
 while True:
-    input_from_user_bool = input("Would you like to receive notifications for the status of some services?[Y/n]: ")
+    input_from_user_bool = raw_input("Would you like to receive notifications for the status of some services?[Y/n]: ")
     if input_from_user_bool:
         if type(input_from_user_bool) == str and input_from_user_bool == "Y" or input_from_user_bool == "y":
             start_dbus = True
@@ -239,10 +239,10 @@ while True:
             moments = 1000
             break
         else:
-            print("You must type either Y or N for Yes or No: ")
+            print "You must type either Y or N for Yes or No: "
             continue
 
-    input_from_user_list = input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want separated by a space: ")
+    input_from_user_list = raw_input("Which services would you like to receive notifications for?\nBy default we have iptables, rc-local, polkit, autovt@tty2\nType Y if you accept these or type the names of the services that you want separated by a space: ")
     services_list = ""
     if input_from_user_list:
         if type(input_from_user_list) == str and input_from_user_list == "Y" or input_from_user_list == "y" :
@@ -250,9 +250,9 @@ while True:
         elif type(input_from_user_list) == str and  input_from_user_list != "Y" or input_from_user_list != "y":
             services_list=str(input_from_user_list)
         else:
-            print("Either type Y or type the services you want separated by a space")
+            print "Either type Y or type the services you want separated by a space"
             continue
-    input_from_user_int = input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ")
+    input_from_user_int = raw_input("What should be the interval between the notifications?\nThe default is 30 minutes\nType Y if you accept this time interval or type the moments that you want: ")
     moments = ""
     if input_from_user_int:
         if type(input_from_user_int) == str and input_from_user_int == "Y" or input_from_user_int == "y":
@@ -260,7 +260,7 @@ while True:
         elif type(input_from_user_int) == str and input_from_user_int != "Y" or input_from_user_int != "y":
             moments += str(input_from_user_int)
         else:
-            print("Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: ")
+            print "Either type Y if you accept the default time interval of 30 mins between notifications or type the interval that you want: "
             continue
     break
 if arguments.install == "v2":
