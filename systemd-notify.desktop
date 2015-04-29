@@ -2,4 +2,4 @@
 Version=1.0
 Name=PynotifySystem
 Type=Application
-Exec=/usr/local/bin/systemd-notify3.py
+Exec=/usr/local/bin/systemd-notify.py
