@@ -80,6 +80,12 @@ class DbusNotify():
                     state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
                 except Exception as ex:
 
+
+
+
+
+
+
 class logindMonitor(threading.Thread):
     """
     logindMonitor
