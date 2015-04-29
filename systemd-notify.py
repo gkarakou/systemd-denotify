@@ -53,7 +53,9 @@ class DbusNotify():
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
 
+            append = ".service"
             for a in config_services:
+                a+= append
                 try:
                     getUnit = manager.LoadUnit(a)
                 except  Exception as ex:
