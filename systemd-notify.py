@@ -27,18 +27,15 @@ class DbusNotify():
         """
         pass
 
-    def run(self, *args):
+    def run(self):
         """
         run
         return False or void
-        :param *args: user supplied args
         :desc: function that starts (or not) a timer thread based on user input
         Helpful API->http://dbus.freedesktop.org/doc/dbus-python/doc/tutorial.html
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        #config = ConfigParser.RawConfigParser(allow_no_value=True)
-        #config.readfp(io.BytesIO("/etc/systemd-desktop-notifications.conf")
         config = ConfigParser.RawConfigParser()
         config.read('/etc/systemd-desktop-notifications.conf')
         config_start = config.getboolean("Services", "start")
@@ -48,7 +45,7 @@ class DbusNotify():
             return False
         elif config_start == "True":
             secs = int(config_interval) * 60
-            threading.Timer(secs, self.run, args).start()
+            threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
