@@ -79,6 +79,21 @@ class DbusNotify():
                 try:
                     state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
                 except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-notify: "+message)
+                status = a + " status: %s" % state
+                try:
+                    Notify.init("systemd-notify")
+                    notificated = Notify.Notification.new("systemd-notify", status)
+                    notificated.show()
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-notify: "+message)
+        else:
+            return False
+
 
 
 
