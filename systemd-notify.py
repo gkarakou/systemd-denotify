@@ -9,9 +9,7 @@ from systemd import journal
 from threading import Thread
 from gi.repository import Notify
 import os
-import sys
 import ConfigParser
-import io
 
 class DbusNotify():
     """
@@ -46,7 +44,6 @@ class DbusNotify():
         if isinstance(config_start, bool) and config_start == False:
             return False
         elif config_start == True and isinstance(config_interval, int) and isinstance(config_services, list):
-            journal.send("systemd-notify.py: "+ config_services[0] +"")
             secs = int(config_interval) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
