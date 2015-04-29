@@ -84,7 +84,7 @@ On a terminal:
 
 cd systemd-notify.py
 
-sudo python3 setup.py
+sudo python2 setup.py
 
 </pre>
 
@@ -92,6 +92,6 @@ sudo python3 setup.py
 NOTE: If you installed the python3 dependencies
 
 <pre>
-sudo python3 setup.py -i v3
+sudo python2 setup.py -i v3
 </pre>
 
