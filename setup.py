@@ -26,20 +26,7 @@ class Installer():
         return int
         """
         uid=os.geteuid()
- #       print "getting uid: "+ str(uid)
         return uid
-
-   # def set_euid(self, *args):
-   #     """set_euid
-   #     return int
-   #     :param *args:
-   #     """
-   #     euid = int(sys.argv[1])
-   #     setuid = os.seteuid(euid)
-   #     if setuid == None:
-   #         pass
-           # print("setting uid: "+ str(self.get_euid()))
-   #     return setuid
 
     def is_archlinux(self):
         """
@@ -61,7 +48,6 @@ class Installer():
                 journal.send("systemd-notify.py: "+ "Os was arch.")
 
         else:
-            #print("os wasnt arch")
             pass
 
     def addXuser_to_group(self):
