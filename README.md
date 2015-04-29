@@ -5,7 +5,7 @@ Systemd-notify.py should not be confused with systemd-notify binary which is par
 Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
 These classes provide desktop notification upon a user login, when systemd files are modified and when services fail(you will also be notified orally when systemd services fail).
 There is also one class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
-One can start it on demand by answering the questions when installing.
+One can start the services he/she wishes by editing the file /etc/systemd-desktop-notifications.conf.
 I wrote these classes to enhance systemd's role on my desktop, but you can modify it to suit your custom needs if you are familiar with python.
 
 NOTE: if you use vim to edit files that are being monitored by systemd-notify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
@@ -83,7 +83,7 @@ On a terminal:
 <pre>git clone https://github.com/gkarakou/systemd-notify.py.git
 
 cd systemd-notify.py
-
+git checkout experimental
 sudo python2 setup.py
 
 </pre>
@@ -92,6 +92,8 @@ sudo python2 setup.py
 NOTE: If you installed the python3 dependencies
 
 <pre>
+cd systemd-notify.py
+git checkout experimental
 sudo python2 setup.py -i v3
 </pre>
 
