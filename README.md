@@ -5,7 +5,7 @@ Systemd-notify.py should not be confused with systemd-notify binary which is par
 Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
 These classes provide desktop notification upon a user login and when a systemd service fails.
 There is also one class that every specified interval (by default 30 minutes) notifies the user for the status of some services.
-One can start it on demand by answering the questions when installing.
+One can start the services he/she wishes by editing the /etc/systemd-desktop-notifications.conf file
 
 
 REQUIREMENTS
