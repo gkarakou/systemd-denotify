@@ -228,6 +228,7 @@ installer.reset_desktop_file()
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
 arguments = parser.parse_args()
+print "---------systemd-notify.py installation wizard--------------------\n"
 while True:
     input_from_user_bool = raw_input("Would you like to receive notifications for the status of some services?[Y/n]: ")
     if input_from_user_bool:
