@@ -10,8 +10,6 @@ from systemd import journal
 from threading import Thread
 from gi.repository import Notify
 import os
-import sys
-import subprocess as sub
 import ConfigParser
 from espeak import espeak
 import pyinotify
@@ -94,13 +92,6 @@ class DbusNotify():
                     journal.send("systemd-notify: "+message)
         else:
             return False
-
-
-
-
-
-
-
 
 class logindMonitor(threading.Thread):
     """
