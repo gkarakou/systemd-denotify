@@ -40,9 +40,10 @@ class DbusNotify():
         config.read('/etc/systemd-desktop-notifications.conf')
         config_start = config.getboolean("Services", "start")
         config_interval = config.getint("Services", "interval")
-        config_services = config.get("Services", "services")
-        print "typeof services: "+ type(config_services)+ " services :"+ str(config_services)
-        journal.send("systemd-notify: "+ "type of services " + type(config_services))
+        config_serv = config.get("Services", "services")
+        config_services = config_serv.split(",")
+        #print "typeof services: "+ type(config_services)+ " services :"+ str(config_services)
+        #journal.send("systemd-notify: "+ "type of services " + type(config_services))
         if config_start == "False":
             return False
         elif config_start == "True":
