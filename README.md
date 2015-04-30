@@ -90,3 +90,12 @@ cd systemd-denotify
 sudo python2 setup.py -i v3
 </pre>
 
+NOTE for archlinux: if you have trouble installing you might have to pam_permit.so temporarilly in /etc/pam.d/usermod
+and after the installation revert your changes back;
+
+
+UNINSTALL
+--------------------------
+
+cd systemd-denotify
+sudo python2 setup.py -u
