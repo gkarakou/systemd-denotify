@@ -1,11 +1,10 @@
-# systemd-notify.py
+# systemd-denotify
 GENERAL
 -------------------
-Systemd-notify.py should not be confused with systemd-notify binary which is part of the systemd core library. Only the names match(that is my mistake since i forgot the c library that is located at /usr/bin), the functionality differs.
-Systemd-notify.py is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
+systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
 These classes provide desktop notification upon a user login and when a systemd service fails.
 There is also one class that every specified interval (by default 30 minutes) notifies the user for the status of some services.
-One can start the services he/she wishes by editing the /etc/systemd-desktop-notifications.conf file
+One can start the services he/she wishes by editing the /etc/systemd-denotify.conf file
 
 
 REQUIREMENTS
@@ -73,9 +72,9 @@ INSTALL
 ------------------------
 On a terminal:
 
-<pre>git clone https://github.com/gkarakou/systemd-notify.py.git
+<pre>git clone https://github.com/gkarakou/systemd-denotify.git
 
-cd systemd-notify.py
+cd systemd-denotify
 
 sudo python2 setup.py
 
@@ -84,9 +83,9 @@ sudo python2 setup.py
 
 NOTE: If you installed the python3 dependencies
 
-<pre>git clone https://github.com/gkarakou/systemd-notify.py.git
+<pre>git clone https://github.com/gkarakou/systemd-denotify.git
 
-cd systemd-notify.py
+cd systemd-denotify
 
 sudo python2 setup.py -i v3
 </pre>
