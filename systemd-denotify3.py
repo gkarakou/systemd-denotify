@@ -238,20 +238,27 @@ if __name__ == "__main__":
     based on user input
     Instantiates DbusNotify class and starts run function with string args (True/False, time, services)
     """
-    log_reader = LogReader()
-    log_reader.daemon = True
-    log_reader.start()
-    lm = logindMonitor()
-    lm.start()
-    if isinstance(log_reader, object) & isinstance(lm, object):
-        pid = os.getpid()
-        js = journal.send("systemd-denotify: successfully started with pid "+ str(pid))
-        try:
-            with open('/tmp/systemd-denotify.pid', 'w') as of:
-                of.write(str(pid))
-        except Exception as ex:
-            templated = "An exception of type {0} occured. Arguments:\n{1!r}"
-            messaged = templated.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+messaged)
+    config = configparser.RawConfigParser()
+    config.read('/etc/systemd-denotify.conf')
+    config_logins_start = config.getboolean("Logins", "start")
+    config_logreader_start = config.getboolean("Journal", "start")
+
+    if isinstance(config_logins_start,bool) and config_logins_start == True:
+        lm = logindMonitor()
+        lm.start()
+    if isinstance(config_logreader_start,bool) and config_logreader_start == True:
+        log_reader = LogReader()
+        log_reader.daemon = True
+        log_reader.start()
     db = DbusNotify()
     db_started = db.run()
+   # if  isinstance(lm, object):
+   #     pid = os.getpid()
+   #     js = journal.send("systemd-denotify: successfully started with pid "+ str(pid))
+   #     try:
+   #         with open('/tmp/systemd-denotify.pid', 'w') as of:
+   #             of.write(str(pid))
+   #     except Exception as ex:
+   #         templated = "An exception of type {0} occured. Arguments:\n{1!r}"
+   #         messaged = templated.format(type(ex).__name__, ex.args)
+   #         journal.send("systemd-denotify: "+messaged)
