@@ -326,6 +326,9 @@ if __name__ == "__main__":
         message = template.format(type(ex).__name__, ex.args)
         journal.send("systemd-denotify: "+message)
 
+    #debug
+    journal.send("systemd-denotify-debug: "+ config_services_start+" "+config_logreader_start)
+
     if isinstance(config_files_start, bool) and config_files_start == True:
         FileNotifier()
     if isinstance(config_logins_start, bool) and config_logins_start == True:
