@@ -231,7 +231,7 @@ installer.remove_old_version()
 installer.reset_desktop_file()
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-denotify(default is 2)")
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
-parser.add_argument("-u", "--uninstall", action='store_true', type=installer.uninstall)
+parser.add_argument("-u", "--uninstall", action='store_true', const=installer.uninstall)
 arguments = parser.parse_args()
 if arguments.install == "v2":
     installer.is_archlinux()
