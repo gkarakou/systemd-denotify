@@ -314,6 +314,6 @@ if __name__ == "__main__":
     if isinstance(config_logreader_start,bool) and config_logreader_start == True:
         lg = LogReader()
         lg.run()
-    if isinstance(config_services_start,bool) and config_services_start == True:
-        db = DbusNotify()
-        db.run()
+#    if isinstance(config_services_start,bool) and config_services_start == True:
+    db = DbusNotify()
+    db.run()
