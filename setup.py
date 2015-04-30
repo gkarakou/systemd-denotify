@@ -8,7 +8,7 @@ import argparse
 class Installer():
     """
     Installer
-    :desc : Class that installs either systemd-notify.py v2 or v3
+    :desc : Class that installs either systemd-denotify.py v2 or v3
     """
 
     def __init__(self):
@@ -47,18 +47,18 @@ class Installer():
         return void
         :desc: function that checks if the underlying os is archlinux
         checks for the existense of /etc/pacman.conf
-        if it is there (os is definitely arch) , we open the file systemd-notify.py rw to have as interpreter python2
+        if it is there (os is definitely arch) , we open the file systemd-denotify.py rw to have as interpreter python2
         """
         if  os.path.isfile("/etc/pacman.conf"):
             path = os.path.dirname(os.path.abspath(__file__))
             data = ""
-            with open(path+"/systemd-notify.py", "r+") as fin:
+            with open(path+"/systemd-denotify.py", "r+") as fin:
                 data += fin.read()
                 fin.seek(0)
                 data_replace = data.replace("python", "python2")
                 fin.write(data_replace)
                 fin.truncate()
-                journal.send("systemd-notify.py: "+ "Os was arch.")
+                journal.send("systemd-denotify.py: "+ "Os was arch.")
 
         else:
             #print("os wasnt arch")
@@ -88,34 +88,34 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
         #this will autoraise  if exit status non zero
         if login == stringify:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                journal.send("systemd-notify.py:" +  "Your user was added to the systemd-journal group.You must relogin for the changes to take effect.")
+                journal.send("systemd-denotify.py:" +  "Your user was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                journal.send("systemd-notify.py: "+"Your user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
+                journal.send("systemd-denotify.py: "+"Your user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
                 return False
         elif stringify != login:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                journal.send("systemd-notify.py: "+ "While your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.You must relogin for the changes to take effect.")
+                journal.send("systemd-denotify.py: "+ "While your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                journal.send("systemd-notify.py: "+"Your Xorg loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
+                journal.send("systemd-denotify.py: "+"Your Xorg loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
                 return False
         else:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ login
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                journal.send("systemd-notify.py: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
+                journal.send("systemd-denotify.py: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                journal.send("systemd-notify.py: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
+                journal.send("systemd-denotify.py: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
                 return False
 
 
@@ -126,12 +126,12 @@ class Installer():
          This func also chmod's the files so that the user that starts X is ab        le to execute the program.
         """
         path = os.path.dirname(os.path.abspath(__file__))
-        src_c = path+"/systemd-notify.py"
-        src_d = path+"/systemd-notify.desktop"
-        src_e = path+"/systemd-desktop-notifications.conf"
-        dst_c = "/usr/local/bin/systemd-notify.py"
-        dst_d = "/etc/xdg/autostart/systemd-notify.desktop"
-        dst_e = "/etc/systemd-desktop-notifications.conf"
+        src_c = path+"/systemd-denotify.py"
+        src_d = path+"/systemd-denotify.desktop"
+        src_e = path+"/systemd-denotify.conf"
+        dst_c = "/usr/local/bin/systemd-denotify.py"
+        dst_d = "/etc/xdg/autostart/systemd-denotify.desktop"
+        dst_e = "/etc/systemd-denotify.conf"
         try:
             shutil.copy2(src_c, dst_c)
             shutil.copy2(src_d, dst_d)
@@ -139,7 +139,7 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
         try:
             os.chmod(dst_c, 0o755)
             os.chmod(dst_d, 0o644)
@@ -147,9 +147,9 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
 
-        journal.send("systemd-notify.py: "+ "successfully installed systemd-notify v2.")
+        journal.send("systemd-denotify.py: "+ "successfully installed systemd-denotify v2.")
 
     def install_v3(self):
         """install_v3
@@ -162,17 +162,17 @@ class Installer():
         """
         path = os.path.dirname(os.path.abspath(__file__))
         data = ""
-        with open(path+"/systemd-notify.desktop", "r+") as fin:
+        with open(path+"/systemd-denotify.desktop", "r+") as fin:
             data += fin.read()
             fin.seek(0)
-            data_replace = data.replace("Exec=/usr/local/bin/systemd-notify.py", "Exec=/usr/local/bin/systemd-notify3.py")
+            data_replace = data.replace("Exec=/usr/local/bin/systemd-denotify.py", "Exec=/usr/local/bin/systemd-denotify3.py")
             fin.write(data_replace)
-        src_c = path+"/systemd-notify3.py"
-        src_d = path+"/systemd-notify.desktop"
-        src_e = path+"/systemd-desktop-notifications.conf"
-        dst_c = "/usr/local/bin/systemd-notify3.py"
-        dst_d = "/etc/xdg/autostart/systemd-notify.desktop"
-        dst_e = "/etc/systemd-desktop-notifications.conf"
+        src_c = path+"/systemd-denotify3.py"
+        src_d = path+"/systemd-denotify.desktop"
+        src_e = path+"/systemd-denotify.conf"
+        dst_c = "/usr/local/bin/systemd-denotify3.py"
+        dst_d = "/etc/xdg/autostart/systemd-denotify.desktop"
+        dst_e = "/etc/systemd-denotify.conf"
         try:
             shutil.copy2(src_c, dst_c)
             shutil.copy2(src_d, dst_d)
@@ -180,7 +180,7 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
         try:
             os.chmod(dst_c, 0o755)
             os.chmod(dst_d, 0o644)
@@ -188,8 +188,8 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
-        journal.send("systemd-notify.py: "+ "successfully installed systemd-notify v3.")
+            journal.send("systemd-denotify: "+message)
+        journal.send("systemd-denotify.py: "+ "successfully installed systemd-denotify v3.")
 
     #def __del__(self):
 
@@ -199,9 +199,9 @@ class Installer():
 
     def reset_desktop_file(self):
         path = os.path.dirname(os.path.abspath(__file__))
-        data_replace = "[Desktop Entry]\nVersion=1.0\nName=PynotifySystem\nType=Application\nExec=/usr/local/bin/systemd-notify.py"
+        data_replace = "[Desktop Entry]\nVersion=1.0\nName=PynotifySystem\nType=Application\nExec=/usr/local/bin/systemd-denotify.py"
         data = ""
-        with open(path+"/systemd-notify.desktop", "r+") as fin:
+        with open(path+"/systemd-denotify.desktop", "r+") as fin:
             data += fin.read()
             fin.seek(0)
             fin.write(data_replace)
@@ -212,7 +212,7 @@ class Installer():
 
 installer = Installer()
 installer.reset_desktop_file()
-parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-notify(default is 2)")
+parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-denotify(default is 2)")
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
 arguments = parser.parse_args()
 if arguments.install == "v2":
