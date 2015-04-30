@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+from __future__ import print_function
 from dbus import SystemBus, Interface
 import threading
 import select
@@ -9,7 +10,7 @@ from systemd import journal
 from threading import Thread
 from gi.repository import Notify
 import os
-import ConfigParser
+import configparser
 from espeak import espeak
 import pyinotify
 
@@ -36,8 +37,8 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        config = ConfigParser.RawConfigParser()
-        config.read('/etc/systemd-desktop-notifications.conf')
+        config = configparser.RawConfigParser()
+        config.read('/etc/systemd-denotify.conf')
         config_start = config.getboolean("Services", "start")
         config_interval = config.getint("Services", "interval")
         config_serv = config.get("Services", "services")
@@ -46,7 +47,7 @@ class DbusNotify():
         if isinstance(config_start, bool) and config_start == False:
             return False
         elif config_start == True and isinstance(config_interval, int) and isinstance(config_services, list):
-            journal.send("systemd-notify.py: "+ config_services[0] +"")
+            journal.send("systemd-denotify.py: "+ config_services[0] +"")
             secs = int(config_interval) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
@@ -61,43 +62,36 @@ class DbusNotify():
                 except  Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-notify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 try:
                     proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
                 except  Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-notify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 try:
                     service_properties = Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-notify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 try:
                     state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-notify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 status = a + " status: %s" % state
                 try:
-                    Notify.init("systemd-notify")
-                    notificated = Notify.Notification.new("systemd-notify", status)
+                    Notify.init("systemd-denotify")
+                    notificated = Notify.Notification.new("systemd-denotify", status)
                     notificated.show()
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-notify: "+message)
+                    journal.send("systemd-denotify: "+message)
         else:
             return False
-
-
-
-
-
-
-
 
 class logindMonitor(threading.Thread):
     """
@@ -129,26 +123,26 @@ class logindMonitor(threading.Thread):
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                journal.send("systemd-notify: "+message)
+                journal.send("systemd-denotify: "+message)
             poller = select.poll()
             try:
                 poller.register(monitor_uids, monitor_uids.get_events())
             except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                journal.send("systemd-notify: "+message)
+                journal.send("systemd-denotify: "+message)
             poller.poll()
             users = login.uids()
             for user in users:
                 now = datetime.datetime.now()
                 try:
-                    Notify.init("systemd-notify")
-                    notificatio = Notify.Notification.new("systemd-notify", "login from user id: "+str(user) +" at "+str(now)[:19])
+                    Notify.init("systemd-denotify")
+                    notificatio = Notify.Notification.new("systemd-denotify", "login from user id: "+str(user) +" at "+str(now)[:19])
                     notificatio.show()
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-notify: "+message)
+                    journal.send("systemd-denotify: "+message)
 
     def __del__(self):
         """
@@ -210,8 +204,8 @@ class LogReader(threading.Thread):
                         try:
                             string = entry['MESSAGE']
                             if string and pattern in string:
-                                Notify.init("systemd-notify")
-                                notificatio=Notify.Notification.new("systemd-notify", string)
+                                Notify.init("systemd-denotify")
+                                notificatio=Notify.Notification.new("systemd-denotify", string)
                                 notificatio.show()
                                 stri = string.replace(".", " ")
                                 espeak.synth(stri)
@@ -220,7 +214,7 @@ class LogReader(threading.Thread):
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
-                            journal.send("systemd-notify: "+message)
+                            journal.send("systemd-denotify: "+message)
                     else:
                         continue
             else:
@@ -243,41 +237,41 @@ class EventHandler(pyinotify.ProcessEvent):
     def process_IN_CLOSE_WRITE(self, event):
         string1 = "file " +event.pathname + " written"
         try:
-            Notify.init("systemd-notify")
-            notificatio = Notify.Notification.new("systemd-notify", string1)
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
             notificatio.show()
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
 
     def process_IN_MODIFY(self, event):
         string1 = "file " +event.pathname + " modified"
         try:
-            Notify.init("systemd-notify")
-            notificatio = Notify.Notification.new("systemd-notify", string1)
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
             notificatio.show()
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
 
     def process_IN_MOVED_TO(self, event):
         string1 = "file " +event.pathname + " overwritten"
         try:
-            Notify.init("systemd-notify")
-            notificatio = Notify.Notification.new("systemd-notify", string1)
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
             notificatio.show()
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+message)
+            journal.send("systemd-denotify: "+message)
 
     def process_IN_ATTRIB(self, event):
         string1 = "files " +event.pathname + " metadata changed"
         try:
-            Notify.init("systemd-notify")
-            notificatio = Notify.Notification.new("systemd-notify", string1)
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
             notificatio.show()
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
@@ -311,13 +305,13 @@ if __name__ == "__main__":
     FileNotifier()# is that a trick to not assign a variable?
     if isinstance(log_reader, object) & isinstance(lm, object):
         pid = os.getpid()
-        js = journal.send("systemd-notify: successfully started with pid "+ str(pid))
+        js = journal.send("systemd-denotify: successfully started with pid "+ str(pid))
         try:
-            with open('/tmp/systemd-notify.pid', 'w') as of:
+            with open('/tmp/systemd-denotify.pid', 'w') as of:
                 of.write(str(pid))
         except Exception as ex:
             templated = "An exception of type {0} occured. Arguments:\n{1!r}"
             messaged = templated.format(type(ex).__name__, ex.args)
-            journal.send("systemd-notify: "+messaged)
+            journal.send("systemd-denotify: "+messaged)
     db = DbusNotify()
     db.run()
