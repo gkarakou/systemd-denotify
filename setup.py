@@ -199,7 +199,7 @@ class Installer():
 
     def reset_desktop_file(self):
         path = os.path.dirname(os.path.abspath(__file__))
-        data_replace = "[Desktop Entry]\nVersion=1.0\nName=PynotifySystem\nType=Application\nExec=/usr/local/bin/systemd-denotify.py"
+        data_replace = "[Desktop Entry]\nVersion=1.0\nName=system-denotify\nType=Application\nExec=/usr/local/bin/systemd-denotify.py"
         data = ""
         with open(path+"/systemd-denotify.desktop", "r+") as fin:
             data += fin.read()
@@ -207,13 +207,31 @@ class Installer():
             fin.write(data_replace)
             fin.truncate()
 
+    def remove_old_version(self):
+        files = ["/etc/systemd-desktop-notifications.conf", "/etc/xdg/autostart/systemd-notify.desktop", "/usr/local/bin/systemd-notify.py", "/usr/local/bin/systemd-notify3.py"]
+        for f in files:
+            if os.path.isfile(f):
+                try:
+                    os.remove(f)
+                except OSError as e:  ## if failed, report it back to the user ##
+                    journal.send("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
 
+    def uninstall(self):
+        files = ["/etc/systemd-denotify.conf", "/etc/xdg/autostart/systemd-denotify.desktop", "/usr/local/bin/systemd-denotify.py", "/usr/local/bin/systemd-denotify3.py"]
+        for f in files:
+            if os.path.isfile(f):
+                try:
+                    os.remove(f)
+                except OSError as e:  ## if failed, report it back to the user ##
+                    journal.send("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
 
 
 installer = Installer()
+installer.remove_old_version()
 installer.reset_desktop_file()
 parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-denotify(default is 2)")
 parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
+parser.add_argument("-u", "--uninstall")
 arguments = parser.parse_args()
 if arguments.install == "v2":
     installer.is_archlinux()
@@ -222,3 +240,5 @@ if arguments.install == "v2":
 elif arguments.install == "v3":
     installer.addXuser_to_group()
     installer.install_v3()
+elif arguments.uninstall:
+    installer.uninstall()
