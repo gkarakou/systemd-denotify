@@ -327,7 +327,7 @@ if __name__ == "__main__":
         journal.send("systemd-denotify: "+message)
 
     #debug
-    journal.send("systemd-denotify-debug: "+ config_services_start+" "+config_logreader_start)
+    journal.send("systemd-denotify-debug: "+ str(config_services_start)+" "+str(config_logreader_start))
 
     if isinstance(config_files_start, bool) and config_files_start == True:
         FileNotifier()
