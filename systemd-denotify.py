@@ -36,11 +36,11 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        config = ConfigParser.RawConfigParser()
-        config.read('/etc/systemd-denotify.conf')
-        config_start = config.getboolean("Services", "start")
-        config_interval = config.getint("Services", "interval")
-        config_serv = config.get("Services", "services")
+        conf = ConfigParser.RawConfigParser()
+        conf.read('/etc/systemd-denotify.conf')
+        config_start = conf.getboolean("Services", "start")
+        config_interval = conf.getint("Services", "interval")
+        config_serv = conf.get("Services", "services")
         config_services = config_serv.split(",")
 
         if isinstance(config_start, bool) and config_start == False:
@@ -278,9 +278,9 @@ class EventHandler(pyinotify.ProcessEvent):
 
 class FileNotifier():
     def __init__(self):
-        config = ConfigParser.RawConfigParser()
-        config.read('/etc/systemd-denotify.conf')
-        config_dirs = config.get("Files", "directories")
+        configure = ConfigParser.RawConfigParser()
+        configure.read('/etc/systemd-denotify.conf')
+        config_dirs = configure.get("Files", "directories")
         config_directories = config_dirs.split(",")
         mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
         wm = pyinotify.WatchManager()
@@ -306,12 +306,12 @@ if __name__ == "__main__":
     config_logins_start = config.getboolean("Logins", "start")
     config_logreader_start = config.getboolean("Journal", "start")
     config_services_start = config.getboolean("Services", "start")
-    if isinstance(config_files_start,bool) and config_files_start == True:
+    if isinstance(config_files_start, bool) and config_files_start == True:
         FileNotifier()
-    if isinstance(config_logins_start,bool) and config_logins_start == True:
+    if isinstance(config_logins_start, bool) and config_logins_start == True:
         lm = logindMonitor()
         lm.run()
-    if isinstance(config_logreader_start,bool) and config_logreader_start == True:
+    if isinstance(config_logreader_start, bool) and config_logreader_start == True:
         lg = LogReader()
         lg.run()
 #    if isinstance(config_services_start,bool) and config_services_start == True:
