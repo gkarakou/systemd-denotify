@@ -326,8 +326,6 @@ if __name__ == "__main__":
         message = template.format(type(ex).__name__, ex.args)
         journal.send("systemd-denotify: "+message)
 
-    #debug
-    journal.send("systemd-denotify-debug: "+ str(config_services_start)+" "+str(config_logreader_start))
     db = DbusNotify()
     db.run()
 
@@ -340,4 +338,3 @@ if __name__ == "__main__":
     if isinstance(config_logins_start, bool) and config_logins_start == True:
         lm = logindMonitor()
         lm.run()
-#    if isinstance(config_services_start,bool) and config_services_start == True:
