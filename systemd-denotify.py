@@ -244,12 +244,12 @@ if __name__ == "__main__":
     config_logreader_start = config.getboolean("Journal", "start")
 
     if isinstance(config_logins_start,bool) and config_logins_start == True:
+        lm = logindMonitor()
+        lm.start()
+    if isinstance(config_logreader_start,bool) and config_logreader_start == True:
         log_reader = LogReader()
         log_reader.daemon = True
         log_reader.start()
-    if isinstance(config_logreader_start,bool) and config_logreader_start == True:
-        lm = logindMonitor()
-        lm.start()
     db = DbusNotify()
     db_started = db.run()
    # if  isinstance(lm, object):
