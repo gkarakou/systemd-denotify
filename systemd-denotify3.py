@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+from __future__ import print_function
 from dbus import SystemBus, Interface
 import threading
 import select
