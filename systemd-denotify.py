@@ -275,6 +275,8 @@ class EventHandler(pyinotify.ProcessEvent):
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-denotify: "+message)
+
 
 class FileNotifier():
     def __init__(self):
@@ -300,7 +302,12 @@ if __name__ == "__main__":
     based on user input
     Instantiates DbusNotify class and starts run function with string args (True/False, time, services)
     """
-    config = ConfigParser.RawConfigParser()
+    try:
+        config = ConfigParser.RawConfigParser()
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
     config.read('/etc/systemd-denotify.conf')
     config_files_start = config.getboolean("Files", "start")
     config_logins_start = config.getboolean("Logins", "start")
