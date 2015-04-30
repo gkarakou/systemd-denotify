@@ -92,13 +92,6 @@ class DbusNotify():
         else:
             return False
 
-
-
-
-
-
-
-
 class logindMonitor(threading.Thread):
     """
     logindMonitor
@@ -285,13 +278,17 @@ class EventHandler(pyinotify.ProcessEvent):
 
 class FileNotifier():
     def __init__(self):
+        config = ConfigParser.RawConfigParser()
+        config.read('/etc/systemd-denotify.conf')
+        config_dirs = config.get("Files", "directories")
+        config_directories = config_dirs.split(",")
         mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
         # Start watching  paths
-        wdd = wm.add_watch('/etc/systemd/', mask, rec=True)
-        wdd = wm.add_watch('/usr/lib/systemd/', mask, rec=True)
+        for d in config_directories:
+            wm.add_watch(d, mask, rec=True)
 
 
 if __name__ == "__main__":
@@ -303,21 +300,20 @@ if __name__ == "__main__":
     based on user input
     Instantiates DbusNotify class and starts run function with string args (True/False, time, services)
     """
-    log_reader = LogReader()
-    log_reader.daemon = True
-    log_reader.start()
-    lm = logindMonitor()
-    lm.start()
-    FileNotifier()# is that a trick to not assign a variable?
-    if isinstance(log_reader, object) & isinstance(lm, object):
-        pid = os.getpid()
-        js = journal.send("systemd-denotify: successfully started with pid "+ str(pid))
-        try:
-            with open('/tmp/systemd-denotify.pid', 'w') as of:
-                of.write(str(pid))
-        except Exception as ex:
-            templated = "An exception of type {0} occured. Arguments:\n{1!r}"
-            messaged = templated.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+messaged)
-    db = DbusNotify()
-    db.run()
+    config = ConfigParser.RawConfigParser()
+    config.read('/etc/systemd-denotify.conf')
+    config_files_start = config.getboolean("Files", "start")
+    config_logins_start = config.getboolean("Logins", "start")
+    config_logreader_start = config.getboolean("Journal", "start")
+    config_services_start = config.getboolean("Services", "start")
+    if isinstance(config_files_start,bool) and config_files_start == True:
+        FileNotifier()
+    if isinstance(config_logins_start,bool) and config_logins_start == True:
+        lm = logindMonitor()
+        lm.run()
+    if isinstance(config_logreader_start,bool) and config_logreader_start == True:
+        lg = LogReader()
+        lg.run()
+    if isinstance(config_services_start,bool) and config_services_start == True:
+        db = DbusNotify()
+        db.run()
