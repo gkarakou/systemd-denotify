@@ -240,5 +240,5 @@ if arguments.install == "v2":
 elif arguments.install == "v3":
     installer.addXuser_to_group()
     installer.install_v3()
-elif arguments.uninstall:
+elif arguments[1] == "uninstall":
     installer.uninstall()

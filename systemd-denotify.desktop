@@ -1,5 +1,5 @@
 [Desktop Entry]
 Version=1.0
-Name=PynotifySystem
+Name=system-denotify
 Type=Application
-Exec=/usr/local/bin/systemd-denotify3.py
+Exec=/usr/local/bin/systemd-denotify.py
