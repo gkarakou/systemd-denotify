@@ -328,16 +328,16 @@ if __name__ == "__main__":
 
     #debug
     journal.send("systemd-denotify-debug: "+ str(config_services_start)+" "+str(config_logreader_start))
+    db = DbusNotify()
+    db.run()
 
     if isinstance(config_files_start, bool) and config_files_start == True:
         FileNotifier()
-    if isinstance(config_logins_start, bool) and config_logins_start == True:
-        lm = logindMonitor()
-        lm.run()
     if isinstance(config_logreader_start, bool) and config_logreader_start == True:
         lg = LogReader()
         lg.daemon = True
         lg.start()
+    if isinstance(config_logins_start, bool) and config_logins_start == True:
+        lm = logindMonitor()
+        lm.run()
 #    if isinstance(config_services_start,bool) and config_services_start == True:
-    db = DbusNotify()
-    db.run()
