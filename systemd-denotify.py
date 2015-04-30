@@ -296,22 +296,36 @@ if __name__ == "__main__":
     """
     __main__
     :desc: Somewhat main function though we are linux only
-    Starts logReader and logindMonitor instances (threads)
-    Writes pid file on /tmp cause we dont have and dont want root rights
-    based on user input
-    Instantiates DbusNotify class and starts run function with string args (True/False, time, services)
+    based on user configuration starts classes
     """
+
     try:
         config = ConfigParser.RawConfigParser()
     except Exception as ex:
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         journal.send("systemd-denotify: "+message)
-    config.read('/etc/systemd-denotify.conf')
+    try:
+        config.read('/etc/systemd-denotify.conf')
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
     config_files_start = config.getboolean("Files", "start")
     config_logins_start = config.getboolean("Logins", "start")
-    config_logreader_start = config.getboolean("Journal", "start")
-    config_services_start = config.getboolean("Services", "start")
+    try:
+        config_logreader_start = config.getboolean("Journal", "start")
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
+    try:
+        config_services_start = config.getboolean("Services", "start")
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
+
     if isinstance(config_files_start, bool) and config_files_start == True:
         FileNotifier()
     if isinstance(config_logins_start, bool) and config_logins_start == True:
