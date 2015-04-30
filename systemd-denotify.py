@@ -336,7 +336,8 @@ if __name__ == "__main__":
         lm.run()
     if isinstance(config_logreader_start, bool) and config_logreader_start == True:
         lg = LogReader()
-        lg.run()
+        lg.daemon = True
+        lg.start()
 #    if isinstance(config_services_start,bool) and config_services_start == True:
     db = DbusNotify()
     db.run()
