@@ -25,7 +25,8 @@ class MyInstall(install):
 
     def run(self):
         install.run(self)
-	subprocess.check_call("python install_script.py",shell=False)
+	path = os.path.dirname(os.path.abspath(__file__))
+        subprocess.check_call("python"+path+"install_script.py",shell=False)
 
 def listfiles(*dirs):
         dir, pattern = os.path.split(os.path.join(*dirs))
