@@ -226,19 +226,19 @@ class Installer():
                     journal.send("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
 
 
-installer = Installer()
-installer.remove_old_version()
-installer.reset_desktop_file()
-parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-denotify(default is 2)")
-parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
-parser.add_argument("-u", "--uninstall", action='store_true')
-arguments = parser.parse_args()
-if arguments.install == "v2":
-    installer.is_archlinux()
-    installer.addXuser_to_group()
-    installer.install_v2()
-elif arguments.install == "v3":
-    installer.addXuser_to_group()
-    installer.install_v3()
-if arguments.uninstall:
-    installer.uninstall()
+#installer = Installer()
+#installer.remove_old_version()
+#installer.reset_desktop_file()
+#parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-denotify(default is 2)")
+#parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
+#parser.add_argument("-u", "--uninstall", action='store_true')
+#arguments = parser.parse_args()
+#if arguments.install == "v2":
+#    installer.is_archlinux()
+#    installer.addXuser_to_group()
+#    installer.install_v2()
+#elif arguments.install == "v3":
+#    installer.addXuser_to_group()
+#    installer.install_v3()
+#if arguments.uninstall:
+#    installer.uninstall()
