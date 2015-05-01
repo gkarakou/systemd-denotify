@@ -19,7 +19,7 @@
 if __package__ is None:
     import sys
     from os import path
-    sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
     from install_script import Installer
 else:
     from .install_script import Installer
