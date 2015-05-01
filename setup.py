@@ -19,7 +19,6 @@ from distutils.core import setup
 from fnmatch        import fnmatch
 import os
 from setuptools.command.install import install
-import subprocess
 from install_script import Installer
 
 class MyInstall(install):
@@ -33,22 +32,23 @@ class MyInstall(install):
         installer.addXuser_to_group()
         installer.install_v2()
 
-def listfiles(*dirs):
-        dir, pattern = os.path.split(os.path.join(*dirs))
-        return [os.path.join(dir, filename)
-        for filename in os.listdir(os.path.abspath(dir))
-           if filename[0] != '.' and fnmatch(filename, pattern)]
-
 setup(
-        name             = 'systemd-denotify',
-        version          = '1.0',
-        description      = 'linux systemd desktop notifications',
-        long_description = " A linux desktop app that notifies for user logins, failed systemd services,monitored files and the status of selected services",
-        author           = 'George Karakougioumtzis <gkarakou>',
-        author_email     = 'gkarakou@gmail.com',
-        url              = 'https://github.com/gkarakou/systemd-denotify',
-        platforms        = 'linux',
-        license          = 'GPL-3.0',
+        name             ='systemd-denotify',
+        version          ='1.0',
+        description      ='linux systemd related desktop notifications',
+        long_description ='A linux desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services',
+        author           ='George Karakougioumtzis <gkarakou>',
+        author_email     ='gkarakou@gmail.com',
+        url              ='https://github.com/gkarakou/systemd-denotify',
+        platforms        ='linux',
+        license          ='GPL-3.0',
         dependency_links  = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/n/notify2/notify2-0.3.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
-        cmdclass	 = {'install': MyInstall}
+        cmdclass	 = {'install': MyInstall},
+        classifiers      = ['Development Status :: 2 - RC',
+                            'Environment :: Desktop',
+                            'Intended Audience :: End Users/Desktop',
+                            'Intended Audience :: System Administrators',
+                            'License :: GPL-3.0 ',
+                            'Operating System :: Linux',
+                            'Programming Language :: Python2.7'],
         )
