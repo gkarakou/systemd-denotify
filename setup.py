@@ -14,6 +14,8 @@
 #
 # You can get a copy of the GNU General Public License at
 # <http://www.gnu.org/licenses/>.
+
+#http://stackoverflow.com/questions/11536764/attempted-relative-import-in-non-package-even-with-init-py
 if __package__ is None:
     import sys
     from os import path
