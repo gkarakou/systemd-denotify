@@ -2,7 +2,7 @@
 GENERAL
 -------------------
 systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
-These classes provide desktop notification upon a user login, when systemd files are modified and when services fail(you will also be notified orally when systemd services fail).
+These classes provide desktop notification upon a user login, when systemd files are modified and when services fail.
 There is also one class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
 One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
 
@@ -30,20 +30,20 @@ DEPENDENCIES
 Fedora 21:
 
 <pre>
-systemd-python notify-python pygobject2 python-slip-dbus espeak python-espeak python-inotify
+systemd-python notify-python pygobject2 python-slip-dbus python-inotify
 
 </pre>
 Arch Linux:
 
 <pre>
-python2 python2-notify python2-gobject python2-systemd python2-dbus espeak python-espeak python-pyinotify
+python2 python2-notify python2-gobject python2-systemd python2-dbus python-pyinotify
 
 </pre>
 
 Debian:
 
 <pre>
-python-systemd python-dbus python-notify python-gobject python-gi espeak espeak-data python-espeak python-inotify
+python-systemd python-dbus python-notify python-gobject python-gi python-inotify
 
 </pre>
 
