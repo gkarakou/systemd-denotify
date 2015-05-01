@@ -1,0 +1,14 @@
+MANIFEST.in
+install_script.py
+setup.cfg
+setup.py
+systemd-denotify/__init__.py
+systemd-denotify/systemd-denotify.py
+systemd-denotify/systemd-denotify3.py
+systemd-denotify/conf/systemd-denotify.conf
+systemd-denotify/conf/systemd-denotify.desktop
+systemd_denotify.egg-info/PKG-INFO
+systemd_denotify.egg-info/SOURCES.txt
+systemd_denotify.egg-info/dependency_links.txt
+systemd_denotify.egg-info/requires.txt
+systemd_denotify.egg-info/top_level.txt

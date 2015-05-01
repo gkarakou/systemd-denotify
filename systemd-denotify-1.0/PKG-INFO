@@ -1,0 +1,17 @@
+Metadata-Version: 1.1
+Name: systemd-denotify
+Version: 1.0
+Summary: linux systemd related desktop notifications
+Home-page: https://github.com/gkarakou/systemd-denotify
+Author: George Karakougioumtzis <gkarakou>
+Author-email: gkarakou@gmail.com
+License: GPL-3.0
+Description: A linux desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services
+Platform: linux
+Classifier: Development Status :: 2 - RC
+Classifier: Environment :: Desktop
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: GPL-3.0 
+Classifier: Operating System :: Linux
+Classifier: Programming Language :: Python2.7
