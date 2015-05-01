@@ -19,7 +19,7 @@ from distutils.core import setup
 from fnmatch        import fnmatch
 import os
 from setuptools.command.install import install
-from systemd-denotify import install_script
+from . import install_script
 
 class MyInstall(install):
 #custom class derived from a stackoverflow answer
