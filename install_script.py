@@ -28,52 +28,14 @@ class Installer():
         CREDITS->http://pymotw.com/2/subprocess/
         """
         login = os.getlogin()
-        try:
-            who = sub.Popen(['/usr/bin/w'], stdout=sub.PIPE, stderr=sub.PIPE)
-            grep = sub.Popen(['/usr/bin/grep', ':0'], stdin=who.stdout, stdout=sub.PIPE)
-            cut = sub.Popen(['/usr/bin/cut', '-d ', '-f1'], stdin=grep.stdout, stdout=sub.PIPE)
-            sort = sub.Popen(['/usr/bin/sort'], stdin=cut.stdout, stdout=sub.PIPE)
-            uniq = sub.Popen(['/usr/bin/uniq'], stdin=sort.stdout, stdout=sub.PIPE)
-            who.stdout.close()
-            grep.stdout.close()
-            cut.stdout.close()
-            sort.stdout.close()
-            end_of_pipe = uniq.stdout
-            for line in end_of_pipe:
-                data = line.strip()
-                stringify = str(data.decode("utf-8"))
-        except Exception as ex:
-            template = "An exception of type {0} occured. Arguments:\n{1!r}"
-            message = template.format(type(ex).__name__, ex.args)
-            print("systemd-denotify: "+message)
-        #this will autoraise  if exit status non zero
-        if login == stringify:
-            command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
-            usermod = sub.check_call(command.split(), shell=False)
-            if usermod:
-                print("systemd-denotify:" +  "Your user was added to the systemd-journal group.You must relogin for the changes to take effect.")
-                return True
-            else:
-                print("systemd-denotify: "+"Your user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
-                return False
-        elif stringify != login:
-            command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
-            usermod = sub.check_call(command.split(), shell=False)
-            if usermod:
-                print("systemd-denotify: "+ "While your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.You must relogin for the changes to take effect.")
-                return True
-            else:
-                print("systemd-denotify: "+"Your Xorg loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
-                return False
+        command = '/usr/sbin/usermod -a -G systemd-journal '+ login
+        usermod = sub.check_call(command.split(), shell=False)
+        if usermod:
+            print("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
+            return True
         else:
-            command = '/usr/sbin/usermod -a -G systemd-journal '+ login
-            usermod = sub.check_call(command.split(), shell=False)
-            if usermod:
-                print("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
-                return True
-            else:
-                print("systemd-denotify: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
-                return False
+            print("systemd-denotify: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
+            return False
 
 
     def install_v2(self):
