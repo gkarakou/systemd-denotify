@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from dbus import SystemBus, Interface
 import threading
 import select

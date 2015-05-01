@@ -19,28 +19,6 @@ class Installer():
 
         """
 
-    def get_euid(self):
-        """
-        get_euid_
-        :desc : Function that returns effective user id as int
-        return int
-        """
-        uid=os.geteuid()
- #       print "getting uid: "+ str(uid)
-        return uid
-
-   # def set_euid(self, *args):
-   #     """set_euid
-   #     return int
-   #     :param *args:
-   #     """
-   #     euid = int(sys.argv[1])
-   #     setuid = os.seteuid(euid)
-   #     if setuid == None:
-   #         pass
-           # print("setting uid: "+ str(self.get_euid()))
-   #     return setuid
-
     def is_archlinux(self):
         """
         is_archlinux
@@ -61,7 +39,6 @@ class Installer():
                 journal.send("systemd-denotify: "+ "Os was arch.")
 
         else:
-            #print("os wasnt arch")
             pass
 
     def addXuser_to_group(self):
@@ -191,12 +168,6 @@ class Installer():
             journal.send("systemd-denotify: "+message)
         journal.send("systemd-denotify: "+ "successfully installed v3.")
 
-    #def __del__(self):
-
-     #   del self.install_v2
-     #   del self.install_v3
-
-
     def reset_desktop_file(self):
         path = os.path.dirname(os.path.abspath(__file__))
         data_replace = "[Desktop Entry]\nVersion=1.0\nName=system-denotify\nType=Application\nExec=/usr/local/bin/systemd-denotify.py"
@@ -225,20 +196,3 @@ class Installer():
                 except OSError as e:  ## if failed, report it back to the user ##
                     journal.send("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
 
-
-#installer = Installer()
-#installer.remove_old_version()
-#installer.reset_desktop_file()
-#parser = argparse.ArgumentParser(description="install version 2 or 3 of systemd-denotify(default is 2)")
-#parser.add_argument("-i", "--install", choices=['v2', 'v3'], default="v2")
-#parser.add_argument("-u", "--uninstall", action='store_true')
-#arguments = parser.parse_args()
-#if arguments.install == "v2":
-#    installer.is_archlinux()
-#    installer.addXuser_to_group()
-#    installer.install_v2()
-#elif arguments.install == "v3":
-#    installer.addXuser_to_group()
-#    installer.install_v3()
-#if arguments.uninstall:
-#    installer.uninstall()

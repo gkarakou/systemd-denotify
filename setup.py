@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 # Copyright (C) 2015 George Karakou (gkarakou)
 #
@@ -33,22 +33,22 @@ class MyInstall(install):
         installer.install_v2()
 
 setup(
-        name             ='systemd-denotify',
-        version          ='1.0',
-        description      ='linux systemd related desktop notifications',
-        long_description ='A linux desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services',
-        author           ='George Karakougioumtzis <gkarakou>',
-        author_email     ='gkarakou@gmail.com',
-        url              ='https://github.com/gkarakou/systemd-denotify',
-        platforms        ='linux',
-        license          ='GPL-3.0',
-        dependency_links  = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/n/notify2/notify2-0.3.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
-        cmdclass	 = {'install': MyInstall},
-        classifiers      = ['Development Status :: 2 - RC',
-                            'Environment :: Desktop',
-                            'Intended Audience :: End Users/Desktop',
-                            'Intended Audience :: System Administrators',
-                            'License :: GPL-3.0 ',
-                            'Operating System :: Linux',
-                            'Programming Language :: Python2.7'],
-        )
+name = 'systemd-denotify',
+version = '1.0',
+description = 'linux systemd related desktop notifications',
+long_description = 'A linux desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services',
+author = 'George Karakougioumtzis <gkarakou>',
+author_email = 'gkarakou@gmail.com',
+url = 'https://github.com/gkarakou/systemd-denotify',
+platforms = 'linux',
+license = 'GPL-3.0',
+dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/n/notify2/notify2-0.3.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
+cmdclass = {'install': MyInstall},
+classifiers = ['Development Status :: 2 - RC',
+'Environment :: Desktop',
+'Intended Audience :: End Users/Desktop',
+'Intended Audience :: System Administrators',
+'License :: GPL-3.0 ',
+'Operating System :: Linux',
+'Programming Language :: Python2.7'],
+)
