@@ -28,7 +28,6 @@ class MyInstall(install):
         installer = Installer()
         installer.remove_old_version()
         installer.reset_desktop_file()
-        installer.is_archlinux()
         installer.addXuser_to_group()
         installer.install_v2()
 

@@ -19,29 +19,7 @@ class Installer():
         Instantiates the installer
 
         """
-
-    def is_archlinux(self):
-        """
-        is_archlinux
-        return void
-        :desc: function that checks if the underlying os is archlinux
-        checks for the existense of /etc/pacman.conf
-        if it is there (os is definitely arch) , we open the file systemd-denotify.py rw to have as interpreter python2
-        """
-        if  os.path.isfile("/etc/pacman.conf"):
-            path = os.path.dirname(os.path.abspath(__file__))
-            data = ""
-            with open(path+"/systemd-denotify.py", "r+") as fin:
-                data += fin.read()
-                fin.seek(0)
-                data_replace = data.replace("python", "python2")
-                fin.write(data_replace)
-                fin.truncate()
-                print("systemd-denotify: "+ "Os was arch.")
-
-        else:
-            pass
-
+    
     def addXuser_to_group(self):
         """addXuser_to_group
         return void
@@ -105,8 +83,8 @@ class Installer():
         """
         path = os.path.dirname(os.path.abspath(__file__))
         src_c = path+"/systemd-denotify.py"
-        src_d = path+"/systemd-denotify.desktop"
-        src_e = path+"/systemd-denotify.conf"
+        src_d = path+"/conf/systemd-denotify.desktop"
+        src_e = path+"/conf/systemd-denotify.conf"
         dst_c = "/usr/local/bin/systemd-denotify.py"
         dst_d = "/etc/xdg/autostart/systemd-denotify.desktop"
         dst_e = "/etc/systemd-denotify.conf"
@@ -146,8 +124,8 @@ class Installer():
             data_replace = data.replace("Exec=/usr/local/bin/systemd-denotify.py", "Exec=/usr/local/bin/systemd-denotify3.py")
             fin.write(data_replace)
         src_c = path+"/systemd-denotify3.py"
-        src_d = path+"/systemd-denotify.desktop"
-        src_e = path+"/systemd-denotify.conf"
+        src_d = path+"/conf/systemd-denotify.desktop"
+        src_e = path+"conf/systemd-denotify.conf"
         dst_c = "/usr/local/bin/systemd-denotify3.py"
         dst_d = "/etc/xdg/autostart/systemd-denotify.desktop"
         dst_e = "/etc/systemd-denotify.conf"
