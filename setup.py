@@ -23,11 +23,9 @@ import subprocess
 from install_script import Installer
 
 class MyInstall(install):
-
+#custom class derived from a stackoverflow answer
     def run(self):
         install.run(self)
-	#path = os.path.dirname(os.path.abspath(__file__))
-        # subprocess.check_call("python"+path+"install_script.py",shell=False)
         installer = Installer()
         installer.remove_old_version()
         installer.reset_desktop_file()
