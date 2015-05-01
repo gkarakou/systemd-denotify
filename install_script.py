@@ -27,9 +27,19 @@ class Installer():
         :desc : Function that adds the logedin user to systemd-journal group
         CREDITS->http://pymotw.com/2/subprocess/
         """
-        login = os.getlogin()
+        try:
+            login = os.getlogin()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print("systemd-denotify: "+message)
         command = '/usr/sbin/usermod -a -G systemd-journal '+ login
-        usermod = sub.check_call(command.split(), shell=True)
+        try:
+            usermod = sub.check_call(command.split(), shell=True)
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print("systemd-denotify: "+message)
         if usermod:
             print("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
             return True
@@ -45,7 +55,7 @@ class Installer():
          This func also chmod's the files so that the user that starts X is ab        le to execute the program.
         """
         path = os.path.dirname(os.path.abspath(__file__))
-        src_c = path+"/systemd-denotify.py"
+        src_c = path+"/systemd-denotify/systemd-denotify.py"
         src_d = path+"/systemd-denotify/conf/systemd-denotify.desktop"
         src_e = path+"/systemd-denotify/conf/systemd-denotify.conf"
         dst_c = "/usr/local/bin/systemd-denotify.py"
@@ -86,7 +96,7 @@ class Installer():
             fin.seek(0)
             data_replace = data.replace("Exec=/usr/local/bin/systemd-denotify.py", "Exec=/usr/local/bin/systemd-denotify3.py")
             fin.write(data_replace)
-        src_c = path+"/systemd-denotify3.py"
+        src_c = path+"/systemd-denotify/systemd-denotify3.py"
         src_d = path+"/systemd-denotify/conf/systemd-denotify.desktop"
         src_e = path+"/systemd-denotify/conf/systemd-denotify.conf"
         dst_c = "/usr/local/bin/systemd-denotify3.py"
