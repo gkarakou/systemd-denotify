@@ -14,12 +14,16 @@
 #
 # You can get a copy of the GNU General Public License at
 # <http://www.gnu.org/licenses/>.
-
+if __package__ is None:
+    import sys
+    from os import path
+    sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
+    from install_script import Installer
+else:
+    from .install_script import Installer
 from distutils.core import setup
-from fnmatch        import fnmatch
 import os
 from setuptools.command.install import install
-from .install_script import Installer
 
 class MyInstall(install):
 #custom class derived from a stackoverflow answer
