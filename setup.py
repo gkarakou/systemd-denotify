@@ -19,13 +19,13 @@ from distutils.core import setup
 from fnmatch        import fnmatch
 import os
 from setuptools.command.install import install
-from install_script import Installer
+from systemd-denotify import install_script
 
 class MyInstall(install):
 #custom class derived from a stackoverflow answer
     def run(self):
         install.run(self)
-        installer = Installer()
+        installer = install_script.Installer()
         installer.remove_old_version()
         installer.reset_desktop_file()
         installer.addXuser_to_group()
