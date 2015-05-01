@@ -49,6 +49,6 @@ setup(
         url              = 'https://github.com/gkarakou/systemd-denotify',
         platforms        = 'linux',
         license          = 'GPL-3.0',
-        dependency_links  = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz",],
+        dependency_links  = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/n/notify2/notify2-0.3.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
         cmdclass	 = {'install': MyInstall}
         )
