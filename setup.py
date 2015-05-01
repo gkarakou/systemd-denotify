@@ -20,7 +20,7 @@ from fnmatch        import fnmatch
 import os
 from setuptools.command.install import install
 import subprocess
-import install_script
+from install_script import Installer
 
 class MyInstall(install):
 
