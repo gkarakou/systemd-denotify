@@ -1,4 +1,0 @@
-dbus-python
-pygobject
-python-systemd
-pyinotify
