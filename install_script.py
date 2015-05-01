@@ -42,10 +42,8 @@ class Installer():
             print("systemd-denotify: "+message)
         if usermod:
             print("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
-            return True
         else:
             print("systemd-denotify: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
-            return False
 
 
     def install_v2(self):
