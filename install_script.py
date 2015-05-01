@@ -152,7 +152,7 @@ class Installer():
         path = os.path.dirname(os.path.abspath(__file__))
         data_replace = "[Desktop Entry]\nVersion=1.0\nName=system-denotify\nType=Application\nExec=/usr/local/bin/systemd-denotify.py"
         data = ""
-        with open(path+"/systemd-denotify.desktop", "r+") as fin:
+        with open(path+"/systemd-denotify/conf/systemd-denotify.desktop", "r+") as fin:
             data += fin.read()
             fin.seek(0)
             fin.write(data_replace)
