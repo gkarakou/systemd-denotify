@@ -20,13 +20,20 @@ from fnmatch        import fnmatch
 import os
 from setuptools.command.install import install
 import subprocess
+import install_script
 
 class MyInstall(install):
 
     def run(self):
         install.run(self)
-	path = os.path.dirname(os.path.abspath(__file__))
-        subprocess.check_call("python"+path+"install_script.py",shell=False)
+	#path = os.path.dirname(os.path.abspath(__file__))
+        # subprocess.check_call("python"+path+"install_script.py",shell=False)
+        installer = Installer()
+        installer.remove_old_version()
+        installer.reset_desktop_file()
+        installer.is_archlinux()
+        installer.addXuser_to_group()
+        installer.install_v2()
 
 def listfiles(*dirs):
         dir, pattern = os.path.split(os.path.join(*dirs))
