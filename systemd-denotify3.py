@@ -11,7 +11,6 @@ from threading import Thread
 from gi.repository import Notify
 import os
 import configparser
-from espeak import espeak
 import pyinotify
 
 class DbusNotify():
@@ -206,8 +205,6 @@ class LogReader(threading.Thread):
                                 Notify.init("systemd-denotify")
                                 notificatio=Notify.Notification.new("systemd-denotify", string)
                                 notificatio.show()
-                                stri = string.replace(".", " ")
-                                espeak.synth(stri)
                             else:
                                 continue
                         except Exception as ex:
