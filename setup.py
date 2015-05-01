@@ -49,5 +49,6 @@ setup(
         url              = 'https://github.com/gkarakou/systemd-denotify',
         platforms        = 'linux',
         license          = 'GPL-3.0',
+        dependency_links  = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz",],
         cmdclass	 = {'install': MyInstall}
         )
