@@ -1,7 +1,8 @@
 #!/usr/bin/python2
+from __future__ import print_function
 import os
 import shutil
-from systemd import journal
+#from systemd import journal
 import subprocess as sub
 import argparse
 
@@ -36,7 +37,7 @@ class Installer():
                 data_replace = data.replace("python", "python2")
                 fin.write(data_replace)
                 fin.truncate()
-                journal.send("systemd-denotify: "+ "Os was arch.")
+                print("systemd-denotify: "+ "Os was arch.")
 
         else:
             pass
@@ -65,34 +66,34 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+message)
+            print("systemd-denotify: "+message)
         #this will autoraise  if exit status non zero
         if login == stringify:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                journal.send("systemd-denotify:" +  "Your user was added to the systemd-journal group.You must relogin for the changes to take effect.")
+                print("systemd-denotify:" +  "Your user was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                journal.send("systemd-denotify: "+"Your user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
+                print("systemd-denotify: "+"Your user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
                 return False
         elif stringify != login:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ stringify
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                journal.send("systemd-denotify: "+ "While your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.You must relogin for the changes to take effect.")
+                print("systemd-denotify: "+ "While your login user doesnt match the Xorg loggedin user,he was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                journal.send("systemd-denotify: "+"Your Xorg loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
+                print("systemd-denotify: "+"Your Xorg loggedin user was not added to the systemd-journal group,but there is a possibility he is already a member of the group.")
                 return False
         else:
             command = '/usr/sbin/usermod -a -G systemd-journal '+ login
             usermod = sub.check_call(command.split(), shell=False)
             if usermod:
-                journal.send("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
+                print("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
                 return True
             else:
-                journal.send("systemd-denotify: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
+                print("systemd-denotify: "+ "Your loggedin user was not added to the systemd-journal group, but there is a possibility he is already a member of the group.")
                 return False
 
 
@@ -116,7 +117,7 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+message)
+            print("systemd-denotify: "+message)
         try:
             os.chmod(dst_c, 0o755)
             os.chmod(dst_d, 0o644)
@@ -124,9 +125,9 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+message)
+            print("systemd-denotify: "+message)
 
-        journal.send("systemd-denotify: "+ "successfully installed v2.")
+        print("systemd-denotify: "+ "successfully installed v2.")
 
     def install_v3(self):
         """install_v3
@@ -157,7 +158,7 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+message)
+            print("systemd-denotify: "+message)
         try:
             os.chmod(dst_c, 0o755)
             os.chmod(dst_d, 0o644)
@@ -165,8 +166,8 @@ class Installer():
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            journal.send("systemd-denotify: "+message)
-        journal.send("systemd-denotify: "+ "successfully installed v3.")
+            print("systemd-denotify: "+message)
+        print("systemd-denotify: "+ "successfully installed v3.")
 
     def reset_desktop_file(self):
         path = os.path.dirname(os.path.abspath(__file__))
@@ -185,7 +186,7 @@ class Installer():
                 try:
                     os.remove(f)
                 except OSError as e:  ## if failed, report it back to the user ##
-                    journal.send("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
+                    print("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
 
     def uninstall(self):
         files = ["/etc/systemd-denotify.conf", "/etc/xdg/autostart/systemd-denotify.desktop", "/usr/local/bin/systemd-denotify.py", "/usr/local/bin/systemd-denotify3.py"]
@@ -194,5 +195,5 @@ class Installer():
                 try:
                     os.remove(f)
                 except OSError as e:  ## if failed, report it back to the user ##
-                    journal.send("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
+                    print("systemd-denotify: " + "Error: %s - %s." % (e.filename,e.strerror))
 
