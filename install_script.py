@@ -29,7 +29,7 @@ class Installer():
         """
         login = os.getlogin()
         command = '/usr/sbin/usermod -a -G systemd-journal '+ login
-        usermod = sub.check_call(command.split(), shell=False)
+        usermod = sub.check_call(command.split(), shell=True)
         if usermod:
             print("systemd-denotify: "+ "While we couldnt find the Xorg loggedin user,your loggedin user was added to the systemd-journal group.You must relogin for the changes to take effect.")
             return True
