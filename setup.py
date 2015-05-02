@@ -59,5 +59,6 @@ classifiers = ['Development Status :: 1.0 - Stable',
 'License :: GPL-3.0 ',
 'Operating System :: Linux',
 'Programming Language :: Python2.7'],
-data_files = [('/etc', ['systemd-denotify/conf/systemd-denotify.conf']), ('/etc/xdg/autostart', ['systemd-denotify/conf/systemd-denotify.desktop']), ('/usr/local/bin', ['systemd-denotify/systemd-denotify.py'])]
+data_files = [('/etc', ['systemd-denotify/conf/systemd-denotify.conf']), ('/etc/xdg/autostart', ['systemd-denotify/conf/systemd-denotify.desktop'])],
+scripts = [('/usr/local/bin', ['systemd-denotify/systemd-denotify.py'])]
 )
