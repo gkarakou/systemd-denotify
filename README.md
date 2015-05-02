@@ -5,6 +5,10 @@ systemd-denotify build repo
 
 distutils made setup.py
 
+Though this module is pypi ready i found it really tedious to install all the dependencies from pip.
+Unfortunately this module/app wont be uploaded to pypi. However all the dependencies should be found from the distros repos and if not all many of them should be allready installed. At a least on a fedora 21 i had to install only python-inotify and notify-python.
+Below are some guidelines to generate packages for debian,ubuntu,fedora. Arch should not be difficult either- only
+a proper PKGBUILD would be needed.
 
 DEPENDENCIES
 -------------------
@@ -44,6 +48,13 @@ python2 setup.py sdist
 
 
 </pre>
+
+
+DEBIAN/UBUNTU
+----------------
+It seems that if you install  stdeb and have a source distribution as generated above creating a .deb to be installed with dpkg is really easy.
+If you find any troubles you can follow this guide:
+http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
 
 
 BUILD FOR FEDORA
