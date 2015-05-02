@@ -40,29 +40,6 @@ python-systemd python-dbus python-notify python-gobject python-gi
 
 </pre>
 
-
-
-NOTE: if you cant find the packages in your distro's package manager you can always search them through Pypi and install them afterwards.
-
-Fedora:
-<pre>
-yum install python-pip
-</pre>
-Arch:
-<pre>
-pacman -S python2-pip
-</pre>
-Debian:
-<pre>
-apt-get install python-pip
-</pre>
-
-Search a package:
-
-<pre>
-pip search dbus
-</pre>
-
 -------------------------------
 
 NOTE: There is a chance you installed the equivalent python3 packages. See below in the install section what to do.
@@ -99,3 +76,10 @@ UNINSTALL
 
 cd systemd-denotify
 sudo python2 setup.py -u
+
+
+BUILDING FOR DISTRIBUTIONS
+----------------------------
+There is a pypi ready dedicated branch to build binaries called build. However due to the complexity of downloading and installing all the dependencies through pip the module/app wont be uploaded to pypi.
+I was successful in building and installing an rpm for fedora 21.
+
