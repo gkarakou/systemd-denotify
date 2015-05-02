@@ -74,7 +74,7 @@ and after the installation revert your changes back;
 UNINSTALL
 --------------------------
 
-cd systemd-denotify
+cd systemd-denotify;
 sudo python2 setup.py -u
 
 
