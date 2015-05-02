@@ -25,7 +25,7 @@
 #    from .install_script import Installer
 from distutils.core import setup
 #import os
-#from setuptools.command.install import install
+from setuptools.command.install import install
 
 #class MyInstall(install):
 #custom class derived from a stackoverflow answer
