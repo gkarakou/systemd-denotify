@@ -60,5 +60,5 @@ classifiers = ['Development Status :: 1.0 - Stable',
 'Operating System :: Linux',
 'Programming Language :: Python2.7'],
 data_files = [('/etc', ['systemd-denotify/conf/systemd-denotify.conf']), ('/etc/xdg/autostart', ['systemd-denotify/conf/systemd-denotify.desktop'])],
-scripts = ['systemd-denotify/systemd-denotify.py']
+scripts = ['scripts/systemd-denotify.py']
 )
