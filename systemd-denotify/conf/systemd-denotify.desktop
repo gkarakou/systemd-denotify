@@ -1,5 +1,5 @@
 [Desktop Entry]
 Version=1.0
-Name=system-denotify
+Name=systemd-denotify
 Type=Application
 Exec=/usr/bin/systemd-denotify.py
