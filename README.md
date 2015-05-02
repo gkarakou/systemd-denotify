@@ -2,11 +2,22 @@
 GENERAL
 -------------------
 systemd-denotify build repo
+Differences from master + experimental:
 
-distutils made setup.py
+1. distutils made setup.py that invokes custom install_script.py (former setup.py -i v2|v3)
+
+2. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
+
+3. Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
+
+4. Stripped the espeak calls and the deps off.
+
+5. What is not been implemented: If one goes yum remove systemd-denotify the module installed will be deleted but not the files that the install_script.py had chmoded and cp'ed to the system dirs(/etc/,/etc/xdg/autostart/,/usr/local/bin). The .spec file is unaware of what the external installer did!
+
+
 
 Though this module is pypi ready i found it really tedious to install all the dependencies from pip.
-Unfortunately this module/app wont be uploaded to pypi. However all the dependencies should be found from the distros repos and if not all many of them should be allready installed. At a least on a fedora 21 i had to install only python-inotify and notify-python.
+Unfortunately this module/app wont be uploaded to pypi. However all the dependencies should be found from the distros repos and if not all many of them should have been allready installed. At a least on a fedora 21 i had to install only python-inotify and notify-python.
 Below are some guidelines to generate packages for debian,ubuntu,fedora. Arch should not be difficult either- only
 a proper PKGBUILD would be needed.
 
