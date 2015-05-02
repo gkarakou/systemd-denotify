@@ -16,26 +16,26 @@
 # <http://www.gnu.org/licenses/>.
 
 #http://stackoverflow.com/questions/11536764/attempted-relative-import-in-non-package-even-with-init-py
-if __package__ is None:
-    import sys
-    from os import path
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-    from install_script import Installer
-else:
-    from .install_script import Installer
+#if __package__ is None:
+#    import sys
+#    from os import path
+#    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+#    from install_script import Installer
+#else:
+#    from .install_script import Installer
 from distutils.core import setup
 import os
 from setuptools.command.install import install
 
-class MyInstall(install):
+#class MyInstall(install):
 #custom class derived from a stackoverflow answer
-    def run(self):
-        install.run(self)
-        installer = Installer()
-        installer.remove_old_version()
-        installer.reset_desktop_file()
-        #installer.addXuser_to_group()
-        installer.install_v2()
+#    def run(self):
+#        install.run(self)
+#        installer = Installer()
+#        installer.remove_old_version()
+#        installer.reset_desktop_file()
+#        #installer.addXuser_to_group()
+#        installer.install_v2()
 
 setup(
 name = 'systemd-denotify',
@@ -47,7 +47,6 @@ author_email = 'gkarakou@gmail.com',
 url = 'https://github.com/gkarakou/systemd-denotify',
 platforms = 'linux',
 license = 'GPL-3.0',
-#py_modules=['systemd-denotify', 'install_script'],
 packages = ['systemd-denotify'],
 package_data = {'systemd-denotify': ['conf/*']},
 install_requires= ['dbus-python', 'pygobject', 'python-systemd', 'pyinotify'],
@@ -60,4 +59,5 @@ classifiers = ['Development Status :: 1.0 - Stable',
 'License :: GPL-3.0 ',
 'Operating System :: Linux',
 'Programming Language :: Python2.7'],
+data_files = [('etc', ['conf/systemd-denotify.conf']), ('etc/xdg/autostart', [conf/systemd-denotify.desktop]), ('usr/local/bin', systemd-denotify.py)]
 )
