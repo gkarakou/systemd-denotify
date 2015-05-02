@@ -3,6 +3,9 @@ GENERAL
 -------------------
 systemd-denotify build repo
 
+distutils made setup.py
+
+
 DEPENDENCIES
 -------------------
 
@@ -23,6 +26,23 @@ Debian:
 
 <pre>
 python-systemd python-dbus python-notify python-gobject python-gi python-inotify
+</pre>
+
+
+
+SOURCE DISTRIBUTION
+---------------------
+
+<pre>
+git clone https://github.com/gkarakou/systemd-denotify.git
+
+cd systemd-denotify
+
+git checkout build
+
+python2 setup.py sdist
+
+
 </pre>
 
 
