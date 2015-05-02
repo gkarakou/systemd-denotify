@@ -15,7 +15,7 @@ systemd-python notify-python pygobject2 python-slip-dbus python-inotify
 Arch Linux:
 
 <pre>
-python2 python2-notify python2-gobject python2-systemd python2-dbus python-pyinotify
+python2 python2-setuptools python2-notify python2-gobject python2-systemd python2-dbus python-pyinotify
 
 </pre>
 
@@ -35,7 +35,7 @@ cd systemd-denotify
 
 git checkout build
 
-sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify" 
+sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify"
 
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
 </pre>
