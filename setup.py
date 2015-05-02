@@ -49,8 +49,8 @@ platforms = 'linux',
 license = 'GPL-3.0',
 packages = ['systemd-denotify'],
 package_data = {'systemd-denotify': ['conf/*']},
-#install_requires= ['dbus-python', 'pygobject', 'python-systemd', 'pyinotify'],
-dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
+install_requires= ['dbus-python', 'pygobject', 'python-systemd', 'pyinotify'],
+#dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
 #cmdclass = {'install': MyInstall},
 classifiers = ['Development Status :: 1.0 - Stable',
 'Environment :: Desktop',
@@ -59,5 +59,5 @@ classifiers = ['Development Status :: 1.0 - Stable',
 'License :: GPL-3.0 ',
 'Operating System :: Linux',
 'Programming Language :: Python2.7'],
-data_files = [('etc', ['systemd-denotify/conf/systemd-denotify.conf']), ('etc/xdg/autostart', ['systemd-denotify/conf/systemd-denotify.desktop']), ('usr/local/bin', ['systemd-denotify/systemd-denotify.py'])]
+data_files = [('/etc', ['systemd-denotify/conf/systemd-denotify.conf']), ('/etc/xdg/autostart', ['systemd-denotify/conf/systemd-denotify.desktop']), ('/usr/local/bin', ['systemd-denotify/systemd-denotify.py'])]
 )
