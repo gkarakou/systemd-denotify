@@ -37,9 +37,9 @@ class DbusNotify():
         """
         conf = ConfigParser.RawConfigParser()
         conf.read('/etc/systemd-denotify.conf')
-        config_start = conf.getboolean("Services", "start")
-        config_interval = conf.getint("Services", "interval")
-        config_serv = conf.get("Services", "services")
+        config_start = conf.getboolean("ServicesStatus", "start")
+        config_interval = conf.getint("ServicesStatus", "interval")
+        config_serv = conf.get("ServicesStatus", "services")
         config_services = config_serv.split(",")
 
         if isinstance(config_start, bool) and config_start == False:
@@ -311,13 +311,13 @@ if __name__ == "__main__":
     config_files_start = config.getboolean("Files", "start")
     config_logins_start = config.getboolean("Logins", "start")
     try:
-        config_logreader_start = config.getboolean("Journal", "start")
+        config_logreader_start = config.getboolean("FailedServices", "start")
     except Exception as ex:
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         journal.send("systemd-denotify: "+message)
     try:
-        config_services_start = config.getboolean("Services", "start")
+        config_services_start = config.getboolean("ServicesStatus", "start")
     except Exception as ex:
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
