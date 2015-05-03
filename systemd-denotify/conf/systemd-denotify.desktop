@@ -2,4 +2,4 @@
 Version=1.0
 Name=systemd-denotify
 Type=Application
-Exec=/usr/bin/systemd-denotify.py
+Exec=/usr/bin/python2 /usr/bin/systemd-denotify.py
