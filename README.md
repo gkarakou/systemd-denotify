@@ -78,3 +78,34 @@ sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-py
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
 
 </pre>
+
+
+ARCHLINUX
+-----------------
+
+PKGBUILD
+
+<pre>
+pkgname=systemd-denotify
+pkgver=r254.de1d483
+pkgrel=1
+pkgdesc='A set of python classes that provide desktop notification upon a user login and when a systemd service fails.'
+arch=(any)
+url='https://github.com/gkarakou/systemd-denotify'
+license=('GPL')
+depends=('python2' 'python2-setuptools''python2-dbus' 'python2-gobject' 'python2-notify' 'python2-systemd' 'python2-pyinotify')
+source=("${pkgname}::git+https://github.com/gkarakou/systemd-denotify")
+md5sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  cd "$pkgname"
+  git checkout build
+  python2 setup.py install --root="${pkgdir}/"
+}
+
+</pre>
