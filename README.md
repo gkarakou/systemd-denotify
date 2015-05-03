@@ -1,28 +1,22 @@
 # systemd-denotify
 GENERAL
 -------------------
-systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings(see the Dependencies section).
-These classes provide desktop notification upon a user login, when systemd files are modified and when services fail.
-There is also one class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
-One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
+systemd-denotify build repo
+Differences from master + experimental:
 
-NOTE: if you use vim to edit files that are being monitored by systemd-denotify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
-To overcome this annoyance if and only if you have a ups installed (in the case of a power failure you will lose data if you dont own a ups) you can edit /root/.vimrc and add these lines:
-<pre>
-set nobackup
 
-set nowritebackup
+1. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
 
-set noswapfile
-</pre>
-Do this only if you own a ups, you have been warned.
+2. Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
 
-REQUIREMENTS
--------------------
+3. Stripped the espeak calls and the deps off.
 
-As the name implies you need to be running a modern linux distribution with systemd.
-You also need a running Xorg, this script(though i like to call it a classy python app) wont work without a desktop session.
-As a linux user you have to be comfortable with the terminal.
+
+
+Though this module is pypi ready i found it really tedious to install all the dependencies from pip.
+Unfortunately this module/app wont be uploaded to pypi. However all the dependencies should be found from the distros repos and if not all many of them should have been allready installed. At a least on a fedora 21 i had to install only python-inotify and notify-python.
+Below are some guidelines to generate packages for debian,ubuntu,fedora. Arch should not be difficult either- only
+a proper PKGBUILD would be needed.
 
 DEPENDENCIES
 -------------------
@@ -36,7 +30,7 @@ systemd-python notify-python pygobject2 python-slip-dbus python-inotify
 Arch Linux:
 
 <pre>
-python2 python2-notify python2-gobject python2-systemd python2-dbus python-pyinotify
+python2 python2-setuptools python2-notify python2-gobject python2-systemd python2-dbus python-pyinotify
 
 </pre>
 
@@ -44,70 +38,43 @@ Debian:
 
 <pre>
 python-systemd python-dbus python-notify python-gobject python-gi python-inotify
-
 </pre>
 
 
-NOTE: if you cant find the packages in your distro's package manager you can always search them through Pypi and install them afterwards.
 
-Fedora:
-<pre>
-yum install python-pip
-</pre>
-Arch:
-<pre>
-pacman -S python2-pip
-</pre>
-Debian:
-<pre>
-apt-get install python-pip
-</pre>
-
-Search a package:
+SOURCE DISTRIBUTION
+---------------------
 
 <pre>
-pip search dbus
-</pre>
-
--------------------------------
-
-NOTE: There is a chance you installed the equivalent python3 packages. See below in the install section what to do.
-
-
-INSTALL
-------------------------
-On a terminal:
-
-<pre>git clone https://github.com/gkarakou/systemd-denotify.git
+git clone https://github.com/gkarakou/systemd-denotify.git
 
 cd systemd-denotify
 
-git checkout experimental
+git checkout build
 
-sudo python2 setup.py
+python2 setup.py sdist
+
 
 </pre>
 
 
-NOTE: If you installed the python3 dependencies
+DEBIAN/UBUNTU
+----------------
+It seems that if you install  stdeb and have a source distribution as generated above creating a .deb to be installed with dpkg is really easy.
+If you find any troubles you can follow this guide:
+http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
 
-<pre>git clone https://github.com/gkarakou/systemd-denotify.git
+
+BUILD FOR FEDORA
+------------------
+<pre>
+git clone https://github.com/gkarakou/systemd-denotify.git
 
 cd systemd-denotify
 
-git checkout experimental
+git checkout build
 
-sudo python2 setup.py -i v3
+sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify" --post-uninstall=postuinstall.sh
+
+sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
 </pre>
-
-
-NOTE for archlinux: if you have trouble installing you might have to pam_permit.so temporarilly in /etc/pam.d/usermod
-and after the installation revert back your configuration.
-
-
-
-UNINSTALL
------------------------------
-
-sudo python2 setup.py -u
-
