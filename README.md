@@ -6,10 +6,9 @@ Differences from master + experimental:
 
 
 1. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
+ Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
 
-2. Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
-
-3. Stripped the espeak calls and the deps off.
+2. Stripped the espeak calls and the deps off.
 
 
 
@@ -77,4 +76,8 @@ git checkout build
 sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify" --post-uninstall=postuinstall.sh
 
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
+
+or
+
+sudo yum install
 </pre>
