@@ -73,7 +73,7 @@ cd systemd-denotify
 
 git checkout build
 
-sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-python, notify-python, pygobject2, python-slip-dbus,python-inotify"
+sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-python, notify-python, pygobject2, python-slip-dbus,python-inotify, systemd, systemd-libs, libnotify, notification-daemon"
 
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
 
@@ -93,7 +93,7 @@ pkgdesc='A set of python classes that provide desktop notification upon a user l
 arch=(any)
 url='https://github.com/gkarakou/systemd-denotify'
 license=('GPL')
-depends=('python2' 'python2-setuptools''python2-dbus' 'python2-gobject' 'python2-notify' 'python2-systemd' 'python2-pyinotify')
+depends=('python2' 'python2-setuptools' 'libnotify' 'notification-daemon' 'python2-dbus' 'python2-gobject' 'python2-notify' 'python2-systemd' 'python2-pyinotify' 'systemd' 'systemd-libs')
 source=("${pkgname}::git+https://github.com/gkarakou/systemd-denotify")
 md5sums=('SKIP')
 
