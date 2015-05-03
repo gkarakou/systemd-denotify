@@ -73,7 +73,7 @@ cd systemd-denotify
 
 git checkout build
 
-sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify" --post-uninstall=postuinstall.sh
+sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-python, notify-python, pygobject2, python-slip-dbus,python-inotify" --post-uninstall=postuinstall.sh
 
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
 
