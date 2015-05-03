@@ -4,7 +4,6 @@ GENERAL
 systemd-denotify build repo
 Differences from master + experimental:
 
-1. distutils made setup.py that invokes custom install_script.py (former setup.py -i v2|v3)
 
 2. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
 
@@ -13,6 +12,14 @@ Differences from master + experimental:
 4. Stripped the espeak calls and the deps off.
 
 5. What is not been implemented: If one goes yum remove systemd-denotify the module installed will be deleted but not the files that the install_script.py had chmoded and cp'ed to the system dirs(/etc/,/etc/xdg/autostart/,/usr/local/bin). The .spec file is unaware of what the external installer did!
+
+
+
+
+1. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
+ Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
+
+2. Stripped the espeak calls and the deps off.
 
 
 
@@ -54,6 +61,13 @@ git clone https://github.com/gkarakou/systemd-denotify.git
 cd systemd-denotify
 
 git checkout build
+<<<<<<< HEAD
+
+python2 setup.py sdist
+
+
+</pre>
+=======
 
 python2 setup.py sdist
 
@@ -67,7 +81,26 @@ It seems that if you install  stdeb and have a source distribution as generated 
 If you find any troubles you can follow this guide:
 http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
 
+>>>>>>> build-merge
 
+BUILD FOR FEDORA
+------------------
+<pre>
+git clone https://github.com/gkarakou/systemd-denotify.git
+
+<<<<<<< HEAD
+DEBIAN/UBUNTU
+----------------
+It seems that if you install  stdeb and have a source distribution as generated above creating a .deb to be installed with dpkg is really easy.
+If you find any troubles you can follow this guide:
+http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
+=======
+cd systemd-denotify
+>>>>>>> build-merge
+
+git checkout build
+
+<<<<<<< HEAD
 BUILD FOR FEDORA
 ------------------
 <pre>
@@ -80,4 +113,13 @@ git checkout build
 sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify"
 
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
+=======
+sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify" --post-uninstall=postuinstall.sh
+
+sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
+
+or
+
+sudo yum install
+>>>>>>> build-merge
 </pre>

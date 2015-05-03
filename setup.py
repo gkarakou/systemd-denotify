@@ -16,26 +16,26 @@
 # <http://www.gnu.org/licenses/>.
 
 #http://stackoverflow.com/questions/11536764/attempted-relative-import-in-non-package-even-with-init-py
-if __package__ is None:
-    import sys
-    from os import path
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-    from install_script import Installer
-else:
-    from .install_script import Installer
+#if __package__ is None:
+#    import sys
+#    from os import path
+#    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+#    from install_script import Installer
+#else:
+#    from .install_script import Installer
 from distutils.core import setup
-import os
+#import os
 from setuptools.command.install import install
 
-class MyInstall(install):
+#class MyInstall(install):
 #custom class derived from a stackoverflow answer
-    def run(self):
-        install.run(self)
-        installer = Installer()
-        installer.remove_old_version()
-        installer.reset_desktop_file()
-        #installer.addXuser_to_group()
-        installer.install_v2()
+#    def run(self):
+#        install.run(self)
+#        installer = Installer()
+#        installer.remove_old_version()
+#        installer.reset_desktop_file()
+#        #installer.addXuser_to_group()
+#        installer.install_v2()
 
 setup(
 name = 'systemd-denotify',
@@ -47,12 +47,11 @@ author_email = 'gkarakou@gmail.com',
 url = 'https://github.com/gkarakou/systemd-denotify',
 platforms = 'linux',
 license = 'GPL-3.0',
-#py_modules=['systemd-denotify', 'install_script'],
 packages = ['systemd-denotify'],
 package_data = {'systemd-denotify': ['conf/*']},
 install_requires= ['dbus-python', 'pygobject', 'python-systemd', 'pyinotify'],
-#dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/n/notify2/notify2-0.3.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
-cmdclass = {'install': MyInstall},
+#dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
+#cmdclass = {'install': MyInstall},
 classifiers = ['Development Status :: 1.0 - Stable',
 'Environment :: Desktop',
 'Intended Audience :: End Users/Desktop',
@@ -60,4 +59,6 @@ classifiers = ['Development Status :: 1.0 - Stable',
 'License :: GPL-3.0 ',
 'Operating System :: Linux',
 'Programming Language :: Python2.7'],
+data_files = [('/etc', ['systemd-denotify/conf/systemd-denotify.conf']), ('/etc/xdg/autostart', ['systemd-denotify/conf/systemd-denotify.desktop'])],
+scripts = ['scripts/systemd-denotify.py']
 )
