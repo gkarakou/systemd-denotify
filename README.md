@@ -77,7 +77,4 @@ sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-py
 
 sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
 
-or
-
-sudo yum install
 </pre>
