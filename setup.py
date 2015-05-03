@@ -40,8 +40,8 @@ class MyInstall(install):
 setup(
 name = 'systemd-denotify',
 version = '1.0',
-description = 'linux systemd related desktop notifications',
-long_description = 'A linux desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services',
+description = 'systemd related desktop notifications',
+long_description = 'A python based desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services',
 author = 'George Karakougioumtzis <gkarakou>',
 author_email = 'gkarakou@gmail.com',
 url = 'https://github.com/gkarakou/systemd-denotify',
