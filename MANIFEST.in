@@ -1,2 +1,3 @@
 include install_script.py
 recursive-include scripts/systemd-denotify.py
+recursive-include systemd-denotify/conf
