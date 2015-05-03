@@ -83,3 +83,14 @@ BUILDING FOR DISTRIBUTIONS
 There is a pypi ready dedicated branch to build binaries called build. However due to the complexity of downloading and installing all the dependencies through pip the module/app wont be uploaded to pypi.
 I was successful in building and installing an rpm for fedora 21.
 
+<pre>git clone https://github.com/gkarakou/systemd-denotify.git
+
+cd systemd-denotify
+
+git checkout build
+
+sudo python2 setup.py bdist_rpm --requires="python2, python-setuptools, systemd-python, notify-python, pygobject2, python-slip-dbus"  --post-uninstall=postuninstall.sh
+
+</pre>
+install with
+sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
