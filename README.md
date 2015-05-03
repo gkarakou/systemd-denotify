@@ -59,7 +59,25 @@ python2 setup.py sdist
 
 DEBIAN/UBUNTU
 ----------------
-It seems that if you install  stdeb and have a source distribution as generated above creating a .deb to be installed with dpkg is really easy.
+
+<pre>
+sudo apt-get install python-stdeb fakeroot python-all
+
+git clone https://github.com/gkarakou/systemd-denotify.git
+
+cd systemd-denotify
+
+git checkout build
+
+sudo python setup.py sdist_dsc --depends "systemd systemd-libs dbus libnotify python-systemd python-dbus python-notify python-gobject python-gi python-inotify xorg notification-daemon" --build-depends "python-setuptools" bdist_deb
+
+#it should produce a .deb package ready to be installed in deb_dist directory (hint:ls -al deb_dist|grep deb):
+
+sudo dpkg -i deb_dist/systemd-denotify-$VERSION.deb
+
+sudo apt-get -f install
+</pre>
+
 If you find any troubles you can follow this guide:
 http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
 
