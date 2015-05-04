@@ -20,7 +20,7 @@ Do this only if you own a ups, you have been warned.
 
 
 Though this module is pypi ready i found it really tedious to install all the dependencies from pip.
-Unfortunately this module/app wont be uploaded to pypi. However all the dependencies should be found from the distros repos and if not all many of them should have been allready installed. At a least on a fedora 21 i had to install only python-inotify and notify-python.
+Unfortunately this module/app wont be uploaded to pypi. Hopefully this package gets its way into the repos.
 Below are some guidelines to generate packages for debian,ubuntu,fedora. Arch should not be difficult either- only
 a proper PKGBUILD would be needed.
 
@@ -46,8 +46,6 @@ git clone https://github.com/gkarakou/systemd-denotify.git
 
 cd systemd-denotify
 
-git checkout build
-
 sudo python setup.py bdist_rpm --requires "python,  systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, notification-daemon, dbus, dbus-python, xorg-x11-server-Xorg" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh
 
 sudo yum --nogpgcheck localinstall dist/systemd-denotify-1.0-1.noarch.rpm
@@ -65,8 +63,6 @@ sudo apt-get install python-stdeb fakeroot python-all
 git clone https://github.com/gkarakou/systemd-denotify.git
 
 cd systemd-denotify
-
-git checkout build
 
 sudo python setup.py sdist_dsc --depends "systemd systemd-libs dbus libnotify python-systemd python-dbus python-notify python-gobject python-gi python-inotify xorg notification-daemon" --build-depends "python-setuptools" bdist_deb
 
@@ -105,7 +101,6 @@ pkgver() {
 
 package() {
   cd "$pkgname"
-  git checkout build
   python2 setup.py install --root="${pkgdir}/"
 }
 
