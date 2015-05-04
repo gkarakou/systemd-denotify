@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from dbus import SystemBus, Interface
 import threading
 import select
@@ -10,6 +10,7 @@ from threading import Thread
 from gi.repository import Notify
 import os
 import ConfigParser
+import pyinotify
 
 class DbusNotify():
     """
@@ -34,11 +35,11 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        config = ConfigParser.RawConfigParser()
-        config.read('/etc/systemd-denotify.conf')
-        config_start = config.getboolean("Services", "start")
-        config_interval = config.getint("Services", "interval")
-        config_serv = config.get("Services", "services")
+        conf = ConfigParser.RawConfigParser()
+        conf.read('/etc/systemd-denotify.conf')
+        config_start = conf.getboolean("ServicesStatus", "start")
+        config_interval = conf.getint("ServicesStatus", "interval")
+        config_serv = conf.get("ServicesStatus", "services")
         config_services = config_serv.split(",")
 
         if isinstance(config_start, bool) and config_start == False:
@@ -88,7 +89,6 @@ class DbusNotify():
                     journal.send("systemd-denotify: "+message)
         else:
             return False
-
 
 class logindMonitor(threading.Thread):
     """
@@ -228,37 +228,110 @@ class LogReader(threading.Thread):
             del self.run
             return
 
+class EventHandler(pyinotify.ProcessEvent):
+    def process_IN_CLOSE_WRITE(self, event):
+        string1 = "file " +event.pathname + " written"
+        try:
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-denotify: "+message)
+
+    def process_IN_MODIFY(self, event):
+        string1 = "file " +event.pathname + " modified"
+        try:
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-denotify: "+message)
+
+    def process_IN_MOVED_TO(self, event):
+        string1 = "file " +event.pathname + " overwritten"
+        try:
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-denotify: "+message)
+
+    def process_IN_ATTRIB(self, event):
+        string1 = "files " +event.pathname + " metadata changed"
+        try:
+            Notify.init("systemd-denotify")
+            notificatio = Notify.Notification.new("systemd-denotify", string1)
+            notificatio.show()
+        except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            journal.send("systemd-denotify: "+message)
+
+
+class FileNotifier():
+    def __init__(self):
+        configure = ConfigParser.RawConfigParser()
+        configure.read('/etc/systemd-denotify.conf')
+        config_dirs = configure.get("Files", "directories")
+        config_directories = config_dirs.split(",")
+        mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
+        wm = pyinotify.WatchManager()
+        notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
+        notifier.start()
+        # Start watching  paths
+        for d in config_directories:
+            wm.add_watch(d, mask, rec=True)
+
+
 if __name__ == "__main__":
     """
     __main__
     :desc: Somewhat main function though we are linux only
-    Starts logReader and logindMonitor instances (threads)
-    Writes pid file on /tmp cause we dont have and dont want root rights
-    based on conf file
-    Instantiates DbusNotify class and starts run function
+    based on user configuration starts classes
     """
 
-    config = ConfigParser.RawConfigParser()
-    config.read('/etc/systemd-denotify.conf')
+    try:
+        config = ConfigParser.RawConfigParser()
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
+    try:
+        config.read('/etc/systemd-denotify.conf')
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
+    config_files_start = config.getboolean("Files", "start")
     config_logins_start = config.getboolean("Logins", "start")
-    config_logreader_start = config.getboolean("Journal", "start")
+    try:
+        config_logreader_start = config.getboolean("FailedServices", "start")
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
+    try:
+        config_services_start = config.getboolean("ServicesStatus", "start")
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+message)
 
-    if isinstance(config_logins_start,bool) and config_logins_start == True:
-        lm = logindMonitor()
-        lm.start()
-    if isinstance(config_logreader_start,bool) and config_logreader_start == True:
-        log_reader = LogReader()
-        log_reader.daemon = True
-        log_reader.start()
     db = DbusNotify()
-    db_started = db.run()
-   # if  isinstance(lm, object):
-   #     pid = os.getpid()
-   #     js = journal.send("systemd-denotify: successfully started with pid "+ str(pid))
-   #     try:
-   #         with open('/tmp/systemd-denotify.pid', 'w') as of:
-   #             of.write(str(pid))
-   #     except Exception as ex:
-   #         templated = "An exception of type {0} occured. Arguments:\n{1!r}"
-   #         messaged = templated.format(type(ex).__name__, ex.args)
-   #         journal.send("systemd-denotify: "+messaged)
+    db.run()
+
+    if isinstance(config_files_start, bool) and config_files_start == True:
+        FileNotifier()
+    if isinstance(config_logreader_start, bool) and config_logreader_start == True:
+        lg = LogReader()
+        lg.daemon = True
+        lg.start()
+    if isinstance(config_logins_start, bool) and config_logins_start == True:
+        lm = logindMonitor()
+        lm.run()
