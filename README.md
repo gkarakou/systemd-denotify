@@ -4,15 +4,11 @@ GENERAL
 systemd-denotify build repo
 Differences from master + experimental:
 
-1. distutils made setup.py that invokes custom install_script.py (former setup.py -i v2|v3)
 
-2. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
+1. the installer doesn't add the x logged in user to group because of permission errors(tried with sudo and pkexec)
+ Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
 
-3. Therefore the .conf file adds comments to manually start the class/service and defaults now to False(dont start)
-
-4. Stripped the espeak calls and the deps off.
-
-5. What is not been implemented: If one goes yum remove systemd-denotify the module installed will be deleted but not the files that the install_script.py had chmoded and cp'ed to the system dirs(/etc/,/etc/xdg/autostart/,/usr/local/bin). The .spec file is unaware of what the external installer did!
+2. Stripped the espeak calls and the deps off.
 
 
 
@@ -63,7 +59,25 @@ python2 setup.py sdist
 
 DEBIAN/UBUNTU
 ----------------
-It seems that if you install  stdeb and have a source distribution as generated above creating a .deb to be installed with dpkg is really easy.
+
+<pre>
+sudo apt-get install python-stdeb fakeroot python-all
+
+git clone https://github.com/gkarakou/systemd-denotify.git
+
+cd systemd-denotify
+
+git checkout build
+
+sudo python setup.py sdist_dsc --depends "systemd systemd-libs dbus libnotify python-systemd python-dbus python-notify python-gobject python-gi python-inotify xorg notification-daemon" --build-depends "python-setuptools" bdist_deb
+
+#it should produce a .deb package ready to be installed in deb_dist directory (hint:ls -al deb_dist|grep deb):
+
+sudo dpkg -i deb_dist/systemd-denotify-$VERSION.deb
+
+sudo apt-get -f install
+</pre>
+
 If you find any troubles you can follow this guide:
 http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
 
@@ -77,7 +91,39 @@ cd systemd-denotify
 
 git checkout build
 
-sudo python setup.py bdist_rpm --requires "python python-setuptools systemd-python notify-python pygobject2 python-slip-dbus python-inotify"
+sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, notification-daemon, dbus, dbus-python, xorg-x11-server-Xorg"
 
-sudo rpm -i dist/systemd-denotify-1.0-1.noarch.rpm
+sudo yum --nogpgcheck localinstall dist/systemd-denotify-1.0-1.noarch.rpm
+
+</pre>
+
+
+ARCHLINUX
+-----------------
+
+PKGBUILD
+
+<pre>
+pkgname=systemd-denotify
+pkgver=r254.de1d483
+pkgrel=1
+pkgdesc='A set of python classes that provide desktop notification upon a user login and when a systemd service fails.'
+arch=(any)
+url='https://github.com/gkarakou/systemd-denotify'
+license=('GPL')
+depends=('python2' 'python2-setuptools' 'libnotify' 'notification-daemon' 'python2-dbus' 'python2-gobject' 'python2-notify' 'python2-systemd' 'python2-pyinotify' 'systemd' 'systemd-libs' 'dbus' 'xorg-server')
+source=("${pkgname}::git+https://github.com/gkarakou/systemd-denotify")
+md5sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  cd "$pkgname"
+  git checkout build
+  python2 setup.py install --root="${pkgdir}/"
+}
+
 </pre>
