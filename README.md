@@ -91,7 +91,7 @@ cd systemd-denotify
 
 git checkout build
 
-sudo python setup.py bdist_rpm --requires "python, python-setuptools, systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, notification-daemon, dbus, dbus-python, xorg-x11-server-Xorg"
+sudo python setup.py bdist_rpm --requires "python,  systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, notification-daemon, dbus, dbus-python, xorg-x11-server-Xorg" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh
 
 sudo yum --nogpgcheck localinstall dist/systemd-denotify-1.0-1.noarch.rpm
 
