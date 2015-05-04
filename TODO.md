@@ -1,4 +1,3 @@
-see experimental one
 DONE--Give the users the capability to disable if they want the login and the journal polling from the .conf
 
 SET TO WONT FIX--Give the users the capability to disable if they want the espeak calls in .conf file section [Journal]
@@ -7,7 +6,8 @@ DONE--Write a proper setup.py from distutils that will only call our custom setu
 
 SET TO WONT FIX(DEDICATED BUILD BRANCH)--Merge experimental into master
 
+DONE---FINAL TARGET->MERGE BUILD INTO MASTER
 
 OPTIONALLY Give the users the capability to watch dirs for metadata changes
 
-OPTIONALLY write code that temporarily allows /etc/pam.d/usermod to auth against us in arch linux. We will revert changes back in setup.py
+SET TO WONT FIX(ITS ON THE PACKAGERS ABILITY) --- write code that temporarily allows /etc/pam.d/usermod to auth against us in arch linux. We will revert changes back in setup.py
