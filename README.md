@@ -78,4 +78,5 @@ http://shallowsky.com/blog/programming/python-debian-packages-w-stdeb.html
 ARCHLINUX
 -----------------
 
-systemd-denotify is already in AUR repository.
+systemd-denotify is already in AUR:
+https://aur.archlinux.org/packages/systemd-denotify/
