@@ -87,6 +87,8 @@ class DbusNotify():
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-denotify: "+message)
+                if notificated:
+                    del notificated
         else:
             return False
 
@@ -140,6 +142,8 @@ class logindMonitor(threading.Thread):
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-denotify: "+message)
+                if notificatio:
+                    del notificatio
 
     def __del__(self):
         """
@@ -204,6 +208,8 @@ class LogReader(threading.Thread):
                                 Notify.init("systemd-denotify")
                                 notificatio=Notify.Notification.new("systemd-denotify", string)
                                 notificatio.show()
+                                if notificatio:
+                                    del notificatio
                             else:
                                 continue
                         except Exception as ex:
