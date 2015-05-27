@@ -80,3 +80,8 @@ ARCHLINUX
 
 systemd-denotify is already in AUR:
 https://aur.archlinux.org/packages/systemd-denotify/
+
+USAGE
+------------------
+
+Simply read and edit accordingly /etc/systemd-denotify.conf
