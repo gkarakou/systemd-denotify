@@ -92,9 +92,9 @@ class DbusNotify():
         else:
             return False
 
-class logindMonitor(threading.Thread):
+class LogindMonitor(threading.Thread):
     """
-    logindMonitor
+    LogindMonitor
     :desc: Class that notifies the user for user logins
     Extends threading.Thread
     Has a constructor that calls the parent one, a run method and a destructor
@@ -339,5 +339,5 @@ if __name__ == "__main__":
         lg.daemon = True
         lg.start()
     if isinstance(config_logins_start, bool) and config_logins_start == True:
-        lm = logindMonitor()
+        lm = LogindMonitor()
         lm.run()
