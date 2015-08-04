@@ -12,6 +12,33 @@ import os
 import ConfigParser
 import pyinotify
 
+class ConfigReader():
+    """
+    ConfigReader
+    :desc: Class that reads the user config for entries
+    Has an constructor and 3 section specific getters
+    """
+
+    def __init__(self):
+        """
+        __init__
+        :desc: Constructor function that by returns a ConfigParser object
+        """
+        conf = ConfigParser.RawConfigParser()
+        self.conf = conf
+        return  self.conf
+
+    def get_global_entries(self):
+
+
+    def get_notification_entries(self):
+
+
+
+    def get_mail_entries(self):
+
+
+
 class DbusNotify():
     """
     DbusNotify
