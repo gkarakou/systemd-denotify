@@ -38,10 +38,13 @@ class ConfigReader():
         dictionary['config_start'] = self.conf.getboolean("ServicesStatus", "start")
         dictionary['config_interval'] = self.conf.getint("ServicesStatus", "interval")
         dictionary['config_serv'] = self.conf.get("ServicesStatus", "services")
-        dictionary['config_services'] = config_serv.split(",")
+        dictionary['config_services'] = dictionary['config_serv'].split(",")
 
+        return dictionary
 
     def get_mail_entries(self):
+        self.conf.read('/etc/systemd-denotify.conf')
+        dictionary = {}
 
 
 
@@ -68,24 +71,20 @@ class DbusNotify():
         Helpful API->http://www.freedesktop.org/wiki/Software/systemd/dbus/
         Credits->https://zignar.net/2014/09/08/getting-started-with-dbus-python-systemd/
         """
-        conf = ConfigParser.RawConfigParser()
-        conf.read('/etc/systemd-denotify.conf')
-        config_start = conf.getboolean("ServicesStatus", "start")
-        config_interval = conf.getint("ServicesStatus", "interval")
-        config_serv = conf.get("ServicesStatus", "services")
-        config_services = config_serv.split(",")
+        conf_reader = ConfigReader()
+        dictio = conf_reader.get_notification_entries()
 
-        if isinstance(config_start, bool) and config_start == False:
+        if isinstance(dictio['config_start'], bool) and dictio['config_start'] == False:
             return False
-        elif config_start == True and isinstance(config_interval, int) and isinstance(config_services, list):
-            secs = int(config_interval) * 60
+        elif dictio['config_start'] == True and isinstance(dictio['config_interval'], int) and isinstance(dictio['config_services'], list):
+            secs = int(dictio['config_interval']) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
 
             append = ".service"
-            for a in config_services:
+            for a in dictio['config_services']:
                 a+= append
                 try:
                     getUnit = manager.LoadUnit(a)
