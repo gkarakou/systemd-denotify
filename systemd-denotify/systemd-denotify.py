@@ -28,11 +28,17 @@ class ConfigReader():
         self.conf = conf
         return  self.conf
 
-    def get_global_entries(self):
+    #def get_global_entries(self):
 
 
     def get_notification_entries(self):
 
+        self.conf.read('/etc/systemd-denotify.conf')
+        dictionary = {}
+        dictionary['config_start'] = self.conf.getboolean("ServicesStatus", "start")
+        dictionary['config_interval'] = self.conf.getint("ServicesStatus", "interval")
+        dictionary['config_serv'] = self.conf.get("ServicesStatus", "services")
+        dictionary['config_services'] = config_serv.split(",")
 
 
     def get_mail_entries(self):
