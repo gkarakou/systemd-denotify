@@ -136,6 +136,81 @@ class ConfigReader():
         #iter through dict sections and check whether there are empty values
         return dictionary
 
+    def mail_worker(self, stri, que, dictio):
+        """
+        mail_worker
+        :desc : Function that does the heavy lifting
+        :params : The string to be mailed, a queue object to put messages in it
+        to notify the parent process about the status of the mail, and a dict
+        containing config options necessary for the mail to be delivered.
+        """
+
+        if self.logg == True and self.logg_facility == "log_file" and\
+        self.logg_level == 10:
+            self.logging.debug('Running inside mail_worker()')
+        dictionary = dictio
+        msg = MIMEMultipart("alternative")
+        #get it from the queue?
+        stripped = stri.strip()
+        part1 = MIMEText(stripped, "plain")
+        msg['Subject'] = dictionary['email_subject']
+        #http://pymotw.com/2/smtplib/
+        msg['To'] = email.utils.formataddr(('Recipient', dictionary['email_to']))
+        msg['From'] = email.utils.formataddr((dictionary['email_from'], dictionary['email_from']))
+        msg.attach(part1)
+        if dictionary['smtp'] == True:
+            # no auth
+            if dictionary['auth'] == False:
+                s = smtplib.SMTP()
+                s.connect(host=str(dictionary['smtp_host']), port=dictionary['smtp_port'])
+                try:
+                    send = s.sendmail(str(dictionary['email_from']), [str(dictionary['email_to'])], msg.as_string())
+                    if isinstance(send, dict):
+                        que.put([self.name, "SUCCESS"])
+                    else:
+                        que.put([self.name, "FAILURE"])
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-mailify: "+message)
+                    if self.logg == True and self.logg_facility == "log_file" or self.logg_facility == "both":
+                        self.logging.error(message)
+                finally:
+                    s.quit()
+                    del s
+
+            # auth
+            elif dictionary['auth'] == True:
+                s = smtplib.SMTP()
+                s.connect(host=str(dictionary['smtp_host']), port=dictionary['smtp_port'])
+                s.login(str(dictionary['auth_user']), str(dictionary['auth_password']))
+                try:
+                    send = s.sendmail(str(dictionary['email_from']), [str(dictionary['email_to'])], msg.as_string().strip())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class ServiceStatusChecker():
     """
     ServiceStatusChecker
