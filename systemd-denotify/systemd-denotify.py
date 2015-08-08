@@ -8,9 +8,13 @@ import datetime
 from systemd import journal
 from threading import Thread
 from gi.repository import Notify
-import os
 import ConfigParser
 import pyinotify
+import smtplib
+import email.utils
+import sys
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 class ConfigReader():
     """
@@ -26,7 +30,6 @@ class ConfigReader():
         """
         conf = ConfigParser.RawConfigParser()
         self.conf = conf
-        return  self.conf
 
     #def get_global_entries(self):
 
@@ -176,16 +179,10 @@ class Mailer(threading.Thread):
                 s.connect(host=str(dictionary['smtp_host']), port=dictionary['smtp_port'])
                 try:
                     send = s.sendmail(str(dictionary['email_from']), [str(dictionary['email_to'])], msg.as_string())
-                    if isinstance(send, dict):
-                        que.put([self.name, "SUCCESS"])
-                    else:
-                        que.put([self.name, "FAILURE"])
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-mailify: "+message)
-                    if self.logg == True and self.logg_facility == "log_file" or self.logg_facility == "both":
-                        self.logging.error(message)
+                    journal.send("systemd-denotify: "+message)
                 finally:
                     s.quit()
                     del s
@@ -200,7 +197,7 @@ class Mailer(threading.Thread):
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-mailify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 finally:
                      s.quit()
                      del s
@@ -222,7 +219,7 @@ class Mailer(threading.Thread):
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-mailify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 finally:
                     s.quit()
                     del s
@@ -243,7 +240,7 @@ class Mailer(threading.Thread):
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-mailify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 finally:
                     s.quit()
                     del s
@@ -271,7 +268,7 @@ class Mailer(threading.Thread):
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-mailify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 finally:
                     s.quit()
                     del s
@@ -297,7 +294,7 @@ class Mailer(threading.Thread):
                 except Exception as ex:
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-mailify: "+message)
+                    journal.send("systemd-denotify: "+message)
                 finally:
                     s.quit()
                     del s
