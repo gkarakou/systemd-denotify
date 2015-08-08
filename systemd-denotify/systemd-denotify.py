@@ -115,6 +115,56 @@ class ConfigReader():
         if not smtp_port:
             smtp_port = 25
         
+            if self.logg == True and self.logg_facility == "both":
+                self.logging.error("You have asked for smtp connection but you have an empty smtp port field. Please update the /etc/systemd-mailify.conf file with a value. port=25")
+                journal.send("systemd-mailify: ERROR You have asked for a smtp connection but you have an empty smtp port  field. Please update the /etc/systemd-mailify.conf file with a value. port=25 ")
+            elif self.logg == True and self.logg_facility == "log_file":
+                self.logging.error("You have asked for smtp connection but you have an empty smtp port field. Please update the /etc/systemd-mailify.conf file with a value. port=25")
+            else:
+                journal.send("systemd-mailify: ERROR You have asked for a smtp connection but you have an empty smtp port field. Please update the /etc/systemd-mailify.conf file with a value. port=25 ")
+
+        conf_dict['smtp_port'] = smtp_port
+
+        #parse [SMTPS]
+        smtps = conf.getboolean("SMTPS", "active")
+        if smtps == True:
+            conf_dict['smtps'] = True
+            smtps_host = conf.get("SMTPS", "host")
+            if len(smtps_host) == 0:
+                smtps_host = "localhost"
+                if self.logg == True and self.logg_facility == "both":
+                    self.logging.info("You have asked for smtps connection but you have an empty smtps host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+                    journal.send("systemd-mailify: INFO You have asked for a smtps connection but you have an empty smtps host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+                elif self.logg == True and self.logg_facility == "log_file":
+                    self.logging.info("You have asked for smtps connection but you have an empty smtps host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+                else:
+                    journal.send("systemd-mailify: INFO You have asked for a smtps connection but you have an empty smtps host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+            conf_dict['smtps_host'] = smtps_host
+            smtps_port = conf.getint("SMTPS", "port")
+            if not smtps_port:
+                smtps_port = 465
+                if self.logg == True and self.logg_facility == "both":
+                    self.logging.error("You have asked for smtps connection but you have an empty smtps port field. Please update the /etc/systemd-mailify.conf file with a value. port=465 ")
+                    journal.send("systemd-mailify: ERROR You have asked for a  smtps connection but you have an empty smtps port field. Please update the /etc/systemd-mailify.conf file with a value. port=465")
+                elif self.logg == True and self.logg_facility == "log_file":
+                    self.logging.error("You have asked for smtps connection but you have an empty smtps port field. Please update the /etc/systemd-mailify.conf file with a value. port=465")
+                else:
+                    journal.send("systemd-mailify: ERROR You have asked for a smtps connection but you have an empty smtps port field. Please update the /etc/systemd-mailify.conf file with a value. port=465 ")
+            conf_dict['smtps_port'] = smtps_port
+            smtps_cert = conf.get("SMTPS", "cert_file")
+            conf_dict['smtps_cert'] = smtps_cert
+            smtps_key = conf.get("SMTPS", "key_file")
+            conf_dict['smtps_key'] = smtps_key
+        else:
+            conf_dict['smtps'] = False
+
+        #parse [STARTTLS]
+        starttls = conf.getboolean("STARTTLS", "active")
+        if  starttls == True:
+            conf_dict['starttls'] = True
+            starttls_host = conf.get("STARTTLS", "host")
+            if len(starttls_host) == 0:
+                starttls_host = "localhost"
 
         return dictionary
 
