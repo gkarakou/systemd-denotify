@@ -64,6 +64,56 @@ class ConfigReader():
         dictionary['conf_email_from'] = self.conf.get("EMAIL", "mail_from")
 
 
+        #parse [AUTH]
+
+        auth = conf.getboolean("AUTH", "active")
+        if auth and auth == True:
+            auth_user = conf.get("AUTH", "auth_user")
+            if len(auth_user) == 0:
+                if self.logg == True and self.logg_facility == "both":
+                    self.logging.error("You have asked for authentication but you have an empty auth_user name. Please update the /etc/systemd-mailify.conf file with a value ")
+                    journal.send("systemd-mailify: ERROR You have asked for authentication but you have an empty auth_user name. Please update the /etc/systemd-mailify.conf file with a value ")
+                elif self.logg == True and self.logg_facility == "log_file":
+                    self.logging.error("You have asked for authentication but you have an empty auth_user name. Please update the /etc/systemd-mailify.conf file with a value ")
+                else:
+                    journal.send("systemd-mailify: ERROR You have asked for authentication but you have an empty auth_user name. Please update the /etc/systemd-mailify.conf file with a value ")
+                sys.exit(1)
+            auth_password = conf.get("AUTH", "auth_password")
+            if len(auth_password) == 0:
+                if self.logg == True and self.logg_facility == "both":
+                    self.logging.error("You have asked for authentication but you have an empty auth_password field. Please update the /etc/systemd-mailify.conf file with a value ")
+                    journal.send("systemd-mailify: ERROR You have asked for authentication but you have an empty auth_password field. Please update the /etc/systemd-mailify.conf file with a value ")
+                elif self.logg == True and self.logg_facility == "log_file":
+                    self.logging.error("You have asked for authentication but you have an empty auth_password field. Please update the /etc/systemd-mailify.conf file with a value ")
+                else:
+                    journal.send("systemd-mailify: ERROR You have asked for authentication but you have an empty auth_password field. Please update the /etc/systemd-mailify.conf file with a value ")
+                sys.exit(1)
+            conf_dict['auth'] = True
+            conf_dict['auth_user'] = auth_user
+            conf_dict['auth_password'] = auth_password
+        else:
+            conf_dict['auth'] = False
+
+        #parse [SMTP]
+        smtp = conf.getboolean("SMTP", "active")
+        if smtp and smtp == True:
+            conf_dict['smtp'] = True
+        else:
+            conf_dict['smtp'] = False
+        smtp_host = conf.get("SMTP", "host")
+        if len(smtp_host) == 0:
+            smtp_host = "localhost"
+            if self.logg == True and self.logg_facility == "both":
+                self.logging.info("You have asked for smtp connection but you have an empty smtp host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+                journal.send("systemd-mailify: INFO You have asked for a smtp connection but you have an empty smtp host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+            elif self.logg == True and self.logg_facility == "log_file":
+                self.logging.info("You have asked for smtp connection but you have an empty smtp host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+            else:
+                journal.send("systemd-mailify: INFO You have asked for a smtp  connection but you have an empty smtp host field. Please update the /etc/systemd-mailify.conf file with a value. We assume localhost here")
+        conf_dict['smtp_host'] = smtp_host
+        smtp_port = conf.getint("SMTP", "port")
+        if not smtp_port:
+            smtp_port = 25
         
 
         return dictionary
