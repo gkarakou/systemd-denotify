@@ -35,22 +35,35 @@ class ConfigReader():
 
         self.conf.read('/etc/systemd-denotify.conf')
         dictionary = {}
-        dictionary['config_start'] = self.conf.getboolean("ServicesStatus", "start")
-        dictionary['config_interval'] = self.conf.getint("ServicesStatus", "interval")
-        dictionary['config_serv'] = self.conf.get("ServicesStatus", "services")
-        dictionary['config_services'] = dictionary['config_serv'].split(",")
+        #parse Logins
+        dictionary['conf_logins_start'] = self.conf.getboolean("Logins", "start")
+        #parse FailedServices
+        dictionary['conf_failed_services_start'] = self.conf.getboolean("FailedServices", "start")
+        #parse Files section
+        dictionary['conf_files_start'] = self.conf.getboolean("Files", "start")
+        dictionary['conf_files_dirs'] = self.conf.get("Files", "directories")
+        dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
+        #parse ServicesStatus
+        dictionary['conf_services_start'] = self.conf.getboolean("ServicesStatus", "start")
+        dictionary['conf_services_interval'] = self.conf.getint("ServicesStatus", "interval")
+        dictionary['conf_services_services'] = self.conf.get("ServicesStatus", "services")
+        dictionary['conf_services'] = dictionary['conf_services_services'].split(",")
 
         return dictionary
 
     def get_mail_entries(self):
         self.conf.read('/etc/systemd-denotify.conf')
         dictionary = {}
+        dictionary['conf_email_on_user_logins'] = self.conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_user_logins")
+        dictionary['conf_email_on_failed_services'] = self.conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_failed_services")
+        dictionary['conf_email_on_file_alteration'] = self.conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_file_alteration")
+        dictionary['conf_email_on_services_statuses'] = self.conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_services_statuses")
 
+        return dictionary
 
-
-class DbusNotify():
+class ServiceStatusChecker():
     """
-    DbusNotify
+    ServiceStatusChecker
     :desc: Class that notifies the user for the status of some systemd services
     Has an empty constructor and a run method
     """
@@ -74,17 +87,18 @@ class DbusNotify():
         conf_reader = ConfigReader()
         dictio = conf_reader.get_notification_entries()
 
-        if isinstance(dictio['config_start'], bool) and dictio['config_start'] == False:
+        if isinstance(dictio['conf_services_start'], bool) and dictio['conf_services_start'] == False:
             return False
-        elif dictio['config_start'] == True and isinstance(dictio['config_interval'], int) and isinstance(dictio['config_services'], list):
-            secs = int(dictio['config_interval']) * 60
+        elif dictio['conf_services_start'] == True and
+        isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
+            secs = int(dictio['conf_services_interval']) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
 
             append = ".service"
-            for a in dictio['config_services']:
+            for a in dictio['conf_services']:
                 a+= append
                 try:
                     getUnit = manager.LoadUnit(a)
@@ -190,9 +204,9 @@ class LogindMonitor(threading.Thread):
             del self.run
             return
 
-class LogReader(threading.Thread):
+class JournalParser(threading.Thread):
     """
-    LogReader
+    JournalParser
     :desc: Class that notifies the user for failed systemd services
     Extends threading.Thread
     Has an constructor that calls the parent one, a run method and a destructor
@@ -361,13 +375,13 @@ if __name__ == "__main__":
         message = template.format(type(ex).__name__, ex.args)
         journal.send("systemd-denotify: "+message)
 
-    db = DbusNotify()
+    db = ServiceStatusChecker()
     db.run()
 
     if isinstance(config_files_start, bool) and config_files_start == True:
         FileNotifier()
     if isinstance(config_logreader_start, bool) and config_logreader_start == True:
-        lg = LogReader()
+        lg = JournalParser()
         lg.daemon = True
         lg.start()
     if isinstance(config_logins_start, bool) and config_logins_start == True:
