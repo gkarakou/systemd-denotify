@@ -164,8 +164,7 @@ class ServiceStatusChecker():
 
         if isinstance(dictio['conf_services_start'], bool) and dictio['conf_services_start'] == False:
             return False
-        elif dictio['conf_services_start'] == True and
-        isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
+        elif dictio['conf_services_start'] == True and isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
             secs = int(dictio['conf_services_interval']) * 60
             threading.Timer(secs, self.run).start()
             bus = SystemBus()
@@ -403,16 +402,14 @@ class EventHandler(pyinotify.ProcessEvent):
 
 class FileNotifier():
     def __init__(self):
-        configure = ConfigParser.RawConfigParser()
-        configure.read('/etc/systemd-denotify.conf')
-        config_dirs = configure.get("Files", "directories")
-        config_directories = config_dirs.split(",")
+        c_read = ConfigReader()
+        dictio = c_read.get_notification_entries()
         mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
         # Start watching  paths
-        for d in config_directories:
+        for d in dictio['conf_files_directories']:
             wm.add_watch(d, mask, rec=True)
 
 
@@ -424,41 +421,27 @@ if __name__ == "__main__":
     """
 
     try:
-        config = ConfigParser.RawConfigParser()
+        config = ConfigReader()
     except Exception as ex:
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         journal.send("systemd-denotify: "+message)
     try:
-        config.read('/etc/systemd-denotify.conf')
+        diction = config.get_notification_entries()
     except Exception as ex:
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
-        journal.send("systemd-denotify: "+message)
-    config_files_start = config.getboolean("Files", "start")
-    config_logins_start = config.getboolean("Logins", "start")
-    try:
-        config_logreader_start = config.getboolean("FailedServices", "start")
-    except Exception as ex:
-        template = "An exception of type {0} occured. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
-        journal.send("systemd-denotify: "+message)
-    try:
-        config_services_start = config.getboolean("ServicesStatus", "start")
-    except Exception as ex:
-        template = "An exception of type {0} occured. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
-        journal.send("systemd-denotify: "+message)
 
-    db = ServiceStatusChecker()
-    db.run()
+##start classes
+    ssc = ServiceStatusChecker()
+    ssc.run()
 
-    if isinstance(config_files_start, bool) and config_files_start == True:
+    if isinstance(diction['conf_files_start'], bool) and diction['conf_files_start'] == True:
         FileNotifier()
-    if isinstance(config_logreader_start, bool) and config_logreader_start == True:
-        lg = JournalParser()
-        lg.daemon = True
-        lg.start()
-    if isinstance(config_logins_start, bool) and config_logins_start == True:
+    if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True:
+        jp = JournalParser()
+        jp.daemon = True
+        jp.start()
+    if isinstance(diction['conf_logins_start'], bool) and diction['conf_logins_start'] == True:
         lm = LogindMonitor()
         lm.run()
