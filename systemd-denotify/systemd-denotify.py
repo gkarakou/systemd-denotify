@@ -46,6 +46,8 @@ class ConfigReader():
         dictionary['conf_files_start'] = self.conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = self.conf.get("Files", "directories")
         dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
+        dictionary['conf_files_evs'] = self.conf.get("Files", "events")
+        dictionary['conf_files_events'] = dictionary['conf_files_evs'].split(",")
         #parse ServicesStatus
         dictionary['conf_services_start'] = self.conf.getboolean("ServicesStatus", "start")
         dictionary['conf_services_interval'] = self.conf.getint("ServicesStatus", "interval")
@@ -327,7 +329,7 @@ class ServiceStatusChecker():
         """
         conf_reader = ConfigReader()
         dictio = conf_reader.get_notification_entries()
-
+        dictionar = conf_reader.get_mail_entries()
         if isinstance(dictio['conf_services_start'], bool) and dictio['conf_services_start'] == False:
             return False
         elif dictio['conf_services_start'] == True and isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
@@ -375,6 +377,48 @@ class ServiceStatusChecker():
                     journal.send("systemd-denotify: "+message)
                 if notificated:
                     del notificated
+        elif dictionar['email_on_services_statuses'] == True and dictio['conf_services_start'] == True and isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
+            secs = int(dictio['conf_services_interval']) * 60
+            threading.Timer(secs, self.run).start()
+            bus = SystemBus()
+            systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+            manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
+
+            append = ".service"
+            for a in dictio['conf_services']:
+                a+= append
+                try:
+                    getUnit = manager.LoadUnit(a)
+                except  Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-denotify: "+message)
+                try:
+                    proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
+                except  Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-denotify: "+message)
+                try:
+                    service_properties = Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-denotify: "+message)
+                try:
+                    state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-denotify: "+message)
+                status = a + " status: %s" % state
+                try:
+                    mail = Mailer()
+                    mail.run(status, dictionar)
+                except Exception as ex:
+                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    journal.send("systemd-denotify: "+message)
         else:
             return False
 
@@ -400,7 +444,8 @@ class LogindMonitor(threading.Thread):
         :desc: function that goes on an infinite loop polling the logind daemon for user logins
         Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
         """
-
+        conf = ConfigReader()
+        dictiona = conf.get_mail_entries()
         while True:
             time.sleep(1)
             try:
@@ -430,7 +475,9 @@ class LogindMonitor(threading.Thread):
                     journal.send("systemd-denotify: "+message)
                 if notificatio:
                     del notificatio
-
+                if dictiona['email_on_user_logins'] == True:
+                    mail = Mailer()
+                    mail.run("login from user id: "+str(user) +" at "+str(now)[:19], diction)
     def __del__(self):
         """
         __del__
@@ -466,6 +513,8 @@ class JournalParser(threading.Thread):
         :desc: function that goes on an infinite loop polling the systemd-journal for failed services
         Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
         """
+        conf = ConfigReader()
+        dictiona = conf.get_mail_entries()
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -496,6 +545,9 @@ class JournalParser(threading.Thread):
                                 notificatio.show()
                                 if notificatio:
                                     del notificatio
+                                if dictiona['email_on_failed_services'] == True:
+                                    mail = Mailer()
+                                    mail.run(string, diction)
                             else:
                                 continue
                         except Exception as ex:
@@ -570,7 +622,16 @@ class FileNotifier():
     def __init__(self):
         c_read = ConfigReader()
         dictio = c_read.get_notification_entries()
-        mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY |pyinotify.IN_MOVED_TO # watched events
+        #dictioo = c_read.get_mail_entries()
+        mappings = {WRITE:pyinotify.IN_CLOSE_WRITE, MODIFY:pyinotify.IN_MODIFY, DELETE:pyinotify.IN_DELETE, ATTRIBUTE:pyinotify.IN_ATTRIB}
+        mask = ""
+        for k, v in dictio['conf_files_events']:
+            for key, value in mappings:
+                if v == key:
+                    mask += value +" | "
+                    if k == len(dictio['conf_file_events']):
+                        mask += value
+        journal.send("systemd-denotify: "+" DEBUG " + mask )
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
