@@ -629,7 +629,8 @@ class FileNotifier():
             for key, value in mappings:
                 if v == key:
                     mask += value +" | "
-                    if k == len(dictio['conf_file_events']):
+        #debug
+                    if k == len(dictio['conf_file_events']) -1:
                         mask += value
         journal.send("systemd-denotify: "+" DEBUG " + mask )
         wm = pyinotify.WatchManager()
