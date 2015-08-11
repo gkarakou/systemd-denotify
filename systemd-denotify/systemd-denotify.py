@@ -64,7 +64,7 @@ class ConfigReader():
         dictionary['conf_email_on_file_alteration'] = self.conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_file_alteration")
         dictionary['conf_email_on_services_statuses'] = self.conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_services_statuses")
 
-        dictionary['conf_email_subject'] = self.conf.get("EMAIL", "mail_subject")
+        dictionary['conf_email_subject'] = self.conf.get("EMAIL", "subject")
         dictionary['conf_email_to'] = self.conf.get("EMAIL", "mail_to")
         dictionary['conf_email_from'] = self.conf.get("EMAIL", "mail_from")
 
