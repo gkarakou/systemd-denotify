@@ -648,10 +648,10 @@ class FileNotifier():
         #dictioo = c_read.get_mail_entries()
         mappings = {"WRITE":pyinotify.IN_CLOSE_WRITE, "MODIFY":pyinotify.IN_MODIFY, "DELETE":pyinotify.IN_DELETE, "ATTRIBUTE":pyinotify.IN_ATTRIB}
         mask = ""
-        for k, v in dictio['conf_files_events']:
-            for key, value in mappings:
+        for k, v in dictio['conf_files_events'].iteritems():
+            for key, value in mappings.iteritems():
                 if str(v) == key:
-                    mask += value +" | "
+                    mask += str(value) +" | "
         #debug
                     if k == len(dictio['conf_file_events']) -1:
                         mask += value
@@ -661,7 +661,7 @@ class FileNotifier():
         notifier.start()
         # Start watching  paths
         for d in dictio['conf_files_directories']:
-            wm.add_watch(d, mask, rec=True)
+            wm.add_watch(d, int(mask), rec=True)
 
 
 if __name__ == "__main__":
