@@ -650,7 +650,7 @@ class FileNotifier():
         mask = ""
         for k, v in dictio['conf_files_events']:
             for key, value in mappings:
-                if string(v) == key:
+                if str(v) == key:
                     mask += value +" | "
         #debug
                     if k == len(dictio['conf_file_events']) -1:
