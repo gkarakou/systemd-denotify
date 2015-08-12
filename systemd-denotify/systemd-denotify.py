@@ -660,7 +660,7 @@ class FileNotifier():
                         mask += str(value) +"|"
         #mask = mask[1:-1]
         mask_str = mask.strip('"')
-        mask_r = mask.replace('"', ' ')
+        mask_r = mask.replace('|', ' | ')
         journal.send("systemd-denotify: "+" DEBUG " + mask + " mask1 " + str(mask1) + " typeof mask " + str(type(mask)) +" typeof mask1 " + str(type(mask1)))
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
