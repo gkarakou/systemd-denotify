@@ -707,7 +707,7 @@ if __name__ == "__main__":
     if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True:
         jp = JournalParser()
         jp.daemon = True
-        jp.start()
+        jp.run()
     if isinstance(diction['conf_logins_start'], bool) and diction['conf_logins_start'] == True:
         lm = LogindMonitor()
         lm.run()
