@@ -657,7 +657,7 @@ class FileNotifier():
         #debug
                 else:
                     if v == key:
-                        mask += str(value) +int("|")
+                        mask += str(value) +bytes("|")
         #mask = mask[1:-1]
         mask_str = mask.strip('"')
         mask_r = mask.replace('"', ' ')
