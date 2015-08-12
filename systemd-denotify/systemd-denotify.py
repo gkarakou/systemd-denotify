@@ -59,14 +59,14 @@ class ConfigReader():
         conf.read('/etc/systemd-denotify.conf')
         dictionary = {}
         dictionary = {}
-        dictionary['conf_email_on_user_logins'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_user_logins")
-        dictionary['conf_email_on_failed_services'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_failed_services")
-        dictionary['conf_email_on_file_alteration'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_file_alteration")
-        dictionary['conf_email_on_services_statuses'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_services_statuses")
+        dictionary['email_on_user_logins'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_user_logins")
+        dictionary['email_on_failed_services'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_failed_services")
+        dictionary['email_on_file_alteration'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_file_alteration")
+        dictionary['email_on_services_statuses'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_services_statuses")
 
-        dictionary['conf_email_subject'] = conf.get("EMAIL", "subject")
-        dictionary['conf_email_to'] = conf.get("EMAIL", "mail_to")
-        dictionary['conf_email_from'] = conf.get("EMAIL", "mail_from")
+        dictionary['subject'] = conf.get("EMAIL", "subject")
+        dictionary['mail_to'] = conf.get("EMAIL", "mail_to")
+        dictionary['ail_from'] = conf.get("EMAIL", "mail_from")
 
 
         #parse [AUTH]
