@@ -475,9 +475,10 @@ class LogindMonitor(threading.Thread):
                     journal.send("systemd-denotify: "+message)
                 if notificatio:
                     del notificatio
-                if dictiona['email_on_user_logins'] == True:
-                    mail = Mailer()
-                    mail.run("login from user id: "+str(user) +" at "+str(now)[:19], diction)
+                for k, v in dictiona.iteritems():
+                    if k == 'email_on_user_logins' and v == True:
+                        mail = Mailer()
+                        mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
     def __del__(self):
         """
         __del__
