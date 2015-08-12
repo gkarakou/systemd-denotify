@@ -338,7 +338,7 @@ class ServiceStatusChecker():
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-
+            statuses = ""
             append = ".service"
             for a in dictio['conf_services']:
                 a+= append
@@ -375,13 +375,14 @@ class ServiceStatusChecker():
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-denotify: "+message)
+                statuses += status + "\r\n"
                 if notificated:
                     del notificated
                 for k, v in dictionar.iteritems():
                     if k == 'email_on_services_statuses' and v == True:
                         try:
                             mail = Mailer()
-                            mail.run(status, dictionar)
+                            mail.run(statuses, dictionar)
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
