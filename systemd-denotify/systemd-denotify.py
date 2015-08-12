@@ -594,8 +594,8 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        for i in self.mail_dictio.iteritems():
-            if self.mail_dictio['email_on_file_alteration'] == True:
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
                 mail = Mailer()
                 mail.run(string1, self.mail_dictio)
 
@@ -609,8 +609,8 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        for i in self.mail_dictio.iteritems():
-            if self.mail_dictio['email_on_file_alteration'] == True:
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
                 mail = Mailer()
                 mail.run(string1, self.mail_dictio)
 
@@ -624,8 +624,8 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        for i in self.mail_dictio.iteritems():
-            if self.mail_dictio['email_on_file_alteration'] == True:
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
                 mail = Mailer()
                 mail.run(string1, self.mail_dictio)
 
@@ -639,8 +639,8 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        for i in self.mail_dictio.iteritems():
-            if self.mail_dictio['email_on_file_alteration'] == True:
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
                 mail = Mailer()
                 mail.run(string1, self.mail_dictio)
 
