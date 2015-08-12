@@ -619,23 +619,15 @@ class FileNotifier():
     def __init__(self):
         c_read = ConfigReader()
         dictio = c_read.get_notification_entries()
-        #mappings = {"WRITE":pyinotify.IN_CLOSE_WRITE, "MODIFY":pyinotify.IN_MODIFY, "DELETE":pyinotify.IN_DELETE, "ATTRIBUTE":pyinotify.IN_ATTRIB}
         mappings = {"WRITE":8, "MODIFY":2, "DELETE":512, "ATTRIBUTE":4}
         mask =[]
-        mask1 = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY | pyinotify.IN_DELETE
         for k, v in enumerate(dictio['conf_files_events']):
             for key, value in mappings.iteritems():
-                if  k == len(dictio['conf_files_events']) -1:
-                    if v == key:
-                        mask.append(value)
-        #debug
-                else:
-                    if v == key:
-                        mask.append(value)
+                if v == key:
+                    mask.append(value)
         mask_r =0
         for v in mask:
             mask_r |= v
-        #journal.send("systemd-denotify: "+" DEBUG " + mask + " mask1 " + str(mask1) + " typeof mask " + str(type(mask)) +" typeof mask1 " + str(type(mask1)))
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
