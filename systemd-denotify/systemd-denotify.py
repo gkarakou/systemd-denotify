@@ -378,15 +378,15 @@ class ServiceStatusChecker():
                 statuses += status + "\r\n"
                 if notificated:
                     del notificated
-                for k, v in dictionar.iteritems():
-                    if k == 'email_on_services_statuses' and v == True:
-                        try:
-                            mail = Mailer()
-                            mail.run(statuses, dictionar)
-                        except Exception as ex:
-                            template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                            message = template.format(type(ex).__name__, ex.args)
-                            journal.send("systemd-denotify: "+message)
+            for k, v in dictionar.iteritems():
+                if k == 'email_on_services_statuses' and v == True:
+                    try:
+                        mail = Mailer()
+                        mail.run(statuses, dictionar)
+                    except Exception as ex:
+                        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                        message = template.format(type(ex).__name__, ex.args)
+                        journal.send("systemd-denotify: "+message)
         else:
             return False
 
