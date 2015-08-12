@@ -594,9 +594,10 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for i in self.mail_dictio.iteritems():
+            if self.mail_dictio['email_on_file_alteration'] == True:
+                mail = Mailer()
+                mail.run(string1, self.mail_dictio)
 
     def process_IN_MODIFY(self, event):
         string1 = "file " +event.pathname + " modified"
@@ -608,9 +609,10 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for i in self.mail_dictio.iteritems():
+            if self.mail_dictio['email_on_file_alteration'] == True:
+                mail = Mailer()
+                mail.run(string1, self.mail_dictio)
 
     def process_IN_MOVED_TO(self, event):
         string1 = "file " +event.pathname + " overwritten"
@@ -622,9 +624,10 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for i in self.mail_dictio.iteritems():
+            if self.mail_dictio['email_on_file_alteration'] == True:
+                mail = Mailer()
+                mail.run(string1, self.mail_dictio)
 
     def process_IN_ATTRIB(self, event):
         string1 = "files " +event.pathname + " metadata changed"
@@ -636,9 +639,10 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for i in self.mail_dictio.iteritems():
+            if self.mail_dictio['email_on_file_alteration'] == True:
+                mail = Mailer()
+                mail.run(string1, self.mail_dictio)
 
 
 class FileNotifier():
