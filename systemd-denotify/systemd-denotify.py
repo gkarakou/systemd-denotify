@@ -377,48 +377,15 @@ class ServiceStatusChecker():
                     journal.send("systemd-denotify: "+message)
                 if notificated:
                     del notificated
-        elif dictionar['email_on_services_statuses'] == True and dictio['conf_services_start'] == True and isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
-            secs = int(dictio['conf_services_interval']) * 60
-            threading.Timer(secs, self.run).start()
-            bus = SystemBus()
-            systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
-            manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-
-            append = ".service"
-            for a in dictio['conf_services']:
-                a+= append
-                try:
-                    getUnit = manager.LoadUnit(a)
-                except  Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                try:
-                    proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
-                except  Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                try:
-                    service_properties = Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                try:
-                    state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                status = a + " status: %s" % state
-                try:
-                    mail = Mailer()
-                    mail.run(status, dictionar)
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
+                for k, v in dictionar.iteritems():
+                    if k == 'email_on_services_statuses' and v == True:
+                        try:
+                            mail = Mailer()
+                            mail.run(status, dictionar)
+                        except Exception as ex:
+                            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                            message = template.format(type(ex).__name__, ex.args)
+                            journal.send("systemd-denotify: "+message)
         else:
             return False
 
