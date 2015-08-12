@@ -632,9 +632,6 @@ class FileNotifier():
                 else:
                     if v == key:
                         mask.append(value)
-        #mask = mask[1:-1]
-        #mask_str = mask.strip('"')
-        #mask_r = mask.replace('"', ' ')
         mask_r =0
         for v in mask:
             mask_r |= v
