@@ -663,14 +663,14 @@ class FileNotifier():
         #mask_r = mask.replace('"', ' ')
         mask_r =0
         for v in mask:
-            mask_r += v + int("|")
+            mask_r += v + int("|", 10)
         journal.send("systemd-denotify: "+" DEBUG " + mask + " mask1 " + str(mask1) + " typeof mask " + str(type(mask)) +" typeof mask1 " + str(type(mask1)))
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
         # Start watching  paths
         for d in dictio['conf_files_directories']:
-            wm.add_watch(d, int(mask_r), rec=True)
+            wm.add_watch(d, int(mask_r, 10), rec=True)
 
 
 if __name__ == "__main__":
