@@ -546,7 +546,7 @@ class JournalParser(threading.Thread):
                                 notificatio.show()
                                 if notificatio:
                                     del notificatio
-                                for k, v in dictiona:
+                                for k, v in dictiona.iteritems():
                                     if k == 'email_on_failed_services' and v == True:
                                         mail = Mailer()
                                         mail.run(string, dictiona)
@@ -707,7 +707,7 @@ if __name__ == "__main__":
     if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True:
         jp = JournalParser()
         jp.daemon = True
-        jp.run()
+        jp.start()
     if isinstance(diction['conf_logins_start'], bool) and diction['conf_logins_start'] == True:
         lm = LogindMonitor()
         lm.run()
