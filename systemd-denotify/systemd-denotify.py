@@ -549,7 +549,7 @@ class JournalParser(threading.Thread):
                                 for k, v in dictiona:
                                     if k == 'email_on_failed_services' and v == True:
                                         mail = Mailer()
-                                        mail.run(string, diction)
+                                        mail.run(string, dictiona)
                             else:
                                 continue
                         except Exception as ex:
