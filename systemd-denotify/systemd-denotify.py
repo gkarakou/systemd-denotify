@@ -546,9 +546,10 @@ class JournalParser(threading.Thread):
                                 notificatio.show()
                                 if notificatio:
                                     del notificatio
-                                if dictiona['email_on_failed_services'] == True:
-                                    mail = Mailer()
-                                    mail.run(string, diction)
+                                for k, v in dictiona:
+                                    if k == 'email_on_failed_services' and v == True:
+                                        mail = Mailer()
+                                        mail.run(string, diction)
                             else:
                                 continue
                         except Exception as ex:
