@@ -667,7 +667,7 @@ class FileNotifier():
         notifier.start()
         # Start watching  paths
         for d in dictio['conf_files_directories']:
-            wm.add_watch(d, int(mask_r), rec=True)
+            wm.add_watch(d, int(bytes(mask_r)), rec=True)
 
 
 if __name__ == "__main__":
