@@ -567,8 +567,9 @@ class EventHandler(pyinotify.ProcessEvent):
             journal.send("systemd-denotify: "+message)
         for k, v in self.mail_dictio.iteritems():
             if k == 'email_on_file_alteration' and v == True:
-                mail = Mailer()
-                mail.run(string1, self.mail_dictio)
+                self.wait_for(string1)
+                #mail = Mailer()
+                #mail.run(string1, self.mail_dictio)
 
     def process_IN_MODIFY(self, event):
         string1 = "file " +event.pathname + " modified"
@@ -619,8 +620,14 @@ class EventHandler(pyinotify.ProcessEvent):
     def get_caller(self):
         return inspect.stack()[2][3]
     def wait_for(self, string):
-
-        print self.get_caller()
+        caller = self.get_caller()
+        strings = ""
+        if caller == "process._IN_MODIFY":
+            strings += string + "\r\n"
+        elif caller == "process._IN_CLOSE_WRITE":
+            strings += string
+            mail = Mailer()
+            mail.run(strings, self.mail_dictio)
 
 class FileNotifier():
     def __init__(self):
