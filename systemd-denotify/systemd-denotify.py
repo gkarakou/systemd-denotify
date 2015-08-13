@@ -620,12 +620,12 @@ class FileNotifier():
         c_read = ConfigReader()
         dictio = c_read.get_notification_entries()
         mappings = {"WRITE":8, "MODIFY":2, "DELETE":512, "ATTRIBUTE":4}
-        mask =[]
+        mask = []
         for k, v in enumerate(dictio['conf_files_events']):
             for key, value in mappings.iteritems():
                 if v == key:
                     mask.append(value)
-        mask_r =0
+        mask_r = 0
         for v in mask:
             mask_r |= v
         wm = pyinotify.WatchManager()
