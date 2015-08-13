@@ -13,6 +13,7 @@ import pyinotify
 import smtplib
 import email.utils
 import sys
+import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import inspect
@@ -554,6 +555,7 @@ class EventHandler(pyinotify.ProcessEvent):
         conf = ConfigReader()
         #self.desktop_dictio = conf.get_notification_entries()
         self.mail_dictio = conf.get_mail_entries()
+        self.strings = ""
 
     def process_IN_CLOSE_WRITE(self, event):
         string1 = "file " +event.pathname + " written"
@@ -619,15 +621,18 @@ class EventHandler(pyinotify.ProcessEvent):
 
     def get_caller(self):
         return inspect.stack()[2][3]
+
     def wait_for(self, string):
         caller = self.get_caller()
         strings = ""
         if caller == "process._IN_MODIFY":
             strings += string + "\r\n"
+            strings = self.strings
+            return self.strings
         elif caller == "process._IN_CLOSE_WRITE":
-            strings += string
+            self.strings += string + "\r\n"
             mail = Mailer()
-            mail.run(strings, self.mail_dictio)
+            mail.run(self.strings, self.mail_dictio)
 
 class FileNotifier():
     def __init__(self):
