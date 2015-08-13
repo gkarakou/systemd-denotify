@@ -13,8 +13,10 @@ import pyinotify
 import smtplib
 import email.utils
 import sys
+import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import inspect
 
 class ConfigReader():
     """
@@ -59,14 +61,14 @@ class ConfigReader():
         conf.read('/etc/systemd-denotify.conf')
         dictionary = {}
         dictionary = {}
-        dictionary['conf_email_on_user_logins'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_user_logins")
-        dictionary['conf_email_on_failed_services'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_failed_services")
-        dictionary['conf_email_on_file_alteration'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_file_alteration")
-        dictionary['conf_email_on_services_statuses'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_services_statuses")
+        dictionary['email_on_user_logins'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_user_logins")
+        dictionary['email_on_failed_services'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_failed_services")
+        dictionary['email_on_file_alteration'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_file_alteration")
+        dictionary['email_on_services_statuses'] = conf.getboolean("EMAIL_NOTIFICATIONS", "email_on_services_statuses")
 
-        dictionary['conf_email_subject'] = conf.get("EMAIL", "subject")
-        dictionary['conf_email_to'] = conf.get("EMAIL", "mail_to")
-        dictionary['conf_email_from'] = conf.get("EMAIL", "mail_from")
+        dictionary['email_subject'] = conf.get("EMAIL", "subject")
+        dictionary['email_to'] = conf.get("EMAIL", "mail_to")
+        dictionary['email_from'] = conf.get("EMAIL", "mail_from")
 
 
         #parse [AUTH]
@@ -338,7 +340,7 @@ class ServiceStatusChecker():
             bus = SystemBus()
             systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
             manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-
+            statuses = ""
             append = ".service"
             for a in dictio['conf_services']:
                 a+= append
@@ -375,50 +377,18 @@ class ServiceStatusChecker():
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-denotify: "+message)
+                statuses += status + "\r\n"
                 if notificated:
                     del notificated
-        elif dictionar['email_on_services_statuses'] == True and dictio['conf_services_start'] == True and isinstance(dictio['conf_services_interval'], int) and isinstance(dictio['conf_services'], list):
-            secs = int(dictio['conf_services_interval']) * 60
-            threading.Timer(secs, self.run).start()
-            bus = SystemBus()
-            systemd = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
-            manager = Interface(systemd, dbus_interface='org.freedesktop.systemd1.Manager')
-
-            append = ".service"
-            for a in dictio['conf_services']:
-                a+= append
-                try:
-                    getUnit = manager.LoadUnit(a)
-                except  Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                try:
-                    proxy = bus.get_object('org.freedesktop.systemd1', getUnit)
-                except  Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                try:
-                    service_properties = Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                try:
-                    state = service_properties.Get('org.freedesktop.systemd1.Unit', 'ActiveState')
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
-                status = a + " status: %s" % state
-                try:
-                    mail = Mailer()
-                    mail.run(status, dictionar)
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
+            for k, v in dictionar.iteritems():
+                if k == 'email_on_services_statuses' and v == True:
+                    try:
+                        mail = Mailer()
+                        mail.run(statuses, dictionar)
+                    except Exception as ex:
+                        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                        message = template.format(type(ex).__name__, ex.args)
+                        journal.send("systemd-denotify: "+message)
         else:
             return False
 
@@ -475,9 +445,10 @@ class LogindMonitor(threading.Thread):
                     journal.send("systemd-denotify: "+message)
                 if notificatio:
                     del notificatio
-                if dictiona['email_on_user_logins'] == True:
-                    mail = Mailer()
-                    mail.run("login from user id: "+str(user) +" at "+str(now)[:19], diction)
+                for k, v in dictiona.iteritems():
+                    if k == 'email_on_user_logins' and v == True:
+                        mail = Mailer()
+                        mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
     def __del__(self):
         """
         __del__
@@ -545,9 +516,10 @@ class JournalParser(threading.Thread):
                                 notificatio.show()
                                 if notificatio:
                                     del notificatio
-                                if dictiona['email_on_failed_services'] == True:
-                                    mail = Mailer()
-                                    mail.run(string, diction)
+                                for k, v in dictiona.iteritems():
+                                    if k == 'email_on_failed_services' and v == True:
+                                        mail = Mailer()
+                                        mail.run(string, dictiona)
                             else:
                                 continue
                         except Exception as ex:
@@ -583,6 +555,7 @@ class EventHandler(pyinotify.ProcessEvent):
         conf = ConfigReader()
         #self.desktop_dictio = conf.get_notification_entries()
         self.mail_dictio = conf.get_mail_entries()
+        self.strings = ""
 
     def process_IN_CLOSE_WRITE(self, event):
         string1 = "file " +event.pathname + " written"
@@ -594,9 +567,11 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
+                self.wait_for(string1)
+                #mail = Mailer()
+                #mail.run(string1, self.mail_dictio)
 
     def process_IN_MODIFY(self, event):
         string1 = "file " +event.pathname + " modified"
@@ -608,9 +583,11 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
+                self.wait_for(string1)
+            #    mail = Mailer()
+            #    mail.run(string1, self.mail_dictio)
 
     def process_IN_MOVED_TO(self, event):
         string1 = "file " +event.pathname + " overwritten"
@@ -622,9 +599,10 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
+                mail = Mailer()
+                mail.run(string1, self.mail_dictio)
 
     def process_IN_ATTRIB(self, event):
         string1 = "files " +event.pathname + " metadata changed"
@@ -636,37 +614,46 @@ class EventHandler(pyinotify.ProcessEvent):
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             journal.send("systemd-denotify: "+message)
-        if self.mail_dictio['email_on_file_alteration'] == True:
-            mail = Mailer()
-            mail.run(string1, self.mail_dictio)
+        for k, v in self.mail_dictio.iteritems():
+            if k == 'email_on_file_alteration' and v == True:
+                mail = Mailer()
+                mail.run(string1, self.mail_dictio)
 
+    def get_caller(self):
+        return inspect.stack()[2][3]
+
+    def wait_for(self, string):
+        caller = self.get_caller()
+        strings = ""
+        if caller == "process_IN_MODIFY":
+            self.strings += string + "\r\n"
+            print "inside wait_for in if process_IN_MODIFY " + self.strings
+            return self.strings
+        elif caller == "process_IN_CLOSE_WRITE":
+            self.strings += string + "\r\n"
+            print "inside wait_for in elif process_IN_CLOSE_WRITE " + self.strings
+            mail = Mailer()
+            mail.run(self.strings, self.mail_dictio)
 
 class FileNotifier():
     def __init__(self):
         c_read = ConfigReader()
         dictio = c_read.get_notification_entries()
-        #mappings = {"WRITE":pyinotify.IN_CLOSE_WRITE, "MODIFY":pyinotify.IN_MODIFY, "DELETE":pyinotify.IN_DELETE, "ATTRIBUTE":pyinotify.IN_ATTRIB}
         mappings = {"WRITE":8, "MODIFY":2, "DELETE":512, "ATTRIBUTE":4}
-        mask = ""
-        mask1 = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MODIFY | pyinotify.IN_DELETE
+        mask = []
         for k, v in enumerate(dictio['conf_files_events']):
-                for key, value in mappings.iteritems():
-                    if  k == len(dictio['conf_files_events']) -1:
-                        if v == key: 
-                            mask += str(value) 
-        #debug 
-                    else:
-                        if v == key: 
-                            mask += str(value) +"|" 
-        #mask = mask[1:-1]
-        mask = mask.strip('"')
-        journal.send("systemd-denotify: "+" DEBUG " + mask + " mask1 " + str(mask1) + " typeof mask " + str(type(mask)) +" typeof mask1 " + str(type(mask1)))
+            for key, value in mappings.iteritems():
+                if v == key:
+                    mask.append(value)
+        mask_r = 0
+        for v in mask:
+            mask_r |= v
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
         # Start watching  paths
         for d in dictio['conf_files_directories']:
-            wm.add_watch(d, int(mask), rec=True)
+            wm.add_watch(d, mask_r, rec=True)
 
 
 if __name__ == "__main__":
