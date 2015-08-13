@@ -581,8 +581,9 @@ class EventHandler(pyinotify.ProcessEvent):
             journal.send("systemd-denotify: "+message)
         for k, v in self.mail_dictio.iteritems():
             if k == 'email_on_file_alteration' and v == True:
-                mail = Mailer()
-                mail.run(string1, self.mail_dictio)
+                self.wait_for(string1)
+            #    mail = Mailer()
+            #    mail.run(string1, self.mail_dictio)
 
     def process_IN_MOVED_TO(self, event):
         string1 = "file " +event.pathname + " overwritten"
@@ -614,6 +615,10 @@ class EventHandler(pyinotify.ProcessEvent):
                 mail = Mailer()
                 mail.run(string1, self.mail_dictio)
 
+    def wait_for(self, string):
+
+        f = sys._current_frames().values()[0]
+        print f.__f_back.f_globals['__name__']
 
 class FileNotifier():
     def __init__(self):
