@@ -13,7 +13,6 @@ import pyinotify
 import smtplib
 import email.utils
 import sys
-import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import inspect
@@ -627,11 +626,11 @@ class EventHandler(pyinotify.ProcessEvent):
         strings = ""
         if caller == "process_IN_MODIFY":
             self.strings += string + "\r\n"
-            print "inside wait_for in if process_IN_MODIFY " + self.strings
+        #    print "inside wait_for in if process_IN_MODIFY " + self.strings
             return self.strings
         elif caller == "process_IN_CLOSE_WRITE":
             self.strings += string + "\r\n"
-            print "inside wait_for in elif process_IN_CLOSE_WRITE " + self.strings
+         #   print "inside wait_for in elif process_IN_CLOSE_WRITE " + self.strings
             mail = Mailer()
             mail.run(self.strings, self.mail_dictio)
 
@@ -645,15 +644,15 @@ class FileNotifier():
             for key, value in mappings.iteritems():
                 if v == key:
                     mask.append(value)
-        mask_r = 0
+        mask_ = 0
         for v in mask:
-            mask_r |= v
+            mask_ |= v
         wm = pyinotify.WatchManager()
         notifier = pyinotify.ThreadedNotifier(wm, EventHandler())
         notifier.start()
         # Start watching  paths
         for d in dictio['conf_files_directories']:
-            wm.add_watch(d, mask_r, rec=True)
+            wm.add_watch(d, mask_, rec=True)
 
 
 if __name__ == "__main__":
