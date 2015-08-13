@@ -15,6 +15,7 @@ import email.utils
 import sys
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import inspect
 
 class ConfigReader():
     """
@@ -615,10 +616,11 @@ class EventHandler(pyinotify.ProcessEvent):
                 mail = Mailer()
                 mail.run(string1, self.mail_dictio)
 
+    def get_caller(self):
+        return inspect.stack()[2][3]
     def wait_for(self, string):
 
-        f = sys._current_frames().values()[0]
-        print f.__f_back.f_globals['__name__']
+        print self.get_caller()
 
 class FileNotifier():
     def __init__(self):
