@@ -625,12 +625,14 @@ class EventHandler(pyinotify.ProcessEvent):
     def wait_for(self, string):
         caller = self.get_caller()
         strings = ""
-        if caller == "process._IN_MODIFY":
+        if caller == "process_IN_MODIFY":
             strings += string + "\r\n"
             strings = self.strings
+            print "inside wait_for in if process_IN_MODIFY " + self.strings
             return self.strings
-        elif caller == "process._IN_CLOSE_WRITE":
+        elif caller == "process_IN_CLOSE_WRITE":
             self.strings += string + "\r\n"
+            print "inside wait_for in elif processIN_CLOSE_WRITE " + self.strings
             mail = Mailer()
             mail.run(self.strings, self.mail_dictio)
 
