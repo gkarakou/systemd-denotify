@@ -27,9 +27,11 @@ from distutils.core import setup
 
 setup(
 name = 'systemd-denotify',
-version = '1.0',
-description = 'systemd related desktop notifications',
-long_description = 'A python based desktop app that notifies for user logins, failed systemd services, monitored files and the status of selected services',
+version = '1.1',
+description = 'systemd related desktop and email notifications',
+long_description = 'A python based app that notifies for user logins, failed
+systemd services, monitored files and the status of selected services. It can
+email those notifications you too!',
 author = 'George Karakougioumtzis <gkarakou>',
 author_email = 'gkarakou@gmail.com',
 url = 'https://github.com/gkarakou/systemd-denotify',
@@ -40,7 +42,7 @@ package_data = {'systemd-denotify': ['conf/*']},
 install_requires= ['dbus-python', 'pygobject', 'python-systemd', 'pyinotify'],
 #dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
 #cmdclass = {'install': MyInstall},
-classifiers = ['Development Status :: 1.0 - Stable',
+classifiers = ['Development Status :: 1.1 - Stable',
 'Environment :: Desktop',
 'Intended Audience :: End Users/Desktop',
 'Intended Audience :: System Administrators',
