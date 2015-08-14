@@ -3,8 +3,8 @@
 GENERAL
 -------------------
 systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings.
-These classes provide desktop notification upon a user login, when systemd files are modified and when services fail.
-There is also one class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
+These classes provide desktop and email notification upon a user login, when systemd files are modified and when services fail.
+There is also another class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
 One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
 
 NOTE: if you use vim to edit files that are being monitored by systemd-denotify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
