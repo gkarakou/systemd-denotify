@@ -1,5 +1,7 @@
 # systemd-denotify
 
+Updated to v1.1
+
 GENERAL
 -------------------
 systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings.
