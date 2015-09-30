@@ -7,6 +7,8 @@ import time
 import datetime
 from systemd import journal
 from threading import Thread
+import gi
+gi.require_version('Notify', '0.7')
 from gi.repository import Notify
 import ConfigParser
 import pyinotify
