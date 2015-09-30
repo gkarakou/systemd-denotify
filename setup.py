@@ -29,8 +29,8 @@ setup(
 name = 'systemd-denotify',
 version = '1.1',
 description = 'systemd related desktop and email notifications',
-long_description = 'A python based app that notifies for user logins, failed
-systemd services, monitored files and the status of selected services. It can
+long_description = 'A python based app that notifies for user logins, failed \
+systemd services, monitored files and the status of selected services. It can \
 email those notifications you too!',
 author = 'George Karakougioumtzis <gkarakou>',
 author_email = 'gkarakou@gmail.com',
