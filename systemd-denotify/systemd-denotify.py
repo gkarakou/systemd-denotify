@@ -43,7 +43,7 @@ class ConfigReader():
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
-        journal.send("systemd-denotify inside get_notification_entries: "+ " conf_patterns_patts type " + str(type(dictionary['conf_patterns_pats'])))
+        #journal.send("systemd-denotify inside get_notification_entries: "+ " conf_patterns_patts type " + str(type(dictionary['conf_patterns_pats'])))
         #if isinstance(dictionary['conf_pattern_patts'], list):
         if "," in dictionary['conf_pattern_patts']:
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
