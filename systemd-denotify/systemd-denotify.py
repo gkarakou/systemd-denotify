@@ -500,10 +500,7 @@ class JournalParser(threading.Thread):
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
-            if isinstance(dictionn['conf_pattern_patterns'], list):
-                patterns += dictionn['conf_pattern_patterns']
-            elif isinstance(dictionn['conf_pattern_patterns'], str):
-                patterns.append(dictionn['conf_pattern_patterns'])
+            patterns += dictionn['conf_pattern_patterns']
         if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
         # debug
