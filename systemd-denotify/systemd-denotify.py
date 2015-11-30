@@ -41,6 +41,10 @@ class ConfigReader():
         dictionary['conf_logins_start'] = conf.getboolean("Logins", "start")
         #parse FailedServices
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
+        #parse patterns section
+        dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
+        dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
+        dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
@@ -485,6 +489,14 @@ class JournalParser(threading.Thread):
         """
         conf = ConfigReader()
         dictiona = conf.get_mail_entries()
+        dictionn = conf.get_notification_entries()
+        #make a new list holding the values of patterns and/or failedservices
+        patterns = []
+        if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
+            for p in dictionn['conf_pattern_patterns']:
+                patterns.append(p)
+        if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
+            patterns.append("entered failed state")
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -506,21 +518,21 @@ class JournalParser(threading.Thread):
                 j_reader.get_next()
                 for entry in j_reader:
                     if 'MESSAGE' in entry:
-                        pattern = "entered failed state"
                         try:
                             string = entry['MESSAGE']
-                            if string and pattern in string:
-                                Notify.init("systemd-denotify")
-                                notificatio=Notify.Notification.new("systemd-denotify", string)
-                                notificatio.show()
-                                if notificatio:
-                                    del notificatio
-                                for k, v in dictiona.iteritems():
-                                    if k == 'email_on_failed_services' and v == True:
-                                        mail = Mailer()
-                                        mail.run(string, dictiona)
-                            else:
-                                continue
+                            for pattern in patterns:
+                                if string and pattern in string:
+                                    Notify.init("systemd-denotify")
+                                    notificatio = Notify.Notification.new("systemd-denotify", string)
+                                    notificatio.show()
+                                    if notificatio:
+                                        del notificatio
+                                    for key, value in dictiona.iteritems():
+                                        if key == 'email_on_failed_services' and value == True or key == 'email_on_journal_pattern_match' and value == True:
+                                            mail = Mailer()
+                                            mail.run(string, dictiona)
+                                else:
+                                    continue
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
@@ -680,7 +692,7 @@ if __name__ == "__main__":
 
     if isinstance(diction['conf_files_start'], bool) and diction['conf_files_start'] == True:
         FileNotifier()
-    if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True:
+    if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True or isinstance(diction['conf_pattern_matcher_start'], bool) and diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
         jp.daemon = True
         jp.start()
