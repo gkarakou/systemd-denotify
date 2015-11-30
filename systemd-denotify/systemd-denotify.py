@@ -43,14 +43,14 @@ class ConfigReader():
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
-        if isinstance(dictionary['conf_patterns_patts'], list):
+        if isinstance(dictionary['conf_patterns_patts'], dict):
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
         else:
             dictionary['conf_pattern_patterns'] = dictionary['conf_patterns_patts']
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
-        if isinstance(dictionary['conf_files_dirs'], list):
+        if isinstance(dictionary['conf_files_dirs'], dict):
             dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
         else:
             dictionary['conf_files_directories'] = dictionary['conf_files_dirs']
@@ -498,7 +498,7 @@ class JournalParser(threading.Thread):
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
-            if isinstance(dictionn['conf_pattern_patterns'], list):
+            if isinstance(dictionn['conf_pattern_patterns'], dict):
                 patterns += dictionn['conf_pattern_patterns']
             else:
                 patterns.append(dictionn['conf_pattern_patterns'])
