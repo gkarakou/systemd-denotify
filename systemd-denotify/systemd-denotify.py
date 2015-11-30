@@ -41,21 +41,17 @@ class ConfigReader():
         dictionary['conf_logins_start'] = conf.getboolean("Logins", "start")
         #parse FailedServices
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
+        #parse patterns section
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
-        #if isinstance(dictionary['conf_pattern_patts'], str) and  "," in dictionary['conf_pattern_patts']:
-        dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split()
-        #elif isinstance(dictionary['conf_pattern_patts'], str) and  not "," in dictionary['conf_pattern_patts']:
-        #    dictionary['conf_pattern_patterns'] = str(dictionary['conf_pattern_patts'])
+        dictionary['conf_pattern_pattss'] = dictionary['conf_pattern_patts'] + ","
+        dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_pattss'].split(",")
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
-        #if "," in dictionary['conf_files_dirs']:
-        dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split()
-        #else:
-        #    dictionary['conf_files_directories'] = dictionary['conf_files_dirs']
+        dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
         dictionary['conf_files_evs'] = conf.get("Files", "events")
-        dictionary['conf_files_events'] = dictionary['conf_files_evs'].split()
+        dictionary['conf_files_events'] = dictionary['conf_files_evs'].split(",")
         #parse ServicesStatus
         dictionary['conf_services_start'] = conf.getboolean("ServicesStatus", "start")
         dictionary['conf_services_interval'] = conf.getint("ServicesStatus", "interval")
