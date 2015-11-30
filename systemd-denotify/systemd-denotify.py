@@ -51,11 +51,11 @@ class ConfigReader():
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
         #if "," in dictionary['conf_files_dirs']:
-        dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
+        dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split()
         #else:
         #    dictionary['conf_files_directories'] = dictionary['conf_files_dirs']
         dictionary['conf_files_evs'] = conf.get("Files", "events")
-        dictionary['conf_files_events'] = dictionary['conf_files_evs'].split(",")
+        dictionary['conf_files_events'] = dictionary['conf_files_evs'].split()
         #parse ServicesStatus
         dictionary['conf_services_start'] = conf.getboolean("ServicesStatus", "start")
         dictionary['conf_services_interval'] = conf.getint("ServicesStatus", "interval")
@@ -501,6 +501,7 @@ class JournalParser(threading.Thread):
             patterns += dictionn['conf_pattern_patterns']
         if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
+            #patterns += "entered failed state"
         # debug
         for i in patterns:
             journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
