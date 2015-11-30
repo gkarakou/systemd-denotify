@@ -44,10 +44,11 @@ class ConfigReader():
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
         journal.send("systemd-denotify inside get_notification_entries: "+ " conf_patterns_patts type " + str(type(dictionary['conf_patterns_pats'])))
-        if isinstance(dictionary['conf_patterns_patts'], list):
+        if isinstance(dictionary['conf_pattern_patts'], list):
+        #if "," in dictionary['conf_patterns'] 
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
-        elif isinstance(dictionary['conf_patterns_patts'], str):
-            dictionary['conf_pattern_patterns'] = dictionary['conf_patterns_patts']
+        elif isinstance(dictionary['conf_pattern_patts'], str):
+            dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts']
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
