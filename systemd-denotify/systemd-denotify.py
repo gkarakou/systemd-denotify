@@ -46,7 +46,7 @@ class ConfigReader():
         if isinstance(dictionary['conf_pattern_patts'], str) and  "," in dictionary['conf_pattern_patts']:
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
         elif isinstance(dictionary['conf_pattern_patts'], str) and  not "," in dictionary['conf_pattern_patts']:
-            dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts']
+            dictionary['conf_pattern_patterns'] = str(dictionary['conf_pattern_patts'])
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
