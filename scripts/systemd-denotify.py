@@ -41,6 +41,7 @@ class ConfigReader():
         dictionary['conf_logins_start'] = conf.getboolean("Logins", "start")
         #parse FailedServices
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
+        #parse patterns section
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
         dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
@@ -492,12 +493,10 @@ class JournalParser(threading.Thread):
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
-            patterns += dictionn['conf_pattern_patterns']
-        if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
+            for p in dictionn['conf_pattern_patterns']:
+                patterns.append(p)
+        if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
-        # debug
-        #for i in patterns:
-        #    journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -528,8 +527,8 @@ class JournalParser(threading.Thread):
                                     notificatio.show()
                                     if notificatio:
                                         del notificatio
-                                    for k, v in dictiona.iteritems():
-                                        if k == 'email_on_failed_services' and v == True or k == 'email_on_journal_pattern_match' and v == True:
+                                    for key, value in dictiona.iteritems():
+                                        if key == 'email_on_failed_services' and value == True or key == 'email_on_journal_pattern_match' and value == True:
                                             mail = Mailer()
                                             mail.run(string, dictiona)
                                 else:
