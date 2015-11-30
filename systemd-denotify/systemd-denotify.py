@@ -44,7 +44,7 @@ class ConfigReader():
         #parse patterns section
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
-        dictionary['conf_pattern_pattss'] = dictionary['conf_pattern_patts'] + ","
+        dictionary['conf_pattern_pattss'] = dictionary['conf_pattern_patts']
         dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_pattss'].split(",")
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
