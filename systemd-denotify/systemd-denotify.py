@@ -496,8 +496,8 @@ class JournalParser(threading.Thread):
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
             patterns.append("entered failed state")
         # debug
-        for i in patterns:
-            journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
+        #for i in patterns:
+        #    journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -537,7 +537,7 @@ class JournalParser(threading.Thread):
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
-                            journal.send("systemd-denotify in journalParser: "+message)
+                            journal.send("systemd-denotify: "+message)
                     else:
                         continue
             else:
