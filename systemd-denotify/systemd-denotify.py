@@ -494,9 +494,8 @@ class JournalParser(threading.Thread):
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
-            #patterns += dictionn['conf_pattern_patterns']
             for p in dictionn['conf_pattern_patterns']:
-                patterns.append(str(p))
+                patterns.append(p)
         if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
         # debug
@@ -532,8 +531,8 @@ class JournalParser(threading.Thread):
                                     notificatio.show()
                                     if notificatio:
                                         del notificatio
-                                    for k, v in dictiona.iteritems():
-                                        if k == 'email_on_failed_services' and v == True or k == 'email_on_journal_pattern_match' and v == True:
+                                    for key, value in dictiona.iteritems():
+                                        if key == 'email_on_failed_services' and value == True or key == 'email_on_journal_pattern_match' and value == True:
                                             mail = Mailer()
                                             mail.run(string, dictiona)
                                 else:
