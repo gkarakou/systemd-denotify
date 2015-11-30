@@ -495,10 +495,10 @@ class JournalParser(threading.Thread):
             patterns.append("entered failed state")
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
             for i in dictionn['conf_pattern_patterns']:
-                patterns.append(str(i))
+                patterns.append(i)
         # debug
-        #for i in patterns:
-        #    journal.send("systemd-denotify pattern_match: "+str(i))
+        for i in patterns:
+            journal.send("systemd-denotify pattern_match: "+str(i))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
