@@ -523,7 +523,7 @@ class JournalParser(threading.Thread):
                         try:
                             string = entry['MESSAGE']
                             for pattern in patterns:
-                                if string and str(pattern) in string:
+                                if string and pattern in string:
                                     Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
