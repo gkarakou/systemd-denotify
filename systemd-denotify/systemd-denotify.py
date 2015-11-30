@@ -492,11 +492,11 @@ class JournalParser(threading.Thread):
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
-            patterns.append("entered failed state")
-        if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
             for i in dictionn['conf_pattern_patterns']:
-                stringi = ""+ str(i) +""
+                stringi = " "+ str(i) +" "
                 patterns.append(stringi)
+        if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
+            patterns.append("entered failed state")
         # debug
         for i in patterns:
             journal.send("systemd-denotify pattern_match: "+str(i))
