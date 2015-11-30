@@ -497,7 +497,7 @@ class JournalParser(threading.Thread):
             patterns.append("entered failed state")
         # debug
         for i in patterns:
-            journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof conf_pattern_patterns "+ str(type(dictionn['conf_pattern_patterns']))+ " typeof patterns "+ str(type(patterns)))
+            journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
