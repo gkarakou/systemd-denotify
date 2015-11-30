@@ -44,17 +44,17 @@ class ConfigReader():
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
         journal.send("systemd-denotify inside get_notification_entries: "+ " conf_patterns_patts type " + str(type(dictionary['conf_patterns_pats'])))
-        if isinstance(dictionary['conf_pattern_patts'], list):
-        #if "," in dictionary['conf_patterns'] 
+        #if isinstance(dictionary['conf_pattern_patts'], list):
+        if "," in dictionary['conf_pattern_patts']:
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
-        elif isinstance(dictionary['conf_pattern_patts'], str):
+        else:
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts']
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
-        if isinstance(dictionary['conf_files_dirs'], list):
+        if "," in dictionary['conf_files_dirs']:
             dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
-        elif isinstance(dictionary['conf_files_dirs'], str):
+        else:
             dictionary['conf_files_directories'] = dictionary['conf_files_dirs']
         dictionary['conf_files_evs'] = conf.get("Files", "events")
         dictionary['conf_files_events'] = dictionary['conf_files_evs'].split(",")
