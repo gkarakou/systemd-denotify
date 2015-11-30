@@ -43,7 +43,6 @@ class ConfigReader():
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
-        #journal.send("systemd-denotify inside get_notification_entries: "+ " conf_patterns_patts type " + str(type(dictionary['conf_patterns_pats'])))
         #if isinstance(dictionary['conf_pattern_patts'], list):
         if "," in dictionary['conf_pattern_patts']:
             dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
@@ -504,8 +503,8 @@ class JournalParser(threading.Thread):
         if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
         # debug
-        #for i in patterns:
-        #    journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
+        for i in patterns:
+            journal.send("systemd-denotify pattern_match: "+str(i)+ " typeof pattern"+ str(type(i)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
