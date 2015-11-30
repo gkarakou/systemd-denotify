@@ -43,11 +43,17 @@ class ConfigReader():
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")
-        dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
+        if isinstance(dictionary['conf_patterns_patts'], list):
+            dictionary['conf_pattern_patterns'] = dictionary['conf_pattern_patts'].split(",")
+        else:
+            dictionary['conf_pattern_patterns'] = dictionary['conf_patterns_patts']
         #parse Files section
         dictionary['conf_files_start'] = conf.getboolean("Files", "start")
         dictionary['conf_files_dirs'] = conf.get("Files", "directories")
-        dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
+        if isinstance(dictionary['conf_files_dirs'], list):
+            dictionary['conf_files_directories'] = dictionary['conf_files_dirs'].split(",")
+        else:
+            dictionary['conf_files_directories'] = dictionary['conf_files_dirs']
         dictionary['conf_files_evs'] = conf.get("Files", "events")
         dictionary['conf_files_events'] = dictionary['conf_files_evs'].split(",")
         #parse ServicesStatus
@@ -492,8 +498,11 @@ class JournalParser(threading.Thread):
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
-            patterns += dictionn['conf_pattern_patterns']
-        if isinstance(dictionn['conf_pattern_matcher_start'], bool) and dictionn['conf_pattern_matcher_start'] == True:
+            if isinstance(dictionn['conf_pattern_patterns'], list):
+                patterns += dictionn['conf_pattern_patterns']
+            else:
+                patterns.append(dictionn['conf_pattern_patterns'])
+        if isinstance(dictionn['conf_failed_services_start'], bool) and dictionn['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
         # debug
         #for i in patterns:
