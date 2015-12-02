@@ -67,8 +67,8 @@ class Mailer(threading.Thread):
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-denotify: "+message)
                 finally:
-                     s.quit()
-                     del s
+                    s.quit()
+                    del s
             else:
                 pass
         #smtps
@@ -76,7 +76,7 @@ class Mailer(threading.Thread):
             # no auth ?
             if  dictionary['auth'] == False:
                 try:
-                    if len(dictionary['smtps_cert']) >0 and len(dictionary['smtps_key'])>0:
+                    if len(dictionary['smtps_cert']) > 0 and len(dictionary['smtps_key']) > 0:
                         s = smtplib.SMTP_SSL(host=str(dictionary['smtps_host']), port=dictionary['smtps_port'], keyfile=dictionary['smtps_key'], certfile=dictionary['smtps_cert'])
                         s.ehlo_or_helo_if_needed()
                         send = s.sendmail(str(dictionary['email_from']), [str(dictionary['email_to'])], msg.as_string())
@@ -95,7 +95,7 @@ class Mailer(threading.Thread):
             elif dictionary['auth'] == True:
                 try:
                     #check whether it is a real file and pem encoded
-                    if len(dictionary['smtps_cert']) >0 and len(dictionary['smtps_key'])>0:
+                    if len(dictionary['smtps_cert']) > 0 and len(dictionary['smtps_key']) > 0:
                         s = smtplib.SMTP_SSL(host=str(dictionary['smtps_host']), port=dictionary['smtps_port'], keyfile=dictionary['smtps_key'], certfile=dictionary['smtps_cert'])
                         s.ehlo_or_helo_if_needed()
                         s.login(dictionary['auth_user'], dictionary['auth_password'])
@@ -125,7 +125,7 @@ class Mailer(threading.Thread):
                     #http://pymotw.com/2/smtplib/
                     if s.has_extn("STARTTLS"):
                         #check whether it is a real file and pem encoded
-                        if len(dictionary['starttls_cert']) >0 and len(dictionary['starttls_key'])>0:
+                        if len(dictionary['starttls_cert']) > 0 and len(dictionary['starttls_key']) > 0:
                             s.starttls(keyfile=dictionary['starttls_key'], certfile=dictionary['starttls_cert'])
                             s.ehlo()
                             send = s.sendmail(str(dictionary['email_from']), [str(dictionary['email_to'])], msg.as_string())
