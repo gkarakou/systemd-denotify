@@ -40,6 +40,8 @@ class JournalParser(threading.Thread):
                 patterns.append(pat)
         if isinstance(dict_notifications['conf_failed_services_start'], bool) and dict_notifications['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
+        for pater in patterns:
+            journal.send("systemd-denotify: DEBUG: " + "PATTERN " +str(pater) + " type of pattern " + str(type(pater)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
