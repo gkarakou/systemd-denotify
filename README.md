@@ -40,7 +40,7 @@ python2 setup.py sdist
 
 </pre>
 
-BUILD FOR FEDORA 22/23
+BUILD FOR FEDORA 21
 ------------------
 <pre>
 git clone https://github.com/gkarakou/systemd-denotify.git
@@ -49,7 +49,7 @@ cd systemd-denotify
 
 sudo python setup.py bdist_rpm --requires "python,  systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, dbus, dbus-python, xorg-x11-server-Xorg" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh
 
-sudo dnf --nogpgcheck localinstall dist/systemd-denotify-1.0-2.noarch.rpm
+sudo yum --nogpgcheck localinstall dist/systemd-denotify-1.2-1.noarch.rpm
 
 </pre>
 
