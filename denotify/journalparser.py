@@ -31,14 +31,14 @@ class JournalParser(threading.Thread):
         Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
         """
         conf = ConfigReader()
-        diction_mail = conf.get_mail_entries()
-        diction_notifications = conf.get_notification_entries()
+        dict_mail = conf.get_mail_entries()
+        dict_notifications = conf.get_notification_entries()
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
-        if isinstance(diction_notifications['conf_pattern_matcher_start'], bool) and diction_notifications['conf_pattern_matcher_start'] == True:
-            for pat in diction_notifications['conf_pattern_patterns']:
+        if isinstance(dict_notifications['conf_pattern_matcher_start'], bool) and dict_notifications['conf_pattern_matcher_start'] == True:
+            for pat in dict_notifications['conf_pattern_patterns']:
                 patterns.append(pat)
-        if isinstance(diction_notifications['conf_failed_services_start'], bool) and diction_notifications['conf_failed_services_start'] == True:
+        if isinstance(dict_notifications['conf_failed_services_start'], bool) and dict_notifications['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
@@ -70,10 +70,10 @@ class JournalParser(threading.Thread):
                                     notificatio.show()
                                     if notificatio:
                                         del notificatio
-                                    for key, value in diction_mail.iteritems():
+                                    for key, value in dict_mail.iteritems():
                                         if key == 'email_on_failed_services' and value == True or key == 'email_on_journal_pattern_match' and value == True:
                                             mail = Mailer()
-                                            mail.run(string, diction_mail)
+                                            mail.run(string, dict_mail)
                                 else:
                                     continue
                         except Exception as ex:
