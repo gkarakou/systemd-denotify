@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 import pyinotify
-from .ConfigReader import ConfigReader
-from .EventHandler import EventHandler
+from .configreader import ConfigReader
+from .eventhandler import EventHandler
 
 class FileNotifier():
     def __init__(self):

@@ -1,6 +1,6 @@
 #!/usr/bin/python2
-from .ConfigReader import ConfigReader
-from .Mailer import Mailer
+from .configreader import ConfigReader
+from .mailer import Mailer
 from dbus import SystemBus, Interface
 import threading
 from systemd import journal
