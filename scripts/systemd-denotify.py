@@ -1,9 +1,9 @@
 #!/usr/bin/python2
-from .ConfigReader import ConfigReader
-from .ServiceStatusChecker import ServiceStatusChecker
-from .LogindMonitor import LogindMonitor
-from .JournalParser import JournalParser
-from .FileNotifier import FileNotifier
+from systemd-denotify.ConfigReader import ConfigReader
+from systemd-denotify.ServiceStatusChecker import ServiceStatusChecker
+from systemd-denotify.LogindMonitor import LogindMonitor
+from systemd-denotify.JournalParser import JournalParser
+from systemd-denotify.FileNotifier import FileNotifier
 from systemd import journal
 
 if __name__ == "__main__":
