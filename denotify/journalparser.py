@@ -33,6 +33,13 @@ class JournalParser(threading.Thread):
         conf = ConfigReader()
         dict_mail = conf.get_mail_entries()
         dict_notifications = conf.get_notification_entries()
+        mail_on_failed = False
+        mail_on_pattern = False
+        for key, value in dict_mail.iteritems():
+            if key == 'email_on_failed_services' and value == True:
+                mail_on_failed = True
+            if key == 'email_on_journal_pattern_match' and value == True:
+                mail_on_pattern = True
         #make a new list holding the values of patterns and/or failedservices
         patterns = []
         if isinstance(dict_notifications['conf_pattern_matcher_start'], bool) and dict_notifications['conf_pattern_matcher_start'] == True:
@@ -72,10 +79,9 @@ class JournalParser(threading.Thread):
                                     notificatio.show()
                                     if notificatio:
                                         del notificatio
-                                    for key, value in dict_mail.iteritems():
-                                        if key == 'email_on_failed_services' and value == True or key == 'email_on_journal_pattern_match' and value == True:
-                                            mail = Mailer()
-                                            mail.run(string, dict_mail)
+                                    if mail_on_failed == True or mail_on_pattern == True:
+                                        mail = Mailer()
+                                        mail.run(string, dict_mail)
                                 else:
                                     continue
                         except Exception as ex:
