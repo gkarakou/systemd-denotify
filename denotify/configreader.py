@@ -1,5 +1,7 @@
 #!/usr/bin/python2
 import ConfigParser
+import sys
+
 class ConfigReader():
     """
     ConfigReader
