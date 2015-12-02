@@ -483,7 +483,7 @@ class JournalParser(threading.Thread):
     def run(self):
         """
         run
-        return void
+        return void(Actually returns None type in python)
         :desc: function that goes on an infinite loop polling the systemd-journal for failed services
         Helpful API->http://www.freedesktop.org/software/systemd/python-systemd/
         """
