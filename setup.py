@@ -23,7 +23,10 @@
 #    from install_script import Installer
 #else:
 #    from .install_script import Installer
-from distutils.core import setup
+try:
+  from setuptools import setup 
+except ImportError:
+  from distutils.core import setup
 
 setup(
 name = 'systemd-denotify',
