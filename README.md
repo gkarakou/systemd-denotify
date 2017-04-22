@@ -55,6 +55,14 @@ sudo dnf --nogpgcheck install systemd-denotify-1.2-1.noarch.rpm
 
 </pre>
 
+Trouble installing?
+Verify that you have all the build tools installed (rpm-build-libs, autobuildrequires, python2-devel) and update the system.
+If you still have problems add the command line parameter 
+<pre>
+--no-autoreq
+</pre>
+in the python setup.py command above.
+
 -------------------------------
 
 DEBIAN/UBUNTU
