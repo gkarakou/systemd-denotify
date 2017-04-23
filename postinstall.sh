@@ -7,7 +7,9 @@ if [ ! -z "$getXuser" ];then
 /usr/sbin/usermod -a -G systemd-journal $getXuser
 elif [ ! -z "$getXorgUser" ];then
 /usr/sbin/usermod -a -G systemd-journal $getXorgUser
-else [ ! -z "$getXwaylandUser" ];then
+elif [ ! -z "$getXwaylandUser" ];then
 /usr/sbin/usermod -a -G systemd-journal $getXwaylandUser
+else
+echo " something went wrong. Please manually add the desktop user to systemd-journal group "
 fi
 exit 0;
