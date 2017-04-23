@@ -21,6 +21,9 @@ set noswapfile
 </pre>
 You can expect data corruption if you dont have a ups, you have been warned.
 
+INSTALLATION
+------------------------------------
+
 
 Though this module is pypi ready i found it really tedious to install all the dependencies from pip.
 Unfortunately this module/app wont be uploaded to pypi. Hopefully this package gets its way into the repos.
