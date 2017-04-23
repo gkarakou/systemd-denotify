@@ -10,7 +10,8 @@ There is also another class that at a specified interval (by default 30 minutes)
 Added support for journal pattern matching in v1.2
 One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
 
-NOTE: if you use vim to edit files that are being monitored by systemd-denotify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
+ATTENTION NEEDED NOTE: 
+if you use vim to edit files that are being monitored by systemd-denotify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
 To overcome this annoyance -if and only if you have a ups installed (in the case of a power failure you will lose data) -you can edit /root/.vimrc and add these lines:
 <pre>
 set nobackup
