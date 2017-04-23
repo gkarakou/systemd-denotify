@@ -13,8 +13,8 @@ One can override the notifications he/she gets by editing the file /etc/systemd-
 
 CAUTION:
 
-if you use vim to edit files that are being monitored by systemd-denotify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too(also known as swap files =.swp).
-To overcome this annoyance -if and only if you have a ups installed (in the case of a power failure you will lose data) -you can edit /root/.vimrc and add these lines:
+if you use vim to edit files that are being monitored by systemd-denotify.py  you will be notified when the backup files that vim writes before saving a file that is modified are written too(also known as swap files =.swp).
+To overcome this annoyance you can edit /root/.vimrc and add these lines:
 <pre>
 set nobackup
 
@@ -22,7 +22,7 @@ set nowritebackup
 
 set noswapfile
 </pre>
-You can expect data corruption if you dont have a ups, you have been warned.
+You can expect data corruption if you dont have a ups installed, you have been warned.
 
 INSTALLATION
 ------------------------------------
