@@ -11,7 +11,7 @@ Added support for journal pattern matching in v1.2
 One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
 
 NOTE: if you use vim to edit files that are being monitored by systemd-denotify.py in the /etc/systemd/ and /usr/lib/systemd/ directories you will be notified when the backup files that vim writes before saving a file that is modified are written too.
-To overcome this annoyance if and only if you have a ups installed (in the case of a power failure you will lose data if you dont own a ups) you can edit /root/.vimrc and add these lines:
+To overcome this annoyance -if and only if you have a ups installed (in the case of a power failure you will lose data) -you can edit /root/.vimrc and add these lines:
 <pre>
 set nobackup
 
@@ -19,7 +19,7 @@ set nowritebackup
 
 set noswapfile
 </pre>
-Do this only if you own a ups, you have been warned.
+You can expect data corruption if you dont have a ups, you have been warned.
 
 
 Though this module is pypi ready i found it really tedious to install all the dependencies from pip.
@@ -56,7 +56,9 @@ sudo dnf --nogpgcheck install systemd-denotify-1.2-1.noarch.rpm
 </pre>
 
 Trouble installing?
+
 Verify that you have all the build tools installed (rpm-build-libs, autobuildrequires, python2-devel) and update the system.
+
 If you still have problems add the command line parameter 
 <pre>
 --no-autoreq
