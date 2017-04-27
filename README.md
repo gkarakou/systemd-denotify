@@ -7,7 +7,7 @@ GENERAL
 systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings.
 These classes provide desktop and email notifications upon a user login, when systemd files are modified and when services fail.
 There is also another class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
-Added support for journal pattern matching in v1.2
+Added support for journal pattern matching in version 1.2. 
 One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
 
 
@@ -46,7 +46,7 @@ python2 setup.py sdist
 
 </pre>
 
-BUILD FOR FEDORA 22/23
+BUILD FOR FEDORA 22 AND UPWARDS
 ------------------
 <pre>
 git clone https://github.com/gkarakou/systemd-denotify.git
