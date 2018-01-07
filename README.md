@@ -53,18 +53,15 @@ git clone https://github.com/gkarakou/systemd-denotify.git
 
 cd systemd-denotify
 
-sudo python setup.py bdist_rpm --requires "python,  systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, dbus, dbus-python" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh
+sudo python setup.py bdist_rpm --requires "python2, systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, dbus, dbus-python" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh
 
-cd dist
-
-sudo dnf --nogpgcheck install systemd-denotify-1.2-1.noarch.rpm
+sudo dnf --nogpgcheck install dist/systemd-denotify-1.2-1.noarch.rpm
 
 </pre>
 
 Trouble installing?
 
-Verify that you have all the build tools installed (rpm-build-libs, autobuildrequires, python2-devel) and update the system.
-
+Verify that you have all the build tools installed (rpm-build-libs, auto-buildrequires, python2-devel) and update the system.
 If you still have problems add the command line parameter 
 <pre>
 --no-autoreq
