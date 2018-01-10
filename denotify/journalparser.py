@@ -1,4 +1,6 @@
 #!/usr/bin/python2
+import sys
+sys.path.append("/usr/lib/python2.7/site-packages")
 from .configreader import ConfigReader
 from .mailer import Mailer
 import threading
