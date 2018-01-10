@@ -26,6 +26,7 @@ class ConfigReader():
         dictionary['conf_logins_start'] = conf.getboolean("Logins", "start")
         #parse FailedServices
         dictionary['conf_failed_services_start'] = conf.getboolean("FailedServices", "start")
+        dictionary['conf_failed_services_espeak'] = conf.getboolean("FailedServices", "espeak")
         #parse patterns section
         dictionary['conf_pattern_matcher_start'] = conf.getboolean("JournalPatternMatcher", "start")
         dictionary['conf_pattern_patts'] = conf.get("JournalPatternMatcher", "patterns")

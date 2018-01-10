@@ -47,6 +47,8 @@ class JournalParser(threading.Thread):
                 patterns.append(pat)
         if isinstance(dict_notifications['conf_failed_services_start'], bool) and dict_notifications['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
+        if isinstance(dict_notifications['conf_failed_services_espeak'], bool) and dict_notifications['conf_failed_services_espeak'] == True:
+        espeak_on_failed = True
         #DEBUG
         #for pater in patterns:
         #journal.send("systemd-denotify: DEBUG: " + "PATTERN " +str(pater) + " type of pattern " + str(type(pater)))
@@ -80,6 +82,8 @@ class JournalParser(threading.Thread):
                                     notificatio.show()
                                     if notificatio:
                                         del notificatio
+                                    if espeak_on_failed = True:
+                                        espeak.synth()
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
