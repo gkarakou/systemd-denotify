@@ -24,7 +24,7 @@
 #else:
 #    from .install_script import Installer
 try:
-  from setuptools import setup 
+  from setuptools import setup
 except ImportError:
   from distutils.core import setup
 

@@ -5,7 +5,7 @@ import threading
 import select
 import datetime
 from systemd import journal
-from espeak import espeak
+from espeakng import ESpeakNG
 from threading import Thread
 from gi.repository import Notify
 
@@ -84,9 +84,10 @@ class JournalParser(threading.Thread):
                                     notificatio.show()
                                     if notificatio:
                                         del notificatio
-                                    if espeak_on_failed = True:
+                                    if espeak_on_failed == True:
+                                        esng = ESpeakNG()
                                         stri = string.replace(".", " ")
-                                        espeak.synth(stri)
+                                        esng.say(stri)
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
