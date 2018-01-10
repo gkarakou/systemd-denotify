@@ -84,12 +84,12 @@ class JournalParser(threading.Thread):
                                     Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
-                                    if notificatio:
-                                        del notificatio
                                     if espeak_on_failed == True:
                                         esng = ESpeakNG()
                                         stri = string.replace(".", " ")
                                         esng.say(stri)
+                                    if notificatio:
+                                        del notificatio
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
