@@ -1,11 +1,12 @@
 #!/usr/bin/python2
-import sys
-sys.path.append("/usr/lib/python2.7/site-packages")
+#import sys
+#sys.path.append("/usr/lib/python2.7/site-packages")
 from .configreader import ConfigReader
 from .mailer import Mailer
 import threading
 import select
 import datetime
+import pyttsx3
 from systemd import journal
 from espeakng import ESpeakNG
 from threading import Thread
@@ -84,10 +85,10 @@ class JournalParser(threading.Thread):
                                     Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
-                                    if espeak_on_failed == True:
-                                        esng = ESpeakNG()
-                                        stri = string.replace(".", " ")
-                                        esng.say(stri)
+                                    #if espeak_on_failed:
+                                    esng = ESpeakNG()
+                                    stri = string.replace(".", " ")
+                                    esng.say(stri)
                                     if notificatio:
                                         del notificatio
                                     if mail_on_failed == True or mail_on_pattern == True:
