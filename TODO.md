@@ -9,6 +9,8 @@ Memory tests
 Whats left is to automagically add the user to the systemd-journal group
 somehow. Maybe steal my code from mailify? What a jerk!
 
+------------------------
+make dependency injection in setup.py for py-espeak-ng from PyPi
 
 DONE
 -----------
