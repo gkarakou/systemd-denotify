@@ -5,6 +5,7 @@ import threading
 import select
 import datetime
 from systemd import journal
+from espeak import espeak
 from threading import Thread
 from gi.repository import Notify
 
@@ -34,6 +35,7 @@ class JournalParser(threading.Thread):
         dict_mail = conf.get_mail_entries()
         dict_notifications = conf.get_notification_entries()
         mail_on_failed = False
+        espeak_on_failed = False
         mail_on_pattern = False
         for key, value in dict_mail.iteritems():
             if key == 'email_on_failed_services' and value == True:
@@ -48,7 +50,7 @@ class JournalParser(threading.Thread):
         if isinstance(dict_notifications['conf_failed_services_start'], bool) and dict_notifications['conf_failed_services_start'] == True:
             patterns.append("entered failed state")
         if isinstance(dict_notifications['conf_failed_services_espeak'], bool) and dict_notifications['conf_failed_services_espeak'] == True:
-        espeak_on_failed = True
+            espeak_on_failed = True
         #DEBUG
         #for pater in patterns:
         #journal.send("systemd-denotify: DEBUG: " + "PATTERN " +str(pater) + " type of pattern " + str(type(pater)))
@@ -83,7 +85,8 @@ class JournalParser(threading.Thread):
                                     if notificatio:
                                         del notificatio
                                     if espeak_on_failed = True:
-                                        espeak.synth()
+                                        stri = string.replace(".", " ")
+                                        espeak.synth(stri)
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
