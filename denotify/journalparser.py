@@ -60,7 +60,6 @@ class JournalParser(threading.Thread):
         #esng.say("inside journalparser")
         #DEBUG
         #for pater in patterns:
-        journal.send("systemd-denotify: DEBUG: " +str(espeak_on_failed) + " type of espeak " + str(type(espeak_on_failed)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -107,6 +106,7 @@ class JournalParser(threading.Thread):
                                         pass
                                 else:
                                     pass
+                            journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern.. and before break")
                             break
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
