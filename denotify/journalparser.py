@@ -96,8 +96,8 @@ class JournalParser(threading.Thread):
                                         engine.say(stri)
                                         engine.runAndWait()
                                         #journal.send("systemd-denotify: DEBUG: inside espeak if condition " +str(espeak_on_failed) + " the string replaced is: " + str(stri))
-                                    if notificatio:
-                                        del notificatio
+                                    #if notificatio:
+                                    #    del notificatio
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
