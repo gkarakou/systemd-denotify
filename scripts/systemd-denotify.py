@@ -39,8 +39,8 @@ if __name__ == "__main__":
         #jp.start()
     if isinstance(diction['conf_pattern_matcher_start'], bool) and diction['conf_pattern_matcher_start'] == True:
         jop = JournalParser()
-        #jp.daemon = True
         jop.run()
     if isinstance(diction['conf_logins_start'], bool) and diction['conf_logins_start'] == True:
         lm = LogindMonitor()
-        lm.run()
+        lm.daemon = True
+        lm.start()
