@@ -108,7 +108,8 @@ class JournalParser(threading.Thread):
                             message = template.format(type(ex).__name__, ex.args)
                             journal.send("systemd-denotify: "+message)
                     else:
-                        break
+                        pass
+                    continue
             else:
                 pass
             continue
