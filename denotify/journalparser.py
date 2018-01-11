@@ -92,10 +92,9 @@ class JournalParser(threading.Thread):
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
                             journal.send("systemd-denotify: "+message)
-                    #journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
+                    journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
                     else:
                         continue
-                continue
 
     def __del__(self):
         """__del__
