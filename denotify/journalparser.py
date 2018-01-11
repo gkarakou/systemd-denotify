@@ -94,7 +94,6 @@ class JournalParser(threading.Thread):
                     #journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
                     else:
                         continue
-                    continue
     def __del__(self):
         """__del__
         return parent destructor or del objects
