@@ -38,7 +38,7 @@ class JournalParser(threading.Thread):
         dict_mail = conf.get_mail_entries()
         dict_notifications = conf.get_notification_entries()
         mail_on_failed = False
-        espeak_on_failed = False
+        #espeak_on_failed = False
         mail_on_pattern = False
         for key, value in dict_mail.iteritems():
             if key == 'email_on_failed_services' and value == True:
