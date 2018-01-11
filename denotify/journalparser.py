@@ -54,7 +54,8 @@ class JournalParser(threading.Thread):
             patterns.append("entered failed state")
         if isinstance(dict_notifications['conf_failed_services_espeak'], bool) and dict_notifications['conf_failed_services_espeak'] == True:
             espeak_on_failed = True
-            engine = pyttsx3.init()
+            #engine = pyttsx3.init()
+            esng = ESpeakNG()
         Notify.init("systemd-denotify")
         #engine.say("testing from journalparser")
         #DEBUG
@@ -88,12 +89,11 @@ class JournalParser(threading.Thread):
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
                                     if espeak_on_failed == True:
-                                        #esng = ESpeakNG()
                                         #stri = string.replace(".", " ")
                                         stri = string.replace(".service:", "")
-                                        #esng.say(stri)
+                                        said=esng.say(stri)
                                         journal.send("systemd-denotify: DEBUG: inside espeak if condition " +str(espeak_on_failed) + " the string replaced is: " + str(stri))
-                                        said=engine.say(stri)
+                                        #said=engine.say(stri)
                                         if said:
                                             del said
                                         #engine.runAndWait()
