@@ -34,6 +34,10 @@ class LogindMonitor(threading.Thread):
         """
         conf = ConfigReader()
         dictiona = conf.get_mail_entries()
+        email = False
+        for k, v in dictiona.iteritems():
+            if k == 'email_on_user_logins' and v == True:
+                email = True
         while True:
             time.sleep(1)
             try:
@@ -61,12 +65,10 @@ class LogindMonitor(threading.Thread):
                     template = "An exception of type {0} occured. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     journal.send("systemd-denotify: "+message)
-                if notificatio:
-                    del notificatio
-                for k, v in dictiona.iteritems():
-                    if k == 'email_on_user_logins' and v == True:
-                        mail = Mailer()
-                        mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
+                if email == True:
+                    mail = Mailer()
+                    mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
+
     def __del__(self):
         """
         __del__
