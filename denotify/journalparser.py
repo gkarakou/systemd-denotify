@@ -106,12 +106,15 @@ class JournalParser(threading.Thread):
                                         pass
                                 else:
                                     pass
-                                continue
-                            journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern.. and before break")
+                            journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
+                            break
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
                             journal.send("systemd-denotify: "+message)
+                    else:
+                        pass
+                continue
              #       else:
              #           pass
                     #        continue
