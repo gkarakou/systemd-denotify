@@ -23,7 +23,8 @@ if __name__ == "__main__":
         diction = config.get_notification_entries()
     except Exception as ex:
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
+        messagee = template.format(type(ex).__name__, ex.args)
+        journal.send("systemd-denotify: "+messagee)
 
 ##start classes
     ssc = ServiceStatusChecker()
