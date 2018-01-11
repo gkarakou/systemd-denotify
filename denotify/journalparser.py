@@ -97,7 +97,7 @@ class JournalParser(threading.Thread):
                                         #said=engine.say(stri)
                                        # if said:
                                        #     del said
-                                        #engine.runAndWait()
+                                        engine.runAndWait()
                                     if notificatio:
                                         del notificatio
                                     if mail_on_failed == True or mail_on_pattern == True:
