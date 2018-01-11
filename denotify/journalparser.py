@@ -95,8 +95,8 @@ class JournalParser(threading.Thread):
                             journal.send("systemd-denotify: "+message)
                         #journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
                             break
-                    else:
-                        pass
+                    #else:
+                    #    pass
 
     def __del__(self):
         """__del__
