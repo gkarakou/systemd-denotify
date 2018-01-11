@@ -78,7 +78,7 @@ class JournalParser(threading.Thread):
                                         engine = pyttsx3.init()
                                         stri = string.replace(".service:", "")
                                         engine.say(stri)
-                                        engine.runAndWait()
+                                        #engine.runAndWait()
                                     else:
                                         pass
                                     if mail_on_failed == True or mail_on_pattern == True:
