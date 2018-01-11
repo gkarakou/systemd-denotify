@@ -98,12 +98,16 @@ class JournalParser(threading.Thread):
                                         #journal.send("systemd-denotify: DEBUG: inside espeak if condition " +str(espeak_on_failed) + " the string replaced is: " + str(stri))
                                     #if notificatio:
                                     #    del notificatio
+                                    else:
+                                        pass
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
+                                    else:
+                                        pass
                                 else:
-                                    pass
-                            break
+                                    continue
+                            #continue
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
@@ -111,7 +115,7 @@ class JournalParser(threading.Thread):
              #       else:
              #           pass
                     #        continue
-                    continue
+                            continue
 
     def __del__(self):
         """__del__
