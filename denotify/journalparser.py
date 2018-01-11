@@ -103,7 +103,7 @@ class JournalParser(threading.Thread):
                                         mail.run(string, dict_mail)
                                 else:
                                     pass
-                                break
+                            break
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
