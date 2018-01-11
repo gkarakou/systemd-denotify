@@ -106,7 +106,7 @@ class JournalParser(threading.Thread):
                                     else:
                                         pass
                                 else:
-                                    continue
+                                    pass
                             #continue
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
@@ -115,7 +115,7 @@ class JournalParser(threading.Thread):
              #       else:
              #           pass
                     #        continue
-                            continue
+                            #continue
 
     def __del__(self):
         """__del__
