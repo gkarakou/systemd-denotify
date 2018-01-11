@@ -40,34 +40,20 @@ class LogindMonitor(threading.Thread):
                 email = True
         while True:
             time.sleep(1)
-            try:
-                monitor_uids = login.Monitor("uid")
-            except Exception as ex:
-                template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                message = template.format(type(ex).__name__, ex.args)
-                journal.send("systemd-denotify: "+message)
+            monitor_uids = login.Monitor("uid")
             poller = select.poll()
-            try:
-                poller.register(monitor_uids, monitor_uids.get_events())
-            except Exception as ex:
-                template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                message = template.format(type(ex).__name__, ex.args)
-                journal.send("systemd-denotify: "+message)
+            poller.register(monitor_uids, monitor_uids.get_events())
             poller.poll()
             users = login.uids()
             for user in users:
                 now = datetime.datetime.now()
-                try:
-                    Notify.init("systemd-denotify")
-                    notificatio = Notify.Notification.new("systemd-denotify", "login from user id: "+str(user) +" at "+str(now)[:19])
-                    notificatio.show()
-                except Exception as ex:
-                    template = "An exception of type {0} occured. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    journal.send("systemd-denotify: "+message)
+                Notify.init("systemd-denotify")
+                notificatio = Notify.Notification.new("systemd-denotify", "login from user id: "+str(user) +" at "+str(now)[:19])
+                notificatio.show()
                 if email == True:
                     mail = Mailer()
                     mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
+                break
 
     def __del__(self):
         """
