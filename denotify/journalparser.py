@@ -74,21 +74,19 @@ class JournalParser(threading.Thread):
                             #        Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
-                                    if espeak_on_failed == True:
-                                        #engine = pyttsx3.init()
-                                        engine= ESpeakNG()
-                                        stri = string.replace(".service:", "")
-                                        engine.say(stri)
-                                        #engine.runAndWait()
-                                    else:
-                                        pass
+                                    #if espeak_on_failed == True:
+                                    #    engine= ESpeakNG()
+                                    #    stri = string.replace(".service:", "")
+                                    #    engine.say(stri)
+                                    #else:
+                                    #    pass
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
                                     else:
                                         pass
-                                else:
-                                    pass
+                                #else:
+                                #    pass
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
