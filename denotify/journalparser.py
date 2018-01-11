@@ -8,7 +8,7 @@ import select
 import datetime
 import pyttsx3
 from systemd import journal
-from espeakng import ESpeakNG
+#from espeakng import ESpeakNG
 from threading import Thread
 from gi.repository import Notify
 
@@ -56,7 +56,7 @@ class JournalParser(threading.Thread):
             espeak_on_failed = True
             engine = pyttsx3.init()
         Notify.init("systemd-denotify")
-        #esng = ESpeakNG()
+        ##esng = ESpeakNG()
         #esng.say("inside journalparser")
         #DEBUG
         #for pater in patterns:
