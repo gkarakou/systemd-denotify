@@ -38,7 +38,7 @@ class JournalParser(threading.Thread):
         dict_mail = conf.get_mail_entries()
         dict_notifications = conf.get_notification_entries()
         mail_on_failed = False
-        #espeak_on_failed = False
+        espeak_on_failed = False
         mail_on_pattern = False
         for key, value in dict_mail.iteritems():
             if key == 'email_on_failed_services' and value == True:
@@ -59,7 +59,7 @@ class JournalParser(threading.Thread):
         #engine.say("testing from journalparser")
         #DEBUG
         #for pater in patterns:
-        #journal.send("systemd-denotify: DEBUG: " + "PATTERN " +str(pater) + " type of pattern " + str(type(pater)))
+        journal.send("systemd-denotify: DEBUG: " +str(espeak_on_failed) + " type of espeak " + str(type(espeak_on_failed)))
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
         # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
@@ -93,11 +93,11 @@ class JournalParser(threading.Thread):
                                         stri = string.replace(".service:", "")
                                         #esng.say(stri)
                                         said=engine.say(stri)
+                                        if said:
+                                            del said
                                         #engine.runAndWait()
                                     if notificatio:
                                         del notificatio
-                                    if said:
-                                        del said
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
