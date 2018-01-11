@@ -71,11 +71,12 @@ class JournalParser(threading.Thread):
                             string = entry['MESSAGE']
                             for pattern in patterns:
                                 if string and pattern in string:
-                                    Notify.init("systemd-denotify")
+                            #        Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
                                     if espeak_on_failed == True:
-                                        engine = pyttsx3.init()
+                                        #engine = pyttsx3.init()
+                                        engine= ESpeakNG()
                                         stri = string.replace(".service:", "")
                                         engine.say(stri)
                                         #engine.runAndWait()
