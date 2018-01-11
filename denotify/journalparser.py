@@ -54,27 +54,13 @@ class JournalParser(threading.Thread):
             patterns.append("entered failed state")
         if isinstance(dict_notifications['conf_failed_services_espeak'], bool) and dict_notifications['conf_failed_services_espeak'] == True:
             espeak_on_failed = True
-            #engine = pyttsx3.init()
         Notify.init("systemd-denotify")
-        #esng = ESpeakNG()
-        #esng.say("inside journalparser")
-        #DEBUG
-        #for pater in patterns:
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
-        # j.seek_tail() #faulty->doesn't move the cursor to the end of journal
-
-        # it is questionable whether there is actually a record with the real
-        # datetime we provide but we assume it moves the cursor to somewhere
-        # near the end of the journal fd
         j_reader.seek_realtime(datetime.datetime.now())
         poller = select.poll()
         poller.register(j_reader, j_reader.get_events())
         while poller.poll():
-            #next is a debugging call
-            # if it prints True it is pollable
-            #reliable = j.reliable_fd()
-            #print reliable
             waiting = j_reader.process()
             # if JOURNAL append or JOURNAL logrotate
             if waiting == 1 or waiting == 2:
@@ -88,15 +74,10 @@ class JournalParser(threading.Thread):
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
                                     if espeak_on_failed == True:
-                                        #stri = string.replace(".", " ")
-                                        #esng = ESpeakNG()
                                         engine = pyttsx3.init()
                                         stri = string.replace(".service:", "")
                                         engine.say(stri)
                                         engine.runAndWait()
-                                        #journal.send("systemd-denotify: DEBUG: inside espeak if condition " +str(espeak_on_failed) + " the string replaced is: " + str(stri))
-                                    #if notificatio:
-                                    #    del notificatio
                                     else:
                                         pass
                                     if mail_on_failed == True or mail_on_pattern == True:
