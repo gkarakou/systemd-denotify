@@ -86,9 +86,12 @@ class JournalParser(threading.Thread):
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
                                     #if espeak_on_failed:
-                                    esng = ESpeakNG()
+                                    #esng = ESpeakNG()
                                     stri = string.replace(".", " ")
-                                    esng.say(stri)
+                                    #esng.say(stri)
+                                    engine = pyttsx3.init()
+                                    engine.say(stri)
+                                    #engine.runAndWait()
                                     if notificatio:
                                         del notificatio
                                     if mail_on_failed == True or mail_on_pattern == True:
