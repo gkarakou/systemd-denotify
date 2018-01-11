@@ -71,6 +71,7 @@ class JournalParser(threading.Thread):
                             string = entry['MESSAGE']
                             for pattern in patterns:
                                 if string and pattern in string:
+                                    Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
                                     if espeak_on_failed == True:
@@ -94,6 +95,8 @@ class JournalParser(threading.Thread):
                     #journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
                     else:
                         continue
+                continue
+
     def __del__(self):
         """__del__
         return parent destructor or del objects
