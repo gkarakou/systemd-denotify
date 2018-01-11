@@ -83,8 +83,6 @@ class JournalParser(threading.Thread):
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
-                                    else:
-                                        pass
                                 #else:
                                 #    pass
                         except Exception as ex:
@@ -92,7 +90,7 @@ class JournalParser(threading.Thread):
                             message = template.format(type(ex).__name__, ex.args)
                             journal.send("systemd-denotify: "+message)
                         #journal.send("systemd-denotify: DEBUG: "+".. after 1st pattern..")
-                            break
+                                break
                     #else:
                     #    pass
 
