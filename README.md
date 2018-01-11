@@ -7,7 +7,7 @@ GENERAL
 systemd-denotify is a set of classes that leverage the power of systemd-python library and many other great python bindings.
 These classes provide desktop and email notifications upon a user login, when systemd files are modified and when services fail.
 There is also another class that at a specified interval (by default 30 minutes) notifies the user for the status of some services.
-Added support for journal pattern matching in version 1.2. 
+Added support for journal pattern matching in version 1.2.
 One can override the notifications he/she gets by editing the file /etc/systemd-denotify.conf.
 
 
@@ -53,7 +53,7 @@ git clone https://github.com/gkarakou/systemd-denotify.git
 
 cd systemd-denotify
 
-sudo python setup.py bdist_rpm --requires "python2, systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, dbus, dbus-python" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh
+sudo python setup.py bdist_rpm --requires "python2, systemd-python, notify-python, pygobject2, python-slip-dbus, python-inotify, systemd, systemd-libs, libnotify, dbus, dbus-python" --build-requires="python-setuptools" --vendor="gkarakou@gmail.com" --post-install=postinstall.sh --no-autoreg
 
 sudo dnf --nogpgcheck install dist/systemd-denotify-1.2-1.noarch.rpm
 
@@ -62,7 +62,7 @@ sudo dnf --nogpgcheck install dist/systemd-denotify-1.2-1.noarch.rpm
 Trouble installing?
 
 Verify that you have all the build tools installed (rpm-build-libs, auto-buildrequires, python2-devel) and update the system.
-If you still have problems add the command line parameter 
+If you still have problems add the command line parameter
 <pre>
 --no-autoreq
 </pre>
