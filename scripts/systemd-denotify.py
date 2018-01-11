@@ -31,7 +31,11 @@ if __name__ == "__main__":
 
     if isinstance(diction['conf_files_start'], bool) and diction['conf_files_start'] == True:
         FileNotifier()
-    if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True or isinstance(diction['conf_pattern_matcher_start'], bool) and diction['conf_pattern_matcher_start'] == True:
+    if isinstance(diction['conf_failed_services_start'], bool) and diction['conf_failed_services_start'] == True:
+        jp = JournalParser()
+        jp.daemon = True
+        jp.start()
+    if isinstance(diction['conf_pattern_matcher_start'], bool) and diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
         jp.daemon = True
         jp.start()
