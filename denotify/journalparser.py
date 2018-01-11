@@ -90,9 +90,9 @@ class JournalParser(threading.Thread):
                                     #if espeak_on_failed:
                                     #esng = ESpeakNG()
                                     #stri = string.replace(".", " ")
-                                    stri = string.rstrip(".")
+                                    stri = string.replace(".service:", "")
                                     #esng.say(stri)
-                                    engine.say("service " +stri+ "failed")
+                                    engine.say(stri)
                                     engine.runAndWait()
                                     if notificatio:
                                         del notificatio
