@@ -92,6 +92,7 @@ class JournalParser(threading.Thread):
                                         #stri = string.replace(".", " ")
                                         stri = string.replace(".service:", "")
                                         #esng.say(stri)
+                                        journal.send("systemd-denotify: DEBUG: inside espeak if condition " +str(espeak_on_failed) + " the string replaced is: " + str(stri))
                                         said=engine.say(stri)
                                         if said:
                                             del said
