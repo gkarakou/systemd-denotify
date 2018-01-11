@@ -91,13 +91,14 @@ class JournalParser(threading.Thread):
                                     if espeak_on_failed == True:
                                         #stri = string.replace(".", " ")
                                         #esng = ESpeakNG()
+                                        engine = pyttsx3.init()
                                         stri = string.replace(".service:", "")
-                                        said=engine.say(stri)
+                                        engine.say(stri)
+                                        engine.runAndWait()
                                         journal.send("systemd-denotify: DEBUG: inside espeak if condition " +str(espeak_on_failed) + " the string replaced is: " + str(stri))
                                         #said=engine.say(stri)
                                        # if said:
                                        #     del said
-                                        engine.runAndWait()
                                     if notificatio:
                                         del notificatio
                                     if mail_on_failed == True or mail_on_pattern == True:
