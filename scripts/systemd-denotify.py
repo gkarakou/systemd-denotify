@@ -42,5 +42,5 @@ if __name__ == "__main__":
 
     if diction['conf_logins_start'] == True:
         lm = LogindMonitor()
-        lm.daemon = True
+        #lm.daemon = True
         lm.run()
