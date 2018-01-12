@@ -28,8 +28,8 @@ if __name__ == "__main__":
 
 ##start classes
     if diction['conf_services_start'] == True:
-    ssc = ServiceStatusChecker()
-    ssc.run()
+        ssc = ServiceStatusChecker()
+        ssc.run()
 
     if diction['conf_files_start'] == True:
         FileNotifier()
