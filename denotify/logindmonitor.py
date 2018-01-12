@@ -35,6 +35,7 @@ class LogindMonitor(threading.Thread):
         conf = ConfigReader()
         dictiona = conf.get_mail_entries()
         email = False
+        Notify.init("systemd-denotify")
         for k, v in dictiona.iteritems():
             if k == 'email_on_user_logins' and v == True:
                 email = True
@@ -45,13 +46,12 @@ class LogindMonitor(threading.Thread):
             poller.register(monitor_uids, monitor_uids.get_events())
             poller.poll()
             users = login.uids()
-            journal.send("systemd-denotify: inside logindmonitor run()")
+            #journal.send("systemd-denotify: inside logindmonitor run()")
             for user in users:
                 now = datetime.datetime.now()
-                Notify.init("systemd-denotify")
-                notificatio = Notify.Notification.new("systemd-denotify", "login from user id: "+str(user) +" at "+str(now)[:19])
+                notificatio = Notify.Notification.new("systemd-denotify","login from user id: "+str(user) +" at "+str(now)[:19])
                 notificatio.show()
-                journal.send("systemd-denotify: inside logindmonitor run() and user loop")
+             #   journal.send("systemd-denotify: inside logindmonitor run() and user loop")
                 if email == True:
                     mail = Mailer()
                     mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
