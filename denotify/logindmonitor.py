@@ -44,7 +44,7 @@ class LogindMonitor(threading.Thread):
             monitor_uids = login.Monitor("uid")
             poller = select.poll()
             poller.register(monitor_uids, monitor_uids.get_events())
-            poller.poll():
+            poller.poll()
             users = login.uids()
             #journal.send("systemd-denotify: inside logindmonitor run()")
             for user in users:
