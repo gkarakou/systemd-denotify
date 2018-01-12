@@ -27,15 +27,15 @@ if __name__ == "__main__":
         journal.send("systemd-denotify: "+message)
 
 ##start classes
+    if diction['conf_files_start'] == True:
+        FileNotifier()
+    if diction['conf_services_start'] == True:
+        ssc = ServiceStatusChecker()
+        ssc.run()
     if diction['conf_logins_start'] == True:
         lm = LogindMonitor()
         lm.run()
     if diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
         jp.run()
-    if diction['conf_files_start'] == True:
-        FileNotifier()
-    if diction['conf_services_start'] == True:
-        ssc = ServiceStatusChecker()
-        ssc.run()
 
