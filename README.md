@@ -56,6 +56,9 @@ sudo python setup.py bdist_rpm --requires "python2, systemd-python, notify-pytho
 
 sudo dnf --nogpgcheck install dist/systemd-denotify-1.3-1.noarch.rpm
 
+</pre>
+
+
 -------------------------------
 
 
