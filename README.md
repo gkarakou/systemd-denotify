@@ -57,17 +57,6 @@ sudo python setup.py bdist_rpm --requires "python2, systemd-python, notify-pytho
 
 sudo dnf --nogpgcheck install dist/systemd-denotify-1.2-1.noarch.rpm
 
-</pre>
-
-Trouble installing?
-
-Verify that you have all the build tools installed (rpm-build-libs, auto-buildrequires, python2-devel) and update the system.
-If you still have problems add the command line parameter
-<pre>
---no-autoreq
-</pre>
-in the python setup.py command above.
-
 -------------------------------
 
 DEBIAN/UBUNTU
