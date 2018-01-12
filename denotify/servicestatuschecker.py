@@ -3,6 +3,7 @@ from .configreader import ConfigReader
 from .mailer import Mailer
 from dbus import SystemBus, Interface
 import threading
+from threading import Thread
 from systemd import journal
 import gi
 gi.require_version('Notify', '0.7')
