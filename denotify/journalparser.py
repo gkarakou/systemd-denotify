@@ -63,7 +63,6 @@ class JournalParser(threading.Thread):
                             string = entry['MESSAGE']
                             for pattern in patterns:
                                 if string and pattern in string:
-                            #        Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
                                     if mail_on_failed == True or mail_on_pattern == True:
