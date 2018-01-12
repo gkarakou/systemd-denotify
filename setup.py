@@ -30,7 +30,7 @@ except ImportError:
 
 setup(
 name = 'systemd-denotify',
-version = '1.2',
+version = '1.3',
 description = 'systemd related desktop and email notifications',
 long_description = 'A python based app that notifies for user logins, failed systemd services, monitored files and the status of selected services. Now matches journal patterns too.It can email those notifications too!',
 author = 'George Karakougioumtzis <gkarakou>',
@@ -43,7 +43,7 @@ package_data = {'denotify': ['conf/*']},
 install_requires= ['dbus-python', 'pygobject', 'python-systemd', 'pyinotify'],
 #dependency_links = ["https://pypi.python.org/packages/source/p/python-systemd/python-systemd-0.0.9.tar.gz", "https://pypi.python.org/packages/source/P/PyGObject/pygobject-2.28.3.tar.bz2#md5=aa64900b274c4661a5c32e52922977f9", "https://pypi.python.org/packages/source/d/dbus-python/dbus-python-0.84.0.tar.gz", "https://pypi.python.org/packages/source/p/pyinotify/pyinotify-0.9.5.tar.gz"],
 #cmdclass = {'install': MyInstall},
-classifiers = ['Development Status :: 1.2 - devel',
+classifiers = ['Development Status :: 1.3 - devel',
 'Environment :: Desktop',
 'Intended Audience :: End Users/Desktop',
 'Intended Audience :: System Administrators',
