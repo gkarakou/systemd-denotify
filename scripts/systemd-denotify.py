@@ -44,3 +44,4 @@ if __name__ == "__main__":
         lm = LogindMonitor()
         lm.daemon = True
         lm.run()
+    return
