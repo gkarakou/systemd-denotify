@@ -69,7 +69,7 @@ class JournalParser(threading.Thread):
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
-                                break
+                                    break
                         except Exception as ex:
                             template = "An exception of type {0} occured. Arguments:\n{1!r}"
                             message = template.format(type(ex).__name__, ex.args)
