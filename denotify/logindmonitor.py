@@ -10,7 +10,7 @@ from systemd import journal
 from threading import Thread
 from gi.repository import Notify
 
-class LogindMonitor(threading.Thread):
+class LogindMonitor():
     """
     LogindMonitor
     :desc: Class that notifies the user for user logins
@@ -21,9 +21,12 @@ class LogindMonitor(threading.Thread):
     def __init__(self):
         """
         __init__
-        return parent constructor
+        return daemon thread start
         """
-        Thread.__init__(self)
+        #Thread.__init__(self)
+        thread = threading.Thread(target=self.run, args=())
+        thread.daemon = True                            # Daemonize thread
+        thread.start()
 
     def run(self):
         """
