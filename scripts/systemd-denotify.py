@@ -34,7 +34,6 @@ if __name__ == "__main__":
         ssc.run()
     if diction['conf_logins_start'] == True:
         lm = LogindMonitor()
-        #lm.run()
     if diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
         jp.run()
