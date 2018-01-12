@@ -34,7 +34,7 @@ if __name__ == "__main__":
     if diction['conf_files_start'] == True:
         FileNotifier()
 
-    if diction['conf_failed_services_start'] == True and (diction['conf_pattern_matcher_start'] == False or diction['conf_pattern_matcher_start']== True):
+    if diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
         jp.run()
         #jp.daemon = True

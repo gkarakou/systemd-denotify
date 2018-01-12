@@ -6,9 +6,7 @@ from .mailer import Mailer
 import threading
 import select
 import datetime
-import pyttsx3
 from systemd import journal
-from espeakng import ESpeakNG
 from threading import Thread
 from gi.repository import Notify
 
@@ -37,8 +35,6 @@ class JournalParser(threading.Thread):
         conf = ConfigReader()
         dict_mail = conf.get_mail_entries()
         dict_notifications = conf.get_notification_entries()
-        mail_on_failed = False
-        espeak_on_failed = False
         mail_on_pattern = False
         for key, value in dict_mail.iteritems():
             if key == 'email_on_failed_services' and value == True:
@@ -50,10 +46,6 @@ class JournalParser(threading.Thread):
         if isinstance(dict_notifications['conf_pattern_matcher_start'], bool) and dict_notifications['conf_pattern_matcher_start'] == True:
             for pat in dict_notifications['conf_pattern_patterns']:
                 patterns.append(pat)
-        if isinstance(dict_notifications['conf_failed_services_start'], bool) and dict_notifications['conf_failed_services_start'] == True:
-            patterns.append("entered failed state")
-        if isinstance(dict_notifications['conf_failed_services_espeak'], bool) and dict_notifications['conf_failed_services_espeak'] == True:
-            espeak_on_failed = True
         Notify.init("systemd-denotify")
         j_reader = journal.Reader()
         j_reader.log_level(journal.LOG_INFO)
@@ -74,12 +66,6 @@ class JournalParser(threading.Thread):
                             #        Notify.init("systemd-denotify")
                                     notificatio = Notify.Notification.new("systemd-denotify", string)
                                     notificatio.show()
-                                    #if espeak_on_failed == True:
-                                    #    engine= ESpeakNG()
-                                    #    stri = string.replace(".service:", "")
-                                    #    engine.say(stri)
-                                    #else:
-                                    #    pass
                                     if mail_on_failed == True or mail_on_pattern == True:
                                         mail = Mailer()
                                         mail.run(string, dict_mail)
