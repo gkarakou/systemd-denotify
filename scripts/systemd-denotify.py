@@ -29,7 +29,8 @@ if __name__ == "__main__":
 ##start classes
     if diction['conf_services_start'] == True:
         ssc = ServiceStatusChecker()
-        ssc.run()
+        ssc.daemon = True
+        ssc.start()
 
     if diction['conf_files_start'] == True:
         FileNotifier()
@@ -37,8 +38,6 @@ if __name__ == "__main__":
     if diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
         jp.run()
-        #jp.daemon = True
-        #jp.start()
 
     if diction['conf_logins_start'] == True:
         lm = LogindMonitor()
