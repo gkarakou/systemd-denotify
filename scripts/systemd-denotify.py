@@ -30,7 +30,7 @@ if __name__ == "__main__":
     if diction['conf_services_start'] == True:
         ssc = ServiceStatusChecker()
         ssc.daemon = True
-        ssc.start()
+        ssc.run()
 
     if diction['conf_files_start'] == True:
         FileNotifier()
