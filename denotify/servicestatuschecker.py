@@ -8,7 +8,7 @@ import gi
 gi.require_version('Notify', '0.7')
 from gi.repository import Notify
 
-class ServiceStatusChecker():
+class ServiceStatusChecker(threading.Thread):
     """
     ServiceStatusChecker
     :desc: Class that notifies the user for the status of some systemd services
@@ -20,7 +20,7 @@ class ServiceStatusChecker():
         __init__
         :desc: Constructor function that by default does nothing
         """
-        pass
+        Thread.__init__(self)
 
     def run(self):
         """
