@@ -39,12 +39,12 @@ class LogindMonitor(threading.Thread):
         for k, v in dictiona.iteritems():
             if k == 'email_on_user_logins' and v == True:
                 email = True
-        #while True:
-        #    time.sleep(1)
-        monitor_uids = login.Monitor("uid")
-        poller = select.poll()
-        poller.register(monitor_uids, monitor_uids.get_events())
-        while poller.poll():
+        while True:
+            time.sleep(1)
+            monitor_uids = login.Monitor("uid")
+            poller = select.poll()
+            poller.register(monitor_uids, monitor_uids.get_events())
+            poller.poll():
             users = login.uids()
             #journal.send("systemd-denotify: inside logindmonitor run()")
             for user in users:
@@ -55,7 +55,7 @@ class LogindMonitor(threading.Thread):
                 if email == True:
                     mail = Mailer()
                     mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
-                break
+            break
 
     def __del__(self):
         """
