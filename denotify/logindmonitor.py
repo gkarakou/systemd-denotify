@@ -55,7 +55,7 @@ class LogindMonitor(threading.Thread):
                 if email == True:
                     mail = Mailer()
                     mail.run("login from user id: "+str(user) +" at "+str(now)[:19], dictiona)
-                break
+            break
 
     def __del__(self):
         """

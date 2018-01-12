@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     if diction['conf_pattern_matcher_start'] == True:
         jp = JournalParser()
-        jp.daemon= True
+        #jp.daemon= True
         jp.run()
 
     if diction['conf_logins_start'] == True:
