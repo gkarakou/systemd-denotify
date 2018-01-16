@@ -59,6 +59,12 @@ sudo dnf --nogpgcheck install dist/systemd-denotify-1.3-1.noarch.rpm
 </pre>
 
 
+trouble installing?
+
+Verify that you have all the necessary build tools preinstalled:
+sudo dnf install auto-buildrequires rpm-build-libs python2-devel
+
+
 -------------------------------
 
 
